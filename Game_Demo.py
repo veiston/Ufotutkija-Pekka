@@ -1,4 +1,7 @@
 # pip install colorama
+# Text is colored with colorama. AI Generated text for placeholder.
+# Print is used to display the text. We could move towards databases.
+# Sorry, horrible code :D
 import time
 import colorama
 
@@ -8,8 +11,6 @@ print('Welcome Pekkka!')
 print('This is a quick demo of our game showing a multiple choice q&a-style mechanic for the investagion section of the game.\n Very demo. Dont be harsh. :D')
 time.sleep(delay)
 
-# Text is colored with colorama. AI Generated text for placeholder.
-# Print is used to display the text. We could move towards databases.
 print(colorama.Fore.RED + '\nIntroduction' + colorama.Style.RESET_ALL)
 print('Under the crimson moon, I arrived at an abandoned field on the outskirts of a forgotten town. The air pulsed with a chilling, strange hum – a call from the unknown. As an experienced paranormal investigator, I had spent years chasing inexplicable whispers, but nothing could have prepared me for that night. A glowing, alien-like light emanated from the broken ruins, signaling the presence of a being beyond the bounds of this world. In that charged moment, as fear and determination intertwined, my journey into the heart of an otherworldly mystery began.')
 time.sleep(delay)
