@@ -19,7 +19,7 @@ asking for help.
    git clone https://github.com/yourusername/ufotutkija.git
    ```
     ```sh
-   cd ufotutkija
+   cd Ufotutkija-Pekka
    ```
 2. Install dependencies:
     ```sh
