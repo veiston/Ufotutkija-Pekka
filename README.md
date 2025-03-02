@@ -16,7 +16,7 @@ asking for help.
 ## Installation
 1. Clone this repository:
    ```sh
-   git clone https://github.com/yourusername/ufotutkija.git
+   git clone https://github.com/veiston/Ufotutkija-Pekka.git
    ```
     ```sh
    cd Ufotutkija-Pekka
