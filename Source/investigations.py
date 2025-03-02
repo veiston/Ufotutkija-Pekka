@@ -1,100 +1,16 @@
+# investigations.py
 
-# just imports
-from colorama import Fore, Style
-# import mysql.connector
 import time
-import sys
 import random
 
-##########################################################################################
-# constants
-PRICE_PER_KM = 0.01
+from utilities import type_writer, print_separator
+from player import player
+from items import items
+from notifications import SCARY_REMINDERS
 
-##########################################################################################
-
-# utilities. utility is a helper function that performs a common task.
-
-def type_writer(text, speed=0.05):
-    for char in text:
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        time.sleep(speed)
-    print()
-
-
-def print_separator():
-    print("\n" + "=" * 50 + "\n")
-
-##########################################################################################
-
-# db connection. in this version we use only original flight_game database, we do not have our own database
-# attention! here's my user and password, do not forget to replace it with yours
-# also field "collation" may be inappropriate for windows or linux, idk
-# commented because we do not need it yet, I did not white the code for it
-# yhteys = mysql.connector.connect(
-#     host='127.0.0.1',
-#     port=3306,
-#     database='flight_game',
-#     user='root',
-#     password='1234',
-#     autocommit=True,
-#     collation="utf8mb4_unicode_ci"
-# )
-
-##########################################################################################
-# our starting setting for the player
-player = {
-    "name": "Pekka",  # the player's default name is Pekka, but they can change it
-    "investigation": '', # the unique key of current investigation
-    "airport": "EFHK",  # this is Helsinki-Vantaan lentoasema, the starting point
-    "money": 100,  # player needs money for the shop and flights
-    "level": 1,  # player's level determines access to new locations
-    "inventory": ["nokia"]  # here is the list of bought items from "items", example: ["nokia", "salt"]
-}
-
-##########################################################################################
-
-# all items for shop will be here with their name, price and success_chance
-# there is no funny pokemon logic here, I hope somebody else could add it, because I do not understand it well yet - Ks
-# however I have implementation of the Success-Chance-Idea below
-items = {
-    "bat": {"name": "Baseball bat", "price": 50, "success_chance": 80},
-    "salt": {"name": "Salt", "price": 20, "success_chance": 70},
-    "nokia": {"name": "Nokia", "price": 0, "success_chance": 50},
-}
-# What is success_chance in items? This field defines the price of the item
-# Example of using success_chance in the gameplay:
-#
-# You hear a strange noise in the dark. What do you do?
-# 1. Throw salt (need salt, success chance 50%)
-# 2. Throw Nokia (need nokia (always awailable), success chance 20%)
-#
-# You throw the salt...
-# It failed! Try again or choose another item.
-#
-# You hear a strange noise in the dark. What do you do?
-# 1. Throw salt (need salt, success chance 50%)
-# 2. Throw Nokia (need nokia (always awailable), success chance 20%)
-#
-# You throw Nokia...
-# It worked! The Nokia flies through the air and... (description of next step)
-#
-#  So player uses their attempt for item using. If item is cheap, the chance of success is low and the player may waste the attempt
-
-# NOKIA IS ALWAYS AVAILABLE, BUT HAS REALLY LOW CHANCE FOR SUCCESS!
-# (I understand that this is impossible in real life, and we should give the Nokia a 100% success rate, but we have a not real story)
-
-###############################################################################
-
-# the player has 3 or fewer turns remaining, a random scary reminder is displayed on the screen
-# to create a sense of urgency and explain the concept of turns to the player
-# the text can be changed, new items can be added
-scary_reminders = [
-    "*** Just a reminder:  Have you forgotten that paranormal hotspots always have high radiation?\nYou don’t have many choices left. Choose wisely ***",
-    "*** Just a reminder: Is someone whispering in the dark, or was it just your imagination?\nAnyway, and you're running out of choices. Choose wisely ***",
-]
-# ##########################################################################################
-
+# TODO new stories should be added here
+# TODO logic of fighting can be added here. For example you create a dictionary of monsters, where each monster has hp and damage. Then you add an hp key for the player. Then you include monsters in the story steps, just like items are currently added. And you also add damage to items
+# TODO logic of interview can be added here. For example you create a dictionary of conversation partners, where each partner has some kind of power scale and a list of questions. Then you add a key with the same power scale for the player. Then you include interrogations in the story steps, just like items are currently added. Finally you develop the logic where your scale influences the game without adding many new entities
 investigations = {
     "tutorial": { # story ident, important
         "name": "Tutorial",  # story name, currently unused field
@@ -276,123 +192,7 @@ investigations = {
     }
 }
 
-def start():
-    print("WeLC0ME TO UФ0tuTKiJa!")
-    input("Press ENTER to start")
-
-    user_name = input("Enter your name (otherwise you will be Pekka): ")
-    if user_name:
-        player["name"] = user_name
-
-    print_separator()
-
-    print(f"Hello, {player['name']}, our best UFO hunter! \nYou've become a legend in paranormal investigations, but now...\nWell... You're stuck in your office, bored and waiting for something exciting...")
-    input("Press ENTER to continue")
-
-    print(f"\nOh wait!\n{player['name']}, you hear a notification from your email inbox... Open it?")
-    input("Press ENTER to open the email")
-
-    email_text = f"""
-    Date: 03 Sept 1999
-    Sender: Mel_UFO-Investigator_77
-
-    Yo, {player['name']}, it's your buddy MELVIN from Evergreen!1! Hope you still REMEMBER me, space cowboy
-    anyways, i just cant believe what im seeing... its NOT normal! noooo way. This is... PARA-NORMAL, and its HUUUGE. 
-    Like, REALLY f*cked up. I NEED your help here, at Evergreen!
-    We need 2 meet @ {Fore.GREEN}Denver International Airport{Style.RESET_ALL} tomorrow evening.
-    plz dont be late. dont tel anyone about this.
-
-    Cya,
-    Melvin
-    P.S. I''ve added {Fore.MAGENTA}$100{Style.RESET_ALL} to your bank account for your plane ticket!1! HURRY UP!!
-    """
-
-    type_writer(email_text, 0.03)
-
-    input("Press ENTER to continue")
-
-    main_menu()
-
-def main_menu():
-    while True:
-
-        print_separator()
-
-        print("Well, what do you want to do next?")
-        print(f"1. {Fore.GREEN}Go to the airport{Style.RESET_ALL}")
-        print(f"2. {Fore.MAGENTA}Buy equipment {'(For demo purposes go here first)' if player['level'] == 1 else ''}{Style.RESET_ALL}")
-        choice = input("Print number of option: ")
-
-        if choice == "1":
-            travel()
-        elif choice == "2":
-            shop()
-        else:
-            print("There is no options like that")
-
-def travel():
-    print_separator()
-
-    print(f"Your level: {player['level']}")
-    print(f"Your balance: ${player['money']}")
-    print(f"\nAttention, {player['name']}! By agreeing to the flight, you start investigating a new case.\n\nOptions, where you could go now:")
-
-    if player['level'] == 1:
-        # TODO replace this stub (these prints) with actual code about traveling. Comments about the possible implementation are below
-        print("\n(Here the airport selection mechanics should be implemented.\nI have described them in the comments in the code.\nYou can a look at it after.\nFor now let's pretend the player receives a list of airports not by hardcode. On level 1 it's just one airport)")
-        print(f"\n1. {Fore.GREEN}Denver International Airport (KDEN){Style.RESET_ALL}")
-        input("\nSelect the airport you want to fly to by its number in the list: ")
-        print("\nGreat choice!")
-        type_writer("Taking off...", 0.1)
-        time.sleep(0.5)
-        type_writer("Flying...", 0.1)
-        time.sleep(0.5)
-        type_writer("Landing complete!", 0.1)
-        time.sleep(0.5)
-        player['airport'] = 'KDEN'
-        player['investigation'] = 'tutorial'
-        player['money'] -= 100
-
-        investigate(player['investigation'])
-    else:
-        print("There's no option for level 2 yet")
-
-    # How does the player choose the airport they want to fly to?
-    # We take the list of all investigations. Each investigation has a level and an airport.
-    # We filter the list of investigations, keeping only those where the level matches the player's level.
-    # From the filtered investigations we extract the airport field and create a list of airport codes.
-    # We search for each found airport in the database using its code and retrieve its name.
-    # We display the list of available airports, numbering them so the player can choose.
-    # When the player enters the number of an airport, we find it in the list and determine whether the player can fly there.
-
-    # How do we determine if the player can fly to the selected airport?
-    # The player has a field player["airport"], which stores the code of the airport where they are currently located.
-    # (If the player hasn't flown yet, they are in the default airport (EFHK – Helsinki))
-    # We take the code of the current airport and the identifier of the selected airport.
-    # We calculate the distance between these two airports (we did a similar Python homework, if I remember right).
-    # Based on the distance we calculate the flight cost. For example, we can take 1km as 0.01$. We use the PRICE_PER_KM variable (it's defined above and can be changed).
-    # We check if the player has enough money.
-    # If player doesn’t have enough money, we show them a message and tell them they need to go Gambling in the store.
-    # If player does have enough money, we "move" the player to the new airport and start new investigation.
-
-    # How do we determine which investigation the player starts with chosen airport? IMPORTANT: for now, one airport = one investigation
-    # Each investigation has a unique key (ex: "tutorial") and is linked to a specific airport.
-    # After the player selects an airport, we search for an investigation where the "airport" field matches the selected airport.
-    # We take the key of that investigation and assign it to player["investigation"].
-    # We need this key later, that is why I decided to save it
-
-def shop():
-    print_separator()
-
-    # TODO replace this stub (these prints) with actual code about shoping and gambling
-    print("There will be a store, but for now you get an old Nokia for free")
-    print("\nHere is also a list of potentially (in future) reachable items from 'items' list: ")
-
-    for item in items.values():
-        print(f"-{item['name']} "
-              f"({Fore.MAGENTA}${item['price']}{Style.RESET_ALL}, "
-              f"Success chance: {Fore.GREEN}{item['success_chance']}%{Style.RESET_ALL})")
-
+# TODO it is really big and ugly function, it should be divided on smaller functions. Also maybe the logic of throwing the Nokia should be removed from here and added as part of the fighting mechanic. If we do not have fighting mechanic, then part with items should be just additional function
 def investigate(ident):
     print_separator()
     # get the investigation data
@@ -479,22 +279,13 @@ def investigate(ident):
         # but it's still an example
         if step in investigation["steps"]:
             if player["turns"] == investigation["turns_limit"] // 2:
-                type_writer(f"\n{random.choice(scary_reminders)}", 0.03)
+                type_writer(f"\n{random.choice(SCARY_REMINDERS)}", 0.03)
                 time.sleep(0.5)
             elif player["turns"] == 3 and investigation["turns_limit"] > 5:
-                type_writer(f"\n{random.choice(scary_reminders)}", 0.03)
+                type_writer(f"\n{random.choice(SCARY_REMINDERS)}", 0.03)
                 time.sleep(0.5)
             elif player["turns"] == 1 and investigation["turns_limit"] > 6:
-                type_writer(f"\n{random.choice(scary_reminders)}", 0.03)
+                type_writer(f"\n{random.choice(SCARY_REMINDERS)}", 0.03)
                 time.sleep(0.5)
 
             print_separator()
-
-start()
-    
-
-
-
-
-
-
