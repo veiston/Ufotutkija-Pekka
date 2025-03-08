@@ -24,3 +24,5 @@ def input_integer(prompt):
         user_input = input(prompt)
         if user_input.isdigit():
             return int(user_input)
+        else:
+            print('Dude, there are no such options here, try again')

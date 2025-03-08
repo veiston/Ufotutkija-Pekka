@@ -1,31 +1,53 @@
 # items.py
 
-# plain items for shop
-# TODO add new items, but it depends on whether we will have a fight. If we do, then additions should be made depending on the fighting logic. See TODO in investigations.py
 items = {
-    "bat": {"name": "Baseball bat", "price": 50, "success_chance": 80},
-    "salt": {"name": "Salt", "price": 20, "success_chance": 70},
-    "nokia": {"name": "Nokia", "price": 0, "success_chance": 50},
+    "salt": {
+        "name": "Salt",
+        "success_chance": 80,
+        "monster_ident": "ghost",
+        "description": "Detects movement of those invisible to the eye. In battle, repels non-physical entities upon contact.",
+        "price": 50
+    },
+    "holy_water": {
+        "name": "Holy Water",
+        "success_chance": 70,
+        "monster_ident": "ghost",
+        "description": "Applied to objects to detect supernatural reactions. In battle, burns or weakens non-physical supernatural entities.",
+        "price": 100
+    },
+    "flashlight": {
+        "name": "Flashlight",
+        "success_chance": 100,
+        "monster_ident": "ghost",
+        "description": "Reveals whether an entity casts a shadow. In battle, disorients those with an unstable physical form.",
+        "price": 75
+    },
+    "emf_detector": {
+        "name": "EMF Detector",
+        "success_chance": 75,
+        "monster_ident": "alien",
+        "description": "Detects electromagnetic pulses from cosmic objects. In battle, disables all technology - even extraterrestrial.",
+        "price": 120
+    },
+    "tinfoil_hat": {
+        "name": "Tinfoil Hat",
+        "success_chance": 60,
+        "monster_ident": "alien",
+        "description": "Helps determine if you are under mental influence. In battle, blocks telepathic attacks.",
+        "price": 30
+    },
+    "uv_flashlight": {
+        "name": "UV Flashlight",
+        "success_chance": 80,
+        "monster_ident": "alien",
+        "description": "Detects biological traces. In battle, temporarily blinds extraterrestrial life forms.",
+        "price": 90
+    },
+    "baseball_bat": {
+        "name": "Baseball Bat",
+        "success_chance": 100,
+        "monster_ident": "alien",
+        "description": "Determines whether an entity is physical. In battle, deals damage to material threats.",
+        "price": 60
+    }
 }
-
-# What is success_chance in items? This field defines the price of the item
-# Example of using success_chance in the gameplay:
-#
-# You hear a strange noise in the dark. What do you do?
-# 1. Throw salt (need salt, success chance 50%)
-# 2. Throw Nokia (need nokia (always awailable), success chance 20%)
-#
-# You throw the salt...
-# It failed! Try again or choose another item.
-#
-# You hear a strange noise in the dark. What do you do?
-# 1. Throw salt (need salt, success chance 50%)
-# 2. Throw Nokia (need nokia (always awailable), success chance 20%)
-#
-# You throw Nokia...
-# It worked! The Nokia flies through the air and... (description of next step)
-#
-#  So player uses their attempt for item using. If item is cheap, the chance of success is low and the player may waste the attempt
-
-# TODO I suggest giving the player a Nokia at the beginning and keeping it forever so they always have a backup item for fighting. Somebody needs to decide when exactly the player receives the Nokia at the start and say this information to the player with prints
-# NOKIA IS ALWAYS AVAILABLE, BUT HAS REALLY LOW CHANCE FOR SUCCESS!
