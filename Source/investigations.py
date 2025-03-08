@@ -214,5 +214,3 @@ def examine():
     print('TODO The user uses items and actions. The user returns to the room.')
     print_separator()
     return True
-
-investigate("tutorial")
