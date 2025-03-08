@@ -1,53 +1,68 @@
 # game.py
 
 from colorama import Fore, Style
+
+from Source.player import get_current_player
 from utilities import type_writer, print_separator, input_press_enter, input_integer
-from player import update_player
-from notifications import get_messages
+from player import reset_player, add_player
 from travel import travel
 from shop import shop
 
-# run_game function first initializes the game (player’s name, Melvin’s letter), then shows menu (travel or shop)
 def run_game():
     initialize_game()
-    print_separator() # utility function print_separator, see utilities.py
+    print_separator()
     show_main_menu()
 
 def initialize_game():
-    print(get_messages("START_WELCOME")) # get_messages("START_WELCOME"] - these are just variables with text, see notifications.py file
-    input_press_enter(get_messages("START_PRESS_ENTER_START")) # added utility function input_press_enter, see utilities.py
+    # Now we have only one player at a time, so we reset our database on every new game
+    reset_player()
 
-    set_player_name()
+    print("WeLc0ME TO UF0tutkiJA!")
+    input_press_enter("Press ENTER to start")
 
-    print_separator() # utility function print_separator, see utilities.py
+    new_user_name = input("Enter your name (otherwise you will be Pekka): ")
+    add_player(new_user_name)
 
-    print(get_messages("START_HELLO_USER_NAME"))
-    input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
+    print_separator()
+    
+    player = get_current_player()
 
-    print(get_messages("START_EMAIL_NOTIFICATION"))
-    input_press_enter(get_messages("START_PRESS_ENTER_EMAIL"))
+    print(f"Hello, {player['name']}, our best UFO hunter! \nYou've become a legend in paranormal investigations, but now...\nWell... You're stuck in your office, bored and waiting for something exciting...")
+    input_press_enter("Press ENTER to continue")
 
-    type_writer(get_messages("START_EMAIL_TEXT"), 0.03) # utility function type_writer, see utilities.py
-    input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
+    print(f"\nOh wait!\n{player['name']}, you hear a notification from your email inbox... Open it?")
+    input_press_enter("Press ENTER to open the email")
 
-def set_player_name():
-    user_name = input(get_messages("START_ENTER_YOUR_NAME"))
-    if user_name:
-        update_player("name", user_name)
+    type_writer(f"""
+        Date: 03 Sept 1999
+        Sender: Mel_UFO-Investigator_77
+
+        Yo, {player['name']}, it's your buddy MELVIN from Evergreen!1! Hope you still REMEMBER me, space cowboy
+        anyways, i just cant believe what im seeing... its NOT normal! noooo way. This is... PARA-NORMAL, and its HUUUGE. 
+        Like, REALLY f*cked up. I NEED your help here, at Evergreen!
+        We need 2 meet @ {Fore.GREEN}Denver International Airport{Style.RESET_ALL} tomorrow evening.
+        plz dont be late. dont tell anyone about this.
+
+        Cya,
+        Melvin
+        P.S. I''ve added {Fore.MAGENTA}$100{Style.RESET_ALL} to your bank account for your plane ticket!1! HURRY UP!!
+        """, 0.03)
+    input_press_enter("Press ENTER to continue")
+
 
 def show_main_menu():
     while True:
-        print(get_messages("MAIN_WHAT_TO_DO"))
-        print(f"1. {Fore.GREEN}{get_messages("MAIN_TRAVEL")}{Style.RESET_ALL}")
-        print(f"2. {Fore.MAGENTA}{get_messages("MAIN_SHOP")}{Style.RESET_ALL}")
+        print("Well, what do you want to do next?")
+        print(f"1. {Fore.GREEN}{"Go to the airport"}{Style.RESET_ALL}")
+        print(f"2. {Fore.MAGENTA}{"Buy equipment"}{Style.RESET_ALL}")
 
-        choice = input_integer(get_messages("COMMON_PRINT_OPTION_NUMBER"))
+        choice = input_integer("Print number of option: ")
 
         if choice == 1:
             travel()
         elif choice == 2:
             shop()
         else:
-            print(get_messages("COMMON_WRONG_INPUT"))
+            print("Friend, there are no such options here, try again")
 
 run_game()

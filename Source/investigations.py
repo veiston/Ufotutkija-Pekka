@@ -3,23 +3,24 @@
 import time
 import random
 
+from Source.player import get_current_player
 from utilities import type_writer, print_separator,input_integer
-from player import player
-from items import items
 from notifications import SCARY_REMINDERS
+from player import get_current_player
 
 # TODO new stories should be added here
 # TODO logic of fighting can be added here. For example you create a dictionary of monsters, where each monster has hp and damage. Then you add an hp key for the player. Then you include monsters in the story steps, just like items are currently added. And you also add damage to items
 # TODO logic of interview can be added here. For example you create a dictionary of conversation partners, where each partner has some kind of power scale and a list of questions. Then you add a key with the same power scale for the player. Then you include interrogations in the story steps, just like items are currently added. Finally you develop the logic where your scale influences the game without adding many new entities
+
 investigations = {
     "tutorial": { # story ident, important
-        "description": f"{player['name']}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
+        "description": "You arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",
         "airport": "KDEN",  # airport code related to this story
         "reward": 200,  # mission completion reward (money)
         "turns_limit": 10,  # number of attempts allowed for the location
         "level": 1,  # location level, must match the player's level to access
-        "win_text":  f"{player['name']}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $200 for new flights.",
-        "lose_text": f"{player['name']}, your resources have run out, and now you lose.",
+        "win_text":  f"It looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $200 for new flights.",
+        "lose_text": f"Your resources have run out, and now you lose.",
         "steps": {
             1: {
                 "text": "\nUpon arriving you find Melvin’s car still parked in his yard and the door to his house is ajar.\nIn the air, you can smell the smoke. Suddenly, you get a headache.\nYou call out for Melvin, but there’s no answer.“Something about this reminds me...\nI’m sure someone unusual has visited Melvin. It’s best to investigate the house and find out who,”\nyou decide and head inside.\n",
@@ -41,7 +42,7 @@ investigations = {
                 "can_examine": True,
                 "is_examined": False,
                 "choices": {
-"                   search_desk": {
+                    "search_desk": {
                         "text": "Search the desk drawers" ,
                         "next_step": 5,
                     },
@@ -135,6 +136,7 @@ investigations = {
 def investigate(ident):
     print_separator()
 
+    player = get_current_player()
     investigation = investigations[ident]
     turns = investigation["turns_limit"]
     step = 1
@@ -145,7 +147,7 @@ def investigate(ident):
         if step is None:
             print(f"{investigation['win_text']}")
             player["money"] += investigation["reward"]
-            player["level"] += 1
+            player["player_level"] += 1
             break
 
         if turns <= 0:
@@ -182,7 +184,7 @@ def investigate(ident):
                 if 1 <= selected_step_number <= len(step_choices_list):
                     break
                 else:
-                    print("Dude, there are no such options here, try again")
+                    print("Friend, there are no such options here, try again")
 
         selected_choice = step_choices_list[selected_step_number - 1]
         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]

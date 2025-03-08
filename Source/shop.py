@@ -2,16 +2,33 @@
 
 from colorama import Fore, Style
 from utilities import print_separator
-from items import items
+from database import get_data_from_database
+
+def get_items_from_database():
+    query = "SELECT * FROM items"
+    result = get_data_from_database(query)
+    items = {}
+    for row in result:
+        item = {
+            "name": row[0],
+            "price": row[1],
+            "item_type": row[2],
+            "description": row[3],
+            "is_finite": row[4]
+        }
+        items[row[0]] = item
+    return items
 
 def shop():
     print_separator()
+    items = get_items_from_database()
 
-    # TODO !SONA ALREADY HAS AN IMPLEMENTATION OF STORE! replace this stub with actual code about shoping and gambling
-    print("There will be a store, but for now you get an old Nokia for free")
-    print("\nHere is also a list of potentially (in future) reachable items from 'items' list: ")
+    # TODO
+    print("Available items:")
+    for index, (key, item) in enumerate(items.items(), 1):
+        price = item['price'] if item['price'] is not None else 0
+        print(f"{index}. {item['name']}: {item['description']} "
+              f"(Price: ${price})")
 
-    for item in items.values():
-        print(f"-{item['name']} "
-              f"({Fore.MAGENTA}${item['price']}{Style.RESET_ALL}, "
-              f"Success chance: {Fore.GREEN}{item['success_chance']}%{Style.RESET_ALL})")
+    print_separator()
+
