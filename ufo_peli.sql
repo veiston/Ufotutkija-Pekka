@@ -22,10 +22,9 @@ PRIMARY KEY (name)
 CREATE TABLE player(
 id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(40) DEFAULT 'Pekka',
-location_ident VARCHAR(40) DEFAULT 'EFHK',
-hp INT DEFAULT 200,
-money INT DEFAULT 0,
-player_level INT DEFAULT 1,
+location_ident VARCHAR(40),
+money INT DEFAULT 100,
+player_level INT,
 PRIMARY KEY (id),
 FOREIGN KEY (location_ident) REFERENCES airport(ident)
 );
@@ -58,8 +57,7 @@ FOREIGN KEY (location_ident) REFERENCES airport(ident)
 );
 
 INSERT INTO airport(ident, name, municipality, player_location)
-VALUES ('EFHK', 'Helsinki-Vantaan lentoasema', 'Vantaa', 'Helsinki'),
-('KBNA', 'Nashville International Airport', 'Nashville', 'Evergreen'),
+VALUES ('KBNA', 'Nashville International Airport', 'Nashville', 'Evergreen'),
 ('KDEN', 'Denver International Airport', 'Denver', 'Hopkinsville'),
 ('KHTS', 'Tri-State/Milton J. Ferguson Field', 'Huntington', 'Flatwoods'),
 ('KLFK', 'Angelina County Airport', 'Lufkin', 'Broaddus'),

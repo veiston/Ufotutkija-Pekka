@@ -1,16 +1,22 @@
 # player.py
-import mysql.connector
-from database import update_data_in_database, get_data_from_database
+from database import *
 
-current_player_id = None
+player = {
+    "name": "Pekka",  # the player's default name is Pekka, but they can change it
+    "airport": 'QWE', # the unique key of current investigation
+    "money": 100,  # player needs money for the shop and flights
+    "level": 1,  # player's level determines access to new locations
+    "inventory": ["nokia"]  # here is the list of bought items from "items", example: ["nokia", "salt"]
+}
 
 def reset_player():
     global current_player_id
     current_player_id = None
-    update_data_in_database("DELETE FROM player")
-    update_data_in_database("ALTER TABLE player AUTO_INCREMENT = 1")
+    # For some reason, inventory needs to be deleted first, otherwise it will not reset the auto_increment and crash the game
     update_data_in_database("DELETE FROM inventory")
     update_data_in_database("ALTER TABLE inventory AUTO_INCREMENT = 1")
+    update_data_in_database("DELETE FROM player")
+    update_data_in_database("ALTER TABLE player AUTO_INCREMENT = 1")
 
 def update_player(field, value, player_id):
     update_data_in_database(f"UPDATE player SET {field} = '{value}' WHERE id = {player_id}")
@@ -59,3 +65,13 @@ def get_current_player():
         return {}
 
 add_player('')
+
+# Test block
+if __name__ == "__main__":
+    player = get_current_player()
+    if player:
+        print("Current player data:")
+        for key, value in player.items():
+            print(f"{key}: {value}")
+    else:
+        print("ERROR: No player.")

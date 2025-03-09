@@ -3,24 +3,23 @@
 import time
 import random
 
-from Source.player import get_current_player
 from utilities import type_writer, print_separator,input_integer
+from player import *
+from items import items
 from notifications import SCARY_REMINDERS
-from player import get_current_player
 
 # TODO new stories should be added here
 # TODO logic of fighting can be added here. For example you create a dictionary of monsters, where each monster has hp and damage. Then you add an hp key for the player. Then you include monsters in the story steps, just like items are currently added. And you also add damage to items
 # TODO logic of interview can be added here. For example you create a dictionary of conversation partners, where each partner has some kind of power scale and a list of questions. Then you add a key with the same power scale for the player. Then you include interrogations in the story steps, just like items are currently added. Finally you develop the logic where your scale influences the game without adding many new entities
-
 investigations = {
     "tutorial": { # story ident, important
-        "description": "You arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",
+        "description": f"{player['name']}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
         "airport": "KDEN",  # airport code related to this story
         "reward": 200,  # mission completion reward (money)
         "turns_limit": 10,  # number of attempts allowed for the location
         "level": 1,  # location level, must match the player's level to access
-        "win_text":  f"It looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $200 for new flights.",
-        "lose_text": f"Your resources have run out, and now you lose.",
+        "win_text":  f"{player['name']}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $200 for new flights.",
+        "lose_text": f"{player['name']}, your resources have run out, and now you lose.",
         "steps": {
             1: {
                 "text": "\nUpon arriving you find Melvin’s car still parked in his yard and the door to his house is ajar.\nIn the air, you can smell the smoke. Suddenly, you get a headache.\nYou call out for Melvin, but there’s no answer.“Something about this reminds me...\nI’m sure someone unusual has visited Melvin. It’s best to investigate the house and find out who,”\nyou decide and head inside.\n",
@@ -42,7 +41,7 @@ investigations = {
                 "can_examine": True,
                 "is_examined": False,
                 "choices": {
-                    "search_desk": {
+"                   search_desk": {
                         "text": "Search the desk drawers" ,
                         "next_step": 5,
                     },
@@ -136,7 +135,6 @@ investigations = {
 def investigate(ident):
     print_separator()
 
-    player = get_current_player()
     investigation = investigations[ident]
     turns = investigation["turns_limit"]
     step = 1
@@ -146,20 +144,26 @@ def investigate(ident):
     while True:
         if step is None:
             print(f"{investigation['win_text']}")
-            player["money"] += investigation["reward"]
-            player["player_level"] += 1
+            # Retrieve the full, updated player data. This returns a dictionary with an 'id' key.
+            current = get_current_player()
+            # Ensure current money and player_level are valid numbers.
+            current_money = current.get("money")
+            if current_money is None:
+                current_money = 0
+            current_level = current.get("player_level")
+            if current_level is None:
+                current_level = 0
+
+            new_money = current_money + investigation["reward"]
+            new_level = current_level + 1
+            # Update player's data with the new money and level.
+            update_player("money", new_money, current["id"])
+            update_player("player_level", new_level, current["id"])
             break
 
         if turns <= 0:
             print(f"{investigation['lose_text']}")
-            # TODO FIGHTING INSTEAD OF lose_text HERE
-            # Example
-            # fighting_result = fight() # fight() return True if you won and False if you lose
-            # if fighting_result == True:
-            #     print(f"{investigation['win_text']}")
-            # else:
-            #     print(f"{investigation['lose_text']}")
-            # break
+            # TODO: Fighting logic could be placed here.
             break
 
         if (turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3):
@@ -175,16 +179,17 @@ def investigate(ident):
         print(step_description)
 
         for number, choice in enumerate(step_choices_list, 1):
+            # Skip re-displaying the "examine" option if already examined.
             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
                 continue
             print(f"{number}. {choice['text']}")
 
         while True:
-                selected_step_number = input_integer("\nSelect your next move by its number: ")
-                if 1 <= selected_step_number <= len(step_choices_list):
-                    break
-                else:
-                    print("Friend, there are no such options here, try again")
+            selected_step_number = input_integer("\nSelect your next move by its number: ")
+            if 1 <= selected_step_number <= len(step_choices_list):
+                break
+            else:
+                print("Dude, there are no such options here, try again")
 
         selected_choice = step_choices_list[selected_step_number - 1]
         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
@@ -216,3 +221,8 @@ def examine():
     print('TODO The user uses items and actions. The user returns to the room.')
     print_separator()
     return True
+
+if __name__ == "__main__":
+    # Test block to run functions.
+    print("Running investigation test: 'tutorial'")
+    investigate("tutorial")
