@@ -130,89 +130,109 @@ investigations = {
                 },
             }
         }
+    },
+    "roswell_city": {
+                "description": "You've arrived in Roswell. Strange things are happening here...",
+                "location": "Roswell City",
+                "reward": 150,
+                "turns_limit": 5,
+                "level": 1,
+                "linked_module": "investigation_city",
+                "steps": {
+                    1: {
+                        "text": "You stand in the middle of Roswell, feeling something is off. Where do you go?",
+                        "choices": {
+                            "police_station": {
+                                "text": "Go to the police station",
+                                "next_step": None,
+                                "launch_module": "police_station",
+                                "flag": "visited_police"
+                            },
+                            "bar": {
+                                "text": "Go to the hotel bar",
+                                "next_step": None,
+                                "launch_module": "investigation_city",
+                                "flag": "visited_bar"
+                            },
+                            "desert": {
+                                "text": "Head into the desert",
+                                "next_step": None,
+                                "launch_module": "desert_mission",
+                                "requires": ["visited_police", "visited_bar"]
+                            }
+                        }
+                    }
+                }
     }
 }
 
 def investigate(ident):
     print_separator()
-
+    
     player = get_current_player()
-    investigation = investigations[ident]
+    investigation = investigations.get(ident)
+    if not investigation:
+        print("Invalid investigation identifier.")
+        return
+    
     turns = investigation["turns_limit"]
     step = 1
-
+    
     print(f"{investigation['description']}")
-
+    
     while True:
         if step is None:
             print(f"{investigation['win_text']}")
             player["money"] += investigation["reward"]
             player["player_level"] += 1
             break
-
+        
         if turns <= 0:
             print(f"{investigation['lose_text']}")
-            # TODO FIGHTING INSTEAD OF lose_text HERE
-            # Example
-            # fighting_result = fight() # fight() return True if you won and False if you lose
-            # if fighting_result == True:
-            #     print(f"{investigation['win_text']}")
-            # else:
-            #     print(f"{investigation['lose_text']}")
-            # break
             break
-
+        
         if (turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3):
             type_writer(f"{random.choice(SCARY_REMINDERS)}\nYou have {turns} turns left", 0.03)
             time.sleep(2)
             print_separator()
-
-        step_data = investigation["steps"][step]
-        step_choices_dict = step_data["choices"]
+        
+        step_data = investigation["steps"].get(step)
+        if not step_data:
+            print("Invalid step. Ending investigation.")
+            break
+        
+        step_choices_dict = step_data.get("choices", {})
         step_choices_list = list(step_choices_dict.values())
         step_description = step_data["text"] if not step_data["is_examined"] else "FYI, you’ve already examined this area... What's next?\n"
-
+        
         print(step_description)
-
+        
         for number, choice in enumerate(step_choices_list, 1):
             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
                 continue
             print(f"{number}. {choice['text']}")
-
+        
         while True:
-                selected_step_number = input_integer("\nSelect your next move by its number: ")
-                if 1 <= selected_step_number <= len(step_choices_list):
-                    break
-                else:
-                    print("Friend, there are no such options here, try again")
-
+            selected_step_number = input_integer("\nSelect your next move by its number: ")
+            if 1 <= selected_step_number <= len(step_choices_list):
+                break
+            else:
+                print("Invalid choice. Try again.")
+        
         selected_choice = step_choices_list[selected_step_number - 1]
         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
-
+        
         if selected_key == "examine" and not step_data["is_examined"]:
             examine()
             investigation["steps"][step]["is_examined"] = True
-
-            is_all_explored = True
-            for step_data in investigation["steps"].values():
-                if step_data["can_examine"] and not step_data["is_examined"]:
-                    is_all_explored = False
-                    break
-
-            if is_all_explored:
-                step = selected_choice["next_step"]
-            else:
-                continue
         else:
             step = selected_choice["next_step"]
-
+        
         turns -= 1
-
         print_separator()
 
 def examine():
     print_separator()
-    # TODO
     print('TODO The user uses items and actions. The user returns to the room.')
     print_separator()
     return True

@@ -1,6 +1,6 @@
 # player.py
 import mysql.connector
-from database import update_data_in_database, get_data_from_database
+from Source.database import update_data_in_database, get_data_from_database
 
 current_player_id = None
 

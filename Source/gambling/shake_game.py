@@ -1,3 +1,0 @@
-# snake_game.py
-
-# TODO add game !SONA ALREADY HAS AN IMPLEMENTATION OF THIS GAME!
