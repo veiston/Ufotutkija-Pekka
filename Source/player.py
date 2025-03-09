@@ -52,19 +52,19 @@ def add_player(new_player_name):
     connection.close()
 
 def get_current_player():
-    global current_player_id
-    if current_player_id:
-        query = f"SELECT * FROM player WHERE id = {current_player_id}"
-        result = get_data_from_database(query)
-        if result:
-            columns = ["id", "name", "location_ident", "money", "player_level"]
-            player_data = result[0]
-            player = {columns[i]: player_data[i] for i in range(len(columns))}
-            return player
+    #global current_player_id
+    #if current_player_id:
+    query = f"SELECT * FROM player WHERE id = 1"
+    result = get_data_from_database(query)
+    if result:
+        columns = ["id", "name", "location_ident", "hp", "attack", "money", "player_level"]
+        player_data = result[0]
+        player = {columns[i]: player_data[i] for i in range(len(columns))}
+        return player
     else:
         return {}
 
-add_player('')
+#add_player('')
 
 # Test block
 if __name__ == "__main__":

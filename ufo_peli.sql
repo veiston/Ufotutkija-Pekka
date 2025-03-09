@@ -24,6 +24,7 @@ id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(40) DEFAULT 'Pekka',
 location_ident VARCHAR(40) DEFAULT 'EFHK',
 hp INT DEFAULT 200,
+attack INT DEFAULT 10,
 money INT DEFAULT 0,
 player_level INT DEFAULT 1,
 PRIMARY KEY (id),
@@ -77,8 +78,8 @@ VALUES ('Alien', 100, 20, 'Water'),
 ('Melvin', 200, 40, 'Phone');
 
 INSERT INTO creature(name, creature_type, description, location_ident)
-VALUES ('Metal Goblin', 'Alien', 'Horrible small creature that apparently burns with the desire to bite your ankles and to steal your phone.', 'KBNA'),
-('Braxie', 'Alien', 'Huge floating creature of weird shapes. Smells really bad.', 'KBNA'),
+VALUES ('Metal Goblin', 'Alien', 'Horrible small creature that apparently burns with the desire to bite your ankles and to steal your phone.', 'KDEN'),
+('Braxie', 'Alien', 'Huge floating creature of weird shapes. Smells really bad.', 'KHTS'),
 ('Wounded Grey', 'Alien', 'Disoriented lanky creature. Very aggressive.', 'KROW'),
 ('Texaboo Baba Yaga', 'Ghost', 'Old lady wearing a Texas costume riding a KFC bucket. Threatening you with guns.', 'KLFK'),
 ('Näkki', 'Ghost', 'Very wet creature.', 'KSEA'),
