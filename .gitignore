@@ -4,3 +4,4 @@ venv/
 __pycache__/
 Source/.DS_Store
 Source/__pycache__/
+Start_initialize_game.bat

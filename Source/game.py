@@ -1,9 +1,15 @@
 # game.py
 
 from colorama import Fore, Style
+<<<<<<< Updated upstream
 from utilities import type_writer, print_separator, input_press_enter, input_integer
 from player import update_player
 from notifications import get_messages
+=======
+
+from utilities import type_writer, print_separator, input_press_enter, input_integer
+from player import reset_player, add_player, get_current_player
+>>>>>>> Stashed changes
 from travel import travel
 from shop import shop
 
