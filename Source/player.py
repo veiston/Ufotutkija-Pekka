@@ -57,7 +57,7 @@ def get_current_player():
         query = f"SELECT * FROM player WHERE id = {current_player_id}"
         result = get_data_from_database(query)
         if result:
-            columns = ["id", "name", "location_ident", "money", "player_level"]
+            columns = ["id", "name", "location_ident", "hp", "money", "player_level"]
             player_data = result[0]
             player = {columns[i]: player_data[i] for i in range(len(columns))}
             return player
