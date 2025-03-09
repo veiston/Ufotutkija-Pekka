@@ -1,15 +1,9 @@
 # game.py
 
 from colorama import Fore, Style
-<<<<<<< Updated upstream
 from utilities import type_writer, print_separator, input_press_enter, input_integer
-from player import update_player
+from player import *
 from notifications import get_messages
-=======
-
-from utilities import type_writer, print_separator, input_press_enter, input_integer
-from player import reset_player, add_player, get_current_player
->>>>>>> Stashed changes
 from travel import travel
 from shop import shop
 
@@ -20,20 +14,22 @@ def run_game():
     show_main_menu()
 
 def initialize_game():
-    print(get_messages("START_WELCOME")) # get_messages("START_WELCOME"] - these are just variables with text, see notifications.py file
-    input_press_enter(get_messages("START_PRESS_ENTER_START")) # added utility function input_press_enter, see utilities.py
-
+    print(get_messages("START_WELCOME"))
+    input_press_enter(get_messages("START_PRESS_ENTER_START"))
+    
     set_player_name()
-
-    print_separator() # utility function print_separator, see utilities.py
-
+    
+    # Ensure player level is set to 1 after creating the player
+    current_player = get_current_player()
+    if current_player:
+        update_player("player_level", 1, current_player["id"])
+    
+    print_separator()
     print(get_messages("START_HELLO_USER_NAME"))
     input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
-
     print(get_messages("START_EMAIL_NOTIFICATION"))
     input_press_enter(get_messages("START_PRESS_ENTER_EMAIL"))
-
-    type_writer(get_messages("START_EMAIL_TEXT"), 0.03) # utility function type_writer, see utilities.py
+    type_writer(get_messages("START_EMAIL_TEXT"), 0.03)
     input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
 
 def set_player_name():

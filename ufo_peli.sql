@@ -22,15 +22,9 @@ PRIMARY KEY (name)
 CREATE TABLE player(
 id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(40) DEFAULT 'Pekka',
-<<<<<<< Updated upstream
 location_ident VARCHAR(40),
-money INT,
-player_level INT,
-=======
-location_ident VARCHAR(40) DEFAULT 'EFHK',
 money INT DEFAULT 100,
-player_level INT DEFAULT 1,
->>>>>>> Stashed changes
+player_level INT,
 PRIMARY KEY (id),
 FOREIGN KEY (location_ident) REFERENCES airport(ident)
 );

@@ -7,8 +7,8 @@ from player import get_current_player, update_player, add_player
 from investigations import investigate
 
 PRICE_PER_KM = 0.01
+FLIGHT_COST = 100
 
-# Travel text function
 def flight_text():
     type_writer("Taking off...", 0.04)
     time.sleep(0.5)
@@ -22,61 +22,80 @@ def get_airport_data(symbol):
     result = get_data_from_database(query)
     return result[0] if result else None
 
+def get_available_airports(player_level):
+    """
+    Here it returns a list of airport symbols unlocked based on the player's level.
+    Level 5 or higher: All configured airports become available.
+    """
+    if player_level == 1:
+        return ["KDEN"]
+    elif player_level == 2:
+        return ["KDEN", "KSEA"]
+    elif player_level == 3:
+        return ["KDEN", "KSEA", "KBNA"]
+    elif player_level == 4:
+        return ["KDEN", "KSEA", "KBNA", "KHTS"]
+    else:
+        return ["KDEN", "KSEA", "KBNA", "KHTS", "KLFK", "KROW"]
+
 def travel():
     current_player = get_current_player()
     if not current_player:
         print("ERROR: No player found. Please create a player first.")
         return
-
-    # Consolidated airport selection logic for all levels
-    airport_symbol = "KDEN"
-    airport_text = f"Denver International Airport ({airport_symbol})"
-    print(f"\n1. {Fore.GREEN}{airport_text}{Style.RESET_ALL}")
-    input("\nSelect the airport you want to fly to by its number in the list: ")
-    print("\nGreat choice!")
-    flight_text()
+    # Change lever for testing purposes here:
+    # Retrieve available airports based on player's level
+    #current_player['player_level'] = 1
+    available_airports = get_available_airports(current_player['player_level'])
     
-    # Update player's airport and deduct money.
-    update_player('location_ident', airport_symbol, current_player['id'])
-    new_money = current_player['money'] - 100
-    update_player('money', new_money, current_player['id'])
+    print("\nAvailable Airports:")
+    airport_options = []
+    index = 1
+    for symbol in available_airports:
+        airport_data = get_airport_data(symbol)
+        if (airport_data):
+            # Expected structure: (ident, name, municipality, player_location)
+            airport_name = airport_data[1]
+            option_text = f"{airport_name} ({symbol})"
+            print(f"{index}. {Fore.GREEN}{option_text}{Style.RESET_ALL}")
+            airport_options.append(symbol)
+            index += 1
     
-    # Start investigation
-    investigate('tutorial')
+    # Option to exit travel
+    print(f"{index}. Exit travel")
     
-    # Fetch and display airport data using the new function
-    airport_data = get_airport_data(airport_symbol)
+    choice = input("\nSelect the airport you want to fly to by its number: ")
+    if choice.isdigit():
+        choice = int(choice)
+        if choice == index:
+            print("Exiting travel...")
+            return
+        elif 1 <= choice < index:
+            selected_symbol = airport_options[choice - 1]
+            selected_airport = get_airport_data(selected_symbol)
+            print(f"\nGreat choice! You selected {selected_airport[1]} ({selected_symbol})")
+            flight_text()
+            
+            # Check if the player has enough money for the flight
+            if current_player["money"] < FLIGHT_COST:
+                print(f"Insufficient funds for the flight. You have ${current_player['money']}, but the flight costs ${FLIGHT_COST}.")
+                return
+            
+            # Update player's airport and deduct flight cost.
+            update_player('location_ident', selected_symbol, current_player['id'])
+            new_money = current_player['money'] - FLIGHT_COST
+            update_player('money', new_money, current_player['id'])
+            print(f"Flight cost ${FLIGHT_COST} deducted. New balance: ${new_money}")
+            
+            # Start investigation
+            investigate('tutorial')
+        else:
+            print("Invalid option selected.")
+    else:
+        print("Invalid input.")
 
 # Test block to check if the functions work. (This is only run if running this file directly)
 if __name__ == '__main__':
     add_player('Test dude')
     current_player = get_current_player()
-    # For testing, manually set player level if needed.
-    current_player['player_level'] = 2  
     travel()
-
-    # For this logic you need database. See file database.py for more information about what is already done
-
-    # How does the player choose the airport they want to fly to?
-    # We take the list of all investigations. Each investigation has a level and an airport.
-    # We filter the list of investigations, keeping only those where the level matches the player's level.
-    # From the filtered investigations we extract the airport field and create a list of airport codes.
-    # We search for each found airport in the database using its code and retrieve its name.
-    # We display the list of available airports, numbering them so the player can choose.
-    # When the player enters the number of an airport, we find it in the list and determine whether the player can fly there.
-
-    # How do we determine if the player can fly to the selected airport?
-    # The player has a field player["airport"], which stores the code of the airport where they are currently located.
-    # (If the player hasn't flown yet, they are in the default airport (EFHK – Helsinki))
-    # We take the code of the current airport and the identifier of the selected airport.
-    # We calculate the distance between these two airports (we did a similar Python homework, if I remember right).
-    # Based on the distance we calculate the flight cost. For example, we can take 1km as 0.01$. We use the PRICE_PER_KM variable (it's defined above and can be changed).
-    # We check if the player has enough money.
-    # If player doesn’t have enough money, we show them a message and tell them they need to go Gambling in the store.
-    # If player does have enough money, we "move" the player to the new airport and start new investigation.
-
-    # How do we determine which investigation the player starts with chosen airport? IMPORTANT: for now, one airport = one investigation
-    # Each investigation has a unique key (ex: "tutorial") and is linked to a specific airport.
-    # After the player selects an airport, we search for an investigation where the "airport" field matches the selected airport.
-    # We take the key of that investigation and assign it to player["investigation"].
-    # We need this key later, that is why I decided to save it

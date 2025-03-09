@@ -4,7 +4,7 @@ import time
 import random
 
 from utilities import type_writer, print_separator,input_integer
-from player import player
+from player import *
 from items import items
 from notifications import SCARY_REMINDERS
 
@@ -144,20 +144,26 @@ def investigate(ident):
     while True:
         if step is None:
             print(f"{investigation['win_text']}")
-            player["money"] += investigation["reward"]
-            player["level"] += 1
+            # Retrieve the full, updated player data. This returns a dictionary with an 'id' key.
+            current = get_current_player()
+            # Ensure current money and player_level are valid numbers.
+            current_money = current.get("money")
+            if current_money is None:
+                current_money = 0
+            current_level = current.get("player_level")
+            if current_level is None:
+                current_level = 0
+
+            new_money = current_money + investigation["reward"]
+            new_level = current_level + 1
+            # Update player's data with the new money and level.
+            update_player("money", new_money, current["id"])
+            update_player("player_level", new_level, current["id"])
             break
 
         if turns <= 0:
             print(f"{investigation['lose_text']}")
-            # TODO FIGHTING INSTEAD OF lose_text HERE
-            # Example
-            # fighting_result = fight() # fight() return True if you won and False if you lose
-            # if fighting_result == True:
-            #     print(f"{investigation['win_text']}")
-            # else:
-            #     print(f"{investigation['lose_text']}")
-            # break
+            # TODO: Fighting logic could be placed here.
             break
 
         if (turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3):
@@ -173,16 +179,17 @@ def investigate(ident):
         print(step_description)
 
         for number, choice in enumerate(step_choices_list, 1):
+            # Skip re-displaying the "examine" option if already examined.
             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
                 continue
             print(f"{number}. {choice['text']}")
 
         while True:
-                selected_step_number = input_integer("\nSelect your next move by its number: ")
-                if 1 <= selected_step_number <= len(step_choices_list):
-                    break
-                else:
-                    print("Dude, there are no such options here, try again")
+            selected_step_number = input_integer("\nSelect your next move by its number: ")
+            if 1 <= selected_step_number <= len(step_choices_list):
+                break
+            else:
+                print("Dude, there are no such options here, try again")
 
         selected_choice = step_choices_list[selected_step_number - 1]
         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
@@ -214,3 +221,8 @@ def examine():
     print('TODO The user uses items and actions. The user returns to the room.')
     print_separator()
     return True
+
+if __name__ == "__main__":
+    # Test block to run functions.
+    print("Running investigation test: 'tutorial'")
+    investigate("tutorial")

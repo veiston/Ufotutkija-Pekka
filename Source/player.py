@@ -1,4 +1,5 @@
 # player.py
+from database import *
 
 player = {
     "name": "Pekka",  # the player's default name is Pekka, but they can change it
@@ -8,10 +9,6 @@ player = {
     "inventory": ["nokia"]  # here is the list of bought items from "items", example: ["nokia", "salt"]
 }
 
-<<<<<<< Updated upstream
-def update_player(key, value):
-    player[key] = value
-=======
 def reset_player():
     global current_player_id
     current_player_id = None
@@ -78,4 +75,3 @@ if __name__ == "__main__":
             print(f"{key}: {value}")
     else:
         print("ERROR: No player.")
->>>>>>> Stashed changes
