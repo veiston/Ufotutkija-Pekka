@@ -1,11 +1,13 @@
 import time
 import sys
 import random
+import config
 from database import *
 from player import update_player, get_current_player
 from colorama import Fore, Style
 from utilities import type_writer, print_separator, input_press_enter, input_integer
 from notifications import get_messages
+from inventory import *
 #KDEN
 
 """
@@ -17,6 +19,8 @@ query = (
     f'WHERE creature.location_ident = "{get_current_player()["location_ident"]}";')
 print(get_data_from_database(query))
 """
+
+
 
 def waiting_action():
     time.sleep(0.5)
@@ -47,6 +51,9 @@ def get_creature():
 #print(get_current_player()['location_ident'])
 #print(get_current_player()['hp'])
 
+
+
+
 def Battle():
     fight = True
     creature = get_creature()
@@ -74,7 +81,9 @@ def Battle():
 
             if creature['hp']<=0:
                 fight = False
+                config.tossNokia = False
                 print('victory')
+
             else:
                 print(f'{creature['name']} attacks!')
                 waiting_action()
@@ -85,15 +94,33 @@ def Battle():
 
                 if get_current_player()['hp']<=0:
                     fight = False
+                    config.tossNokia = False
                     print('kualit')
+
         elif action == 2:
-            print('itemit')
+            item = list_inventory()
+            print(item)
+            if item!='exit':
+                if item['type'] == creature['weakness']:
+                    print('BOW!')
+                elif item['name'] == 'Nokia':
+                    print('mäkitorppa')
+                else:
+                    print('meh')
         elif action ==3:
             print(creature['description'])
 
 
+#config.tossNokia = True
+#list_inventory()
 
+"""
+inventory = get_inventory()
 
+for i in range(len(inventory)):
+    print(i+1)
+    print(inventory[i]['item'])
+"""
 Battle()
 #player = get_current_player()
 #print(get_current_player()['hp'])
