@@ -166,68 +166,82 @@ investigations = {
     }
 }
 
+
 def investigate(ident):
     print_separator()
-    
+
     player = get_current_player()
     investigation = investigations.get(ident)
     if not investigation:
         print("Invalid investigation identifier.")
         return
-    
+
     turns = investigation["turns_limit"]
     step = 1
-    
+
     print(f"{investigation['description']}")
-    
+
     while True:
         if step is None:
             print(f"{investigation['win_text']}")
             player["money"] += investigation["reward"]
             player["player_level"] += 1
             break
-        
+
         if turns <= 0:
             print(f"{investigation['lose_text']}")
             break
-        
+
         if (turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3):
             type_writer(f"{random.choice(SCARY_REMINDERS)}\nYou have {turns} turns left", 0.03)
             time.sleep(2)
             print_separator()
-        
+
         step_data = investigation["steps"].get(step)
         if not step_data:
             print("Invalid step. Ending investigation.")
             break
-        
-        step_choices_dict = step_data.get("choices", {})
+
+        step_choices_dict = step_data["choices"]
         step_choices_list = list(step_choices_dict.values())
-        step_description = step_data["text"] if not step_data["is_examined"] else "FYI, you’ve already examined this area... What's next?\n"
-        
+        step_description = step_data["text"] if not step_data[
+            "is_examined"] else "FYI, you’ve already examined this area... What's next?\n"
+
         print(step_description)
-        
+
         for number, choice in enumerate(step_choices_list, 1):
             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
                 continue
             print(f"{number}. {choice['text']}")
-        
+
         while True:
             selected_step_number = input_integer("\nSelect your next move by its number: ")
             if 1 <= selected_step_number <= len(step_choices_list):
                 break
             else:
-                print("Invalid choice. Try again.")
-        
+                print("Friend, there are no such options here, try again")
+
         selected_choice = step_choices_list[selected_step_number - 1]
         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
-        
+
         if selected_key == "examine" and not step_data["is_examined"]:
             examine()
             investigation["steps"][step]["is_examined"] = True
-        else:
-            step = selected_choice["next_step"]
-        
+
+            # Check if all examinable locations have been examined
+            is_all_explored = all(
+                step_data.get("is_examined", False)
+                for step_data in investigation["steps"].values()
+                if step_data.get("can_examine", False)
+            )
+
+            if is_all_explored:
+                print("You've thoroughly examined all available areas! Perhaps you should draw a conclusion?")
+            else:
+                continue  # Continue to the next iteration within the while loop
+
+        step = selected_choice["next_step"]
+
         turns -= 1
         print_separator()
 
