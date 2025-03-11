@@ -34,3 +34,12 @@ def yes_no(prompt):
             return user_input
         else:
             print('Dude, there are no such options here, try again')
+
+def waiting_action():
+    time.sleep(0.5)
+    print('.')
+    time.sleep(0.5)
+    print('.')
+    time.sleep(0.5)
+    print('.')
+    time.sleep(1)

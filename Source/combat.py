@@ -5,7 +5,7 @@ import config
 from database import *
 from player import update_player, get_current_player
 from colorama import Fore, Style
-from utilities import type_writer, print_separator, input_press_enter, input_integer
+from utilities import type_writer, print_separator, input_press_enter, input_integer, waiting_action
 from notifications import get_messages
 from inventory import *
 #KDEN
@@ -22,14 +22,7 @@ print(get_data_from_database(query))
 
 
 
-def waiting_action():
-    time.sleep(0.5)
-    print('.')
-    time.sleep(0.5)
-    print('.')
-    time.sleep(0.5)
-    print('.')
-    time.sleep(1)
+
 
 def get_creature():
     query = (f'SELECT creature.name, creature_types.hp, creature_types.attack, creature_types.weakness, creature.creature_type, creature.description '
@@ -50,20 +43,20 @@ def creature_turn(creature):
     if creature['hp'] <= 0:
         config.tossNokia = False
         print('victory')
-        return 'end'
+        return 'win'
 
     else:
         print(f'{creature['name']} attacks!')
         waiting_action()
         attack = random.randint(creature['attack'] - 5, creature['attack'] + 5)
-        update_player('hp', get_current_player()['hp'] - attack, 1)
+        update_player('hp', get_current_player()['hp'] - attack, get_current_player()['id'])
         print(f'You take {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
         input_press_enter('')
 
         if get_current_player()['hp'] <= 0:
             config.tossNokia = False
             print('kualit')
-            return 'end'
+            return 'lose'
 #print(get_data_from_database(getCreature))
 #print(get_current_player()['location_ident'])
 #print(get_current_player()['hp'])
@@ -88,6 +81,8 @@ def battle():
         action = input_integer(get_messages("COMMON_PRINT_OPTION_NUMBER"))
 
         if action == 1:
+            print_separator()
+
             print(f'You attack {creature['name']}')
             waiting_action()
             attack = random.randint(get_current_player()['attack']-5, get_current_player()['attack']+5)
@@ -97,31 +92,47 @@ def battle():
             input_press_enter('')
 
             turnChange = creature_turn(creature)
-            if turnChange == 'exit':
-                fight = False
+            print(turnChange)
+            if turnChange == 'win':
+                #fight = False
+                return True
+            elif turnChange == 'lose':
+                return False
 
         elif action == 2:
+            print_separator()
             item = list_inventory()
 
             if item!='exit':
-                print(f'You throw {item["name"]} at {creature["name"]}!')
-                waiting_action()
-
-                if item['type'] == creature['weakness']:
-                    attack = item['attack']*2
+                if item['type'] == 'Healing':
+                    update_player('hp', get_current_player()['hp']+item['power'], get_current_player()['id'])
+                    print(f'Yo regain {Fore.GREEN}{item["power"]}{Style.RESET_ALL} health')
+                    input_press_enter('')
 
                 else:
-                    attack = item['attack']
+                    print(f'You throw {item["name"]} at {creature["name"]}!')
+                    waiting_action()
 
-                creature['hp']-=attack
-                print(f'{creature['name']} takes {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
+                    if item['type'] == creature['weakness']:
+                        attack = item['power']*2
+
+                    else:
+                        attack = item['power']
+
+                    creature['hp']-=attack
+                    print(f'{creature['name']} takes {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
+                    print(f'{creature["name"]} {creature["hp"]} HP')
+                    input_press_enter('')
 
                 turnChange = creature_turn(creature)
-                if turnChange == 'end':
-                    fight = False
+                if turnChange == 'win':
+                    return True
+                elif turnChange == 'lose':
+                    return False
 
 
         elif action ==3:
+            print_separator()
             print(creature['description'])
             print(creature['hp'])
             print(creature['type'])
@@ -137,7 +148,7 @@ for i in range(len(inventory)):
     print(i+1)
     print(inventory[i]['item'])
 """
-battle()
+print(battle())
 #player = get_current_player()
 #print(get_current_player()['hp'])
 #update_player('hp', get_current_player()['hp']-10, 1)
