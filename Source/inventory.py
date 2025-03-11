@@ -35,44 +35,50 @@ def get_inventory():
 def list_inventory():
     inventory = get_inventory()
     inventoryLength = len(inventory)
+    openInventory = True
 
-    for i in range(inventoryLength):
-        if inventory[i]["amount"] is None:
-            print(f'{i+1}) {inventory[i]["name"]}')
-        else:
-            print(f'{i + 1}) {inventory[i]["name"]} {inventory[i]["amount"]}')
+    while openInventory:
+        print_separator()
+        print('Inventory\n')
 
-    print(f'{inventoryLength+1}) Go back\n')
-    action = input_integer(get_messages("COMMON_PRINT_OPTION_NUMBER"))
-
-    if action>0 and action<=inventoryLength:
-        item = inventory[action-1]
-        print(item['description'])
-        if item['type'] != 'Healing':
-            print(f'Attack power {Fore.RED}{item["power"]}{Style.RESET_ALL}')
-        else:
-            print(f'Healing power {Fore.GREEN}{item["power"]}{Style.RESET_ALL}')
-
-        if item['name'] != 'Nokia':
-            print(f'You have {item["amount"]} left\n')
-
-        choose = yes_no('Do you want to use this item? y/n\n')
-
-        if choose == 'y':
-            if item['name'] == 'Nokia':
-                config.tossNokia = True
+        for i in range(inventoryLength):
+            if inventory[i]["amount"] is None:
+                print(f'{i+1}) {inventory[i]["name"]}')
             else:
-                update_inventory(1, get_current_player()['id'], item['name'])
-            return item
-        if choose == 'n':
-            list_inventory()
-    elif action==inventoryLength+1:
-        #This is the Go Back option
-        return 'exit'
-    else:
-        print("There's no such option")
-        input_press_enter('')
-        list_inventory()
+                print(f'{i + 1}) {inventory[i]["name"]} {inventory[i]["amount"]}')
+
+        print(f'{inventoryLength+1}) Go back\n')
+        action = input_integer(get_messages("COMMON_PRINT_OPTION_NUMBER"))
+
+        if action>0 and action<=inventoryLength:
+            item = inventory[action-1]
+            print_separator()
+            print(item['description'])
+            if item['type'] != 'Healing':
+                print(f'Attack power {Fore.RED}{item["power"]}{Style.RESET_ALL}\n')
+            else:
+                print(f'Healing power {Fore.GREEN}{item["power"]}{Style.RESET_ALL}\n')
+
+            if item['name'] != 'Nokia':
+                print(f'You have {item["amount"]} left\n')
+
+            choose = yes_no('Do you want to use this item? y/n\n')
+
+            if choose == 'y':
+                if item['name'] == 'Nokia':
+                    config.tossNokia = True
+                else:
+                    update_inventory(1, get_current_player()['id'], item['name'])
+                return item
+
+        elif action==inventoryLength+1:
+            #This is the Go Back option
+            print_separator()
+            return 'exit'
+        else:
+            print("There's no such option")
+            input_press_enter('')
+            #list_inventory()
 
 
 def get_item(pick):
@@ -97,5 +103,5 @@ def update_inventory(value, player_id, item):
 #print(get_inventory()[0])
 
 #print(get_item('Salt'))
-list_inventory()
+#list_inventory()
 #list_inventory()
