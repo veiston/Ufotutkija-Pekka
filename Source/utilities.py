@@ -26,3 +26,20 @@ def input_integer(prompt):
             return int(user_input)
         else:
             print('Dude, there are no such options here, try again')
+
+def yes_no(prompt):
+    while True:
+        user_input = input(prompt)
+        if user_input == 'y' or user_input == 'n':
+            return user_input
+        else:
+            print('Dude, there are no such options here, try again')
+
+def waiting_action():
+    time.sleep(0.5)
+    print('.')
+    time.sleep(0.5)
+    print('.')
+    time.sleep(0.5)
+    print('.')
+    time.sleep(1)

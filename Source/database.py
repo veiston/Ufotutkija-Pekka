@@ -19,7 +19,8 @@ def connect_to_database():
         database='ufo_peli',
         user='root',  # attention! do not forget to replace user and password with yours
         password='1234',
-        autocommit=True
+        autocommit=True,
+        collation = 'utf8mb3_unicode_ci'
     )
     return connection
 

@@ -13,6 +13,7 @@ PRIMARY KEY (ident)
 CREATE TABLE items(
 name VARCHAR(40) NOT NULL,
 price INT,
+item_power INT DEFAULT 20,
 item_type VARCHAR(40),
 description VARCHAR(2000),
 is_finite BIT,
@@ -24,6 +25,7 @@ id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(40) DEFAULT 'Pekka',
 location_ident VARCHAR(40) DEFAULT 'EFHK',
 hp INT DEFAULT 200,
+attack INT DEFAULT 10,
 money INT DEFAULT 0,
 player_level INT DEFAULT 1,
 PRIMARY KEY (id),
@@ -68,11 +70,14 @@ VALUES ('EFHK', 'Helsinki-Vantaan lentoasema', 'Vantaa', 'Helsinki'),
 
 INSERT INTO items(name, price, item_type, description, is_finite)
 VALUES ('Nokia', NULL, 'Phone', 'Your trusty phone. Indestructible.', 0),
-('Water Balloon', 50, 'Water', 'Balloon that contains water.', 1),
+('EMF Detector', 50, 'emf', 'Detects electromagnetic pulses from cosmic objects. In battle, disables all technology - even extraterrestial.', 1),
 ('Salt', 50, 'Salt', 'Handful of salt.', 1);
 
+INSERT INTO items(name, price, item_power, item_type, description, is_finite)
+VALUES ('Coffee', 50, 100, 'Healing', 'Delicious coffee.', 1);
+
 INSERT INTO creature_types(name, hp, attack, weakness)
-VALUES ('Alien', 100, 20, 'Water'),
+VALUES ('Alien', 100, 20, 'emf'),
 ('Ghost', 70, 30, 'Salt'),
 ('Melvin', 200, 40, 'Phone');
 
