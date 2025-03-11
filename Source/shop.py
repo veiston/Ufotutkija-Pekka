@@ -4,6 +4,7 @@ from colorama import Fore, Style
 from utilities import print_separator
 from database import get_data_from_database, update_data_in_database
 from player import get_current_player, update_player
+from gambling import menu
 
 def get_items_from_database():
     query = "SELECT * FROM items"
@@ -42,16 +43,16 @@ def shop():
         print(f"{display_index}. {item['name']}: {item['description']} (Price: ${price})")
         display_index += 1
         
-    print(f"{display_index}. Exit shop")
+    print(f"{display_index}. Gamble and earn more money")
+    print(f"{display_index + 1}. Exit shop")
     print_separator()
     print("What would you like to buy?")
     choice = input("Enter the option number: ")
     if choice.isdigit():
-        choice = int(choice)  # remove the +1 adjustment
+        choice = int(choice)
         if choice == display_index:
             return
         elif 1 <= choice < display_index:
-            # Use the filtered_items list for selection
             selected_key, selected_item = filtered_items[choice - 1]
             price = selected_item['price'] if selected_item['price'] is not None else 0
 
@@ -60,6 +61,9 @@ def shop():
                 print("ERROR: No player found. Please create a player first.")
                 return
 
+            if selected_item == display_index+1:
+                menu()
+                return
             # Check if the player has enough money
             if player.get("money", 0) < price:
                 print(f"Insufficient funds to purchase {selected_item['name']} mate. Check your balance again. You have ${player.get('money')}.")

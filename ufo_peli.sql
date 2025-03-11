@@ -13,7 +13,6 @@ PRIMARY KEY (ident)
 CREATE TABLE items(
 name VARCHAR(40) NOT NULL,
 price INT,
-item_power INT DEFAULT 20,
 item_type VARCHAR(40),
 description VARCHAR(2000),
 is_finite BIT,
@@ -23,11 +22,9 @@ PRIMARY KEY (name)
 CREATE TABLE player(
 id INT NOT NULL AUTO_INCREMENT,
 name VARCHAR(40) DEFAULT 'Pekka',
-location_ident VARCHAR(40) DEFAULT 'EFHK',
-hp INT DEFAULT 200,
-attack INT DEFAULT 10,
-money INT DEFAULT 0,
-player_level INT DEFAULT 1,
+location_ident VARCHAR(40),
+money INT DEFAULT 100,
+player_level INT,
 PRIMARY KEY (id),
 FOREIGN KEY (location_ident) REFERENCES airport(ident)
 );
@@ -60,8 +57,7 @@ FOREIGN KEY (location_ident) REFERENCES airport(ident)
 );
 
 INSERT INTO airport(ident, name, municipality, player_location)
-VALUES ('EFHK', 'Helsinki-Vantaan lentoasema', 'Vantaa', 'Helsinki'),
-('KBNA', 'Nashville International Airport', 'Nashville', 'Evergreen'),
+VALUES ('KBNA', 'Nashville International Airport', 'Nashville', 'Evergreen'),
 ('KDEN', 'Denver International Airport', 'Denver', 'Hopkinsville'),
 ('KHTS', 'Tri-State/Milton J. Ferguson Field', 'Huntington', 'Flatwoods'),
 ('KLFK', 'Angelina County Airport', 'Lufkin', 'Broaddus'),
@@ -70,20 +66,17 @@ VALUES ('EFHK', 'Helsinki-Vantaan lentoasema', 'Vantaa', 'Helsinki'),
 
 INSERT INTO items(name, price, item_type, description, is_finite)
 VALUES ('Nokia', NULL, 'Phone', 'Your trusty phone. Indestructible.', 0),
-('EMF Detector', 50, 'emf', 'Detects electromagnetic pulses from cosmic objects. In battle, disables all technology - even extraterrestial.', 1),
+('Water Balloon', 50, 'Water', 'Balloon that contains water.', 1),
 ('Salt', 50, 'Salt', 'Handful of salt.', 1);
 
-INSERT INTO items(name, price, item_power, item_type, description, is_finite)
-VALUES ('Coffee', 50, 100, 'Healing', 'Delicious coffee.', 1);
-
 INSERT INTO creature_types(name, hp, attack, weakness)
-VALUES ('Alien', 100, 20, 'emf'),
+VALUES ('Alien', 100, 20, 'Water'),
 ('Ghost', 70, 30, 'Salt'),
 ('Melvin', 200, 40, 'Phone');
 
 INSERT INTO creature(name, creature_type, description, location_ident)
-VALUES ('Metal Goblin', 'Alien', 'Horrible small creature that apparently burns with the desire to bite your ankles and to steal your phone.', 'KDEN'),
-('Braxie', 'Alien', 'Huge floating creature of weird shapes. Smells really bad.', 'KHTS'),
+VALUES ('Metal Goblin', 'Alien', 'Horrible small creature that apparently burns with the desire to bite your ankles and to steal your phone.', 'KBNA'),
+('Braxie', 'Alien', 'Huge floating creature of weird shapes. Smells really bad.', 'KBNA'),
 ('Wounded Grey', 'Alien', 'Disoriented lanky creature. Very aggressive.', 'KROW'),
 ('Texaboo Baba Yaga', 'Ghost', 'Old lady wearing a Texas costume riding a KFC bucket. Threatening you with guns.', 'KLFK'),
 ('Näkki', 'Ghost', 'Very wet creature.', 'KSEA'),
