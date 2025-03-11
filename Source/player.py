@@ -52,7 +52,7 @@ def add_player(new_player_name):
     connection.close()
 
 def get_current_player():
-    #global current_player_id
+  #global current_player_id
     #if current_player_id:
     query = f"SELECT * FROM player WHERE id = 1"
     result = get_data_from_database(query)
