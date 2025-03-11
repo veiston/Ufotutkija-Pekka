@@ -97,5 +97,5 @@ def update_inventory(value, player_id, item):
 #print(get_inventory()[0])
 
 #print(get_item('Salt'))
-list_inventory()
+#list_inventory()
 #list_inventory()
