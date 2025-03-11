@@ -1,3 +1,0 @@
-# blackjack.py
-
-# TODO add game !UNNA AND SONA ALREADY HAS AN IMPLEMENTATION OF THIS GAME!

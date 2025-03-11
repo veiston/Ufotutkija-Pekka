@@ -78,7 +78,7 @@ def travel():
             
             # Check if the player has enough money for the flight
             if current_player["money"] < FLIGHT_COST:
-                print(f"Insufficient funds for the flight. You have ${current_player['money']}, but the flight costs ${FLIGHT_COST}.")
+                print(f"Insufficient funds for the flight. You have ${current_player['money']}, but the flight costs ${FLIGHT_COST}. Have you tried to earn by gambling?")
                 return
             
             # Update player's airport and deduct flight cost.
