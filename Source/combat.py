@@ -42,11 +42,28 @@ def get_creature():
         columns = ["name", "hp", "attack", "weakness", "type", "description"]
         creature_data = result[0]
         creature = {columns[i]: creature_data[i] for i in range(len(columns))}
-        print('tööt')
         return creature
     else:
-        print('tuut')
         return {}
+
+def creature_turn(creature):
+    if creature['hp'] <= 0:
+        config.tossNokia = False
+        print('victory')
+        return 'end'
+
+    else:
+        print(f'{creature['name']} attacks!')
+        waiting_action()
+        attack = random.randint(creature['attack'] - 5, creature['attack'] + 5)
+        update_player('hp', get_current_player()['hp'] - attack, 1)
+        print(f'You take {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
+        input_press_enter('')
+
+        if get_current_player()['hp'] <= 0:
+            config.tossNokia = False
+            print('kualit')
+            return 'end'
 #print(get_data_from_database(getCreature))
 #print(get_current_player()['location_ident'])
 #print(get_current_player()['hp'])
@@ -54,7 +71,7 @@ def get_creature():
 
 
 
-def Battle():
+def battle():
     fight = True
     creature = get_creature()
     print(f'Suddenly you are ambushed by {Fore.CYAN}{creature['name']}{Style.RESET_ALL}')
@@ -71,7 +88,7 @@ def Battle():
         action = input_integer(get_messages("COMMON_PRINT_OPTION_NUMBER"))
 
         if action == 1:
-            type_writer(f'You attack {creature['name']}', 0.03)
+            print(f'You attack {creature['name']}')
             waiting_action()
             attack = random.randint(get_current_player()['attack']-5, get_current_player()['attack']+5)
             creature['hp']-=attack
@@ -79,36 +96,35 @@ def Battle():
             print(f'{creature["name"]} {creature["hp"]} HP')
             input_press_enter('')
 
-            if creature['hp']<=0:
+            turnChange = creature_turn(creature)
+            if turnChange == 'exit':
                 fight = False
-                config.tossNokia = False
-                print('victory')
-
-            else:
-                print(f'{creature['name']} attacks!')
-                waiting_action()
-                attack = random.randint(creature['attack']-5, creature['attack']+5)
-                update_player('hp', get_current_player()['hp'] - attack, 1)
-                print(f'You take {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
-                input_press_enter('')
-
-                if get_current_player()['hp']<=0:
-                    fight = False
-                    config.tossNokia = False
-                    print('kualit')
 
         elif action == 2:
             item = list_inventory()
-            print(item)
+
             if item!='exit':
+                print(f'You throw {item["name"]} at {creature["name"]}!')
+                waiting_action()
+
                 if item['type'] == creature['weakness']:
-                    print('BOW!')
-                elif item['name'] == 'Nokia':
-                    print('mäkitorppa')
+                    attack = item['attack']*2
+
                 else:
-                    print('meh')
+                    attack = item['attack']
+
+                creature['hp']-=attack
+                print(f'{creature['name']} takes {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
+
+                turnChange = creature_turn(creature)
+                if turnChange == 'end':
+                    fight = False
+
+
         elif action ==3:
             print(creature['description'])
+            print(creature['hp'])
+            print(creature['type'])
 
 
 #config.tossNokia = True
@@ -121,7 +137,7 @@ for i in range(len(inventory)):
     print(i+1)
     print(inventory[i]['item'])
 """
-Battle()
+battle()
 #player = get_current_player()
 #print(get_current_player()['hp'])
 #update_player('hp', get_current_player()['hp']-10, 1)

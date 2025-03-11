@@ -9,14 +9,14 @@ from player import update_player, get_current_player
 
 def get_inventory():
     if config.tossNokia:
-        query = (f'SELECT inventory.item, inventory.amount, items.price, items.item_type, items.description '
+        query = (f'SELECT inventory.item, inventory.amount, items.price, items.attack, items.item_type, items.description '
                 f'FROM inventory '
                 f'INNER JOIN items '
                 f'ON inventory.item = items.name '
                 f'WHERE player_id = {get_current_player()["id"]} '
                 f'AND inventory.item NOT IN ("Nokia");')
     else:
-        query = (f'SELECT inventory.item, inventory.amount, items.price, items.item_type, items.description '
+        query = (f'SELECT inventory.item, inventory.amount, items.price, items.attack, items.item_type, items.description '
                 f'FROM inventory '
                 f'INNER JOIN items '
                 f'ON inventory.item = items.name '
@@ -24,7 +24,7 @@ def get_inventory():
     result = get_data_from_database(query)
     print(len(result))
     if result:
-        columns = ["name", "amount", "price", "type", "description"]
+        columns = ["name", "amount", "price", "attack", "type", "description"]
         inventory = []
         for oi in range(len(result)):
             inventory.append({columns[i]: result[oi][i] for i in range(len(columns))})
