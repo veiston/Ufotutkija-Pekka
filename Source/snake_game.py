@@ -5,6 +5,7 @@ import random
 import curses
 from utilities import print_separator, input_integer
 from colorama import Fore, Style
+from player import get_current_player
 
 def play_snake(player):
     """
@@ -38,6 +39,14 @@ def run_snake_game(stdscr, player, bet):
     food = [random.randint(1, sh - 2), random.randint(1, sw - 2)]
     direction = curses.KEY_RIGHT
 
+    # Mapping of direction keys to coordinate changes
+    key_delta = {
+        curses.KEY_UP: (-1, 0),
+        curses.KEY_DOWN: (1, 0),
+        curses.KEY_LEFT: (0, -1),
+        curses.KEY_RIGHT: (0, 1)
+    }
+
     # Score system
     score = 0
 
@@ -48,17 +57,9 @@ def run_snake_game(stdscr, player, bet):
         # Draw food
         stdscr.addch(food[0], food[1], "O")
 
-        # Move snake
-        new_head = [snake[0][0], snake[0][1]]
-
-        if direction == curses.KEY_UP:
-            new_head[0] -= 1
-        elif direction == curses.KEY_DOWN:
-            new_head[0] += 1
-        elif direction == curses.KEY_LEFT:
-            new_head[1] -= 1
-        elif direction == curses.KEY_RIGHT:
-            new_head[1] += 1
+        # Move snake using mapping
+        dx, dy = key_delta.get(direction, (0, 0))
+        new_head = [snake[0][0] + dx, snake[0][1] + dy]
 
         # Check for collisions
         if new_head in snake or new_head[0] == 0 or new_head[0] == h or new_head[1] == 0 or new_head[1] == w:
@@ -81,17 +82,18 @@ def run_snake_game(stdscr, player, bet):
 
         # Get new direction from user
         key = stdscr.getch()
-        if key in [curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT]:
+        if key in key_delta:
             direction = key
 
     # Calculate winnings
-    winnings = bet + (score * 5)
+    score = score * 5
+    winnings = bet + (score)
     player["money"] += winnings
 
     print_separator()
     print(f"{Fore.GREEN}Game Over!{Style.RESET_ALL}")
     print(f"Snake length: {score + 1}")
-    print(f"You won: {Fore.GREEN}${winnings}{Style.RESET_ALL}")
+    print(f"You won: {Fore.GREEN}${score}{Style.RESET_ALL}")
     return player["money"]
 
 def get_bet(player):
@@ -109,3 +111,6 @@ def get_bet(player):
             return bet
         else:
             print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
+
+if __name__ == "__main__":
+    play_snake(get_current_player())
