@@ -25,15 +25,7 @@ def add_player(new_player_name):
     reset_player()
     global current_player_id
 
-    connection = mysql.connector.connect(
-        host='127.0.0.1',
-        port=3306,
-        database='ufo_peli',
-        user='root',  # Attention! do not forget to replace user and password with yours
-        password='1234',
-        autocommit=True,
-        collation="utf8mb4_unicode_ci"
-    )
+    connection = connect_to_database()
 
     if new_player_name:
         query = f"INSERT INTO player (name) VALUES ('{new_player_name}')"

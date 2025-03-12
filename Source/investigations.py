@@ -706,6 +706,19 @@ def examine():
     return True
 
 if __name__ == "__main__":
-    # Test block to run functions.
-    print("Running investigation test: 'endgame'")
-    investigate("endgame")
+    while True:
+        print_separator()
+        print("Investigations Menu:")
+        keys = list(investigations.keys())
+        for i, inv in enumerate(keys, 1):
+            print(f"{i}. {inv}")
+        print(f"{len(keys)+1}. Exit")
+        print_separator()
+        choice = input_integer("Select an investigation by its number: ")
+        if choice == len(keys)+1:
+            print("Exiting investigation menu...")
+            break
+        elif 1 <= choice <= len(keys):
+            investigate(keys[choice-1])
+        else:
+            print("No such option. Please try again.")
