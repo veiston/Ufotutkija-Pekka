@@ -9,6 +9,8 @@ from items import items
 from notifications import SCARY_REMINDERS
 player = get_current_player()
 
+player = get_current_player()
+
 investigations = {
     "tutorial": { # story ident, important
         "description": f"{player['name']}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
