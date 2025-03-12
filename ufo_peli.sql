@@ -64,14 +64,15 @@ VALUES ('KBNA', 'Nashville International Airport', 'Nashville', 'Evergreen'),
 ('KROW', 'Roswell Air Center Airport', 'Roswell', 'Roswell'),
 ('KSEA', 'Seattle Tacoma International Airport', 'Seattle', 'Aberdeen');
 
-INSERT INTO items(name, price, item_type, description, is_finite)
-VALUES ('Nokia', NULL, 'Phone', 'Your trusty phone. Indestructible.', 0),
-('Water Balloon', 50, 'Water', 'Balloon that contains water.', 1),
-('Salt', 50, 'Salt', 'Handful of salt.', 1);
+INSERT INTO items(name, price, item_power, item_type, description, is_finite)
+VALUES ('Nokia', NULL, 40, 'Phone', 'Your trusty phone. Indestructible. You can throw it at things once per encounter.', 0),
+('EMF Detector', 50, 30, 'EMF', 'Detects electromagnetic pulses from cosmic objects. In battle, disables all technology - even extraterrestial.', 1),
+('Salt', 50, 30, 'Salt', 'Detecs movement of those invisible to the eye. In battle repels non-physical entities upon contact.', 1),
+('Coffee', 50, 100, 'Healing', 'Delicious coffee.', 1);
 
 INSERT INTO creature_types(name, hp, attack, weakness)
-VALUES ('Alien', 100, 20, 'Water'),
-('Ghost', 70, 30, 'Salt'),
+VALUES ('Alien', 100, 20, 'EMF'),
+('Ghost', 85, 30, 'Salt'),
 ('Melvin', 200, 40, 'Phone');
 
 INSERT INTO creature(name, creature_type, description, location_ident)
