@@ -1,35 +1,12 @@
-import time
-import sys
 import random
 import config
 from database import *
 from player import update_player, get_current_player
 from colorama import Fore, Style
-from utilities import type_writer, print_separator, input_press_enter, input_integer, waiting_action
+from utilities import print_separator, input_press_enter, input_integer, waiting_action
 from notifications import get_messages
-from inventory import *
-from creature import *
-#KDEN
-
-"""
-query = (
-    f'SELECT creature.name, creature_types.hp, creature_types.attack, creature.creature_type, creature.description '
-    f'FROM creature '
-    f'INNER JOIN creature_types '
-    f'ON creature.creature_type = creature_types.name '
-    f'WHERE creature.location_ident = "{get_current_player()["location_ident"]}";')
-print(get_data_from_database(query))
-"""
-
-
-
-
-
-
-#print(get_data_from_database(getCreature))
-#print(get_current_player()['location_ident'])
-#print(get_current_player()['hp'])
-
+from inventory import list_inventory
+from creature import get_creature, creature_turn, how_is_the_creature_doing
 
 
 
@@ -40,12 +17,16 @@ def battle():
     input_press_enter('')
 
     while fight:
+
+        #determine what colour the player health is displayed in
         if get_current_player()['hp']>=100:
             colour = Fore.GREEN
         else:
             colour = Fore.RED
+
         print(f'You have {colour}{get_current_player()['hp']} HP{Style.RESET_ALL} left')
         input_press_enter('')
+
         print('Choose your next action')
         print(f'1) Attack\n'
               f'2) Use item\n'
@@ -58,14 +39,15 @@ def battle():
 
             print(f'You attack {creature['name']}')
             waiting_action()
+            #adding random element to the normal attack
             attack = random.randint(get_current_player()['attack']-5, get_current_player()['attack']+5)
             creature['hp']-=attack
             print(f'{creature['name']} takes {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
 
-            how_is_the_creature_doing(creature)
+            how_is_the_creature_doing(creature) #is the thing alive or not and how much health it has
             input_press_enter('')
 
-            turnChange = creature_turn(creature)
+            turnChange = creature_turn(creature) #creature attack logic contained in creature.py
 
             if turnChange == 'win':
                 return True
@@ -74,13 +56,14 @@ def battle():
 
         elif action == 2:
             print_separator()
-            item = list_inventory()
+            item = list_inventory() #calling the inventory from inventory.py
 
-            if item!='exit':
+            if item!='exit': #checks if you chose item instead of just exiting the inventory
                 print_separator()
 
                 if item['type'] == 'Healing':
-
+                    #checking for overhealing
+                    #let's add max health to the database in the future!
                     if get_current_player()['hp']+item['power']>=200:
                         healing = 200
                         healthGained = 200-get_current_player()['hp']
@@ -92,8 +75,7 @@ def battle():
                     print(f'You regain {Fore.GREEN}{healthGained}{Style.RESET_ALL} health')
                     input_press_enter('')
 
-                else:
-
+                else: #attack items
                     print(f'You throw {item["name"]} at {creature["name"]}!')
                     waiting_action()
 
@@ -110,35 +92,18 @@ def battle():
                     how_is_the_creature_doing(creature)
                     input_press_enter('')
 
-                turnChange = creature_turn(creature)
+                turnChange = creature_turn(creature) #creature will attack no matter the type of item you choose
+
                 if turnChange == 'win':
                     return True
                 elif turnChange == 'lose':
                     return False
 
 
-        elif action ==3:
+        elif action ==3: #get a little flavour text and the creature type
             print_separator()
             print(creature['name'])
             print(creature['description'])
             print(f"\nWith your extensive knowledge of all things weird, you determine the creature is the {Fore.CYAN}{creature["type"]}{Style.RESET_ALL}-type and has {Fore.MAGENTA}{creature['hp']} HP{Style.RESET_ALL}")
             input_press_enter('')
             print_separator()
-
-
-#config.tossNokia = True
-#list_inventory()
-
-"""
-inventory = get_inventory()
-
-for i in range(len(inventory)):
-    print(i+1)
-    print(inventory[i]['item'])
-"""
-battle()
-#player = get_current_player()
-#print(get_current_player()['hp'])
-#update_player('hp', get_current_player()['hp']-10, 1)
-#print(get_current_player()['hp'])
-
