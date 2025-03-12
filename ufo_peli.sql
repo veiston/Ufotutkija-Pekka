@@ -77,7 +77,8 @@ VALUES ('Nokia', NULL, 40, 'Phone', 'Your trusty phone. Indestructible. You can 
 INSERT INTO creature_types(name, hp, attack, weakness)
 VALUES ('Alien', 100, 20, 'EMF'),
 ('Ghost', 85, 30, 'Salt'),
-('Melvin', 200, 40, 'Phone');
+('Melvin', 200, 40, 'Phone'),
+('Tonttu', 1, 1, 'Phone');
 
 INSERT INTO creature(name, creature_type, description, location_ident)
 VALUES ('Metal Goblin', 'Alien', 'Horrible small creature that apparently burns with the desire to bite your ankles and to steal your phone.', 'KDEN'),
@@ -85,4 +86,5 @@ VALUES ('Metal Goblin', 'Alien', 'Horrible small creature that apparently burns 
 ('Wounded Grey', 'Alien', 'Disoriented lanky creature. Very aggressive.', 'KROW'),
 ('Texaboo Baba Yaga', 'Ghost', 'Old lady wearing a Texas costume riding a KFC bucket. Threatening you with guns.', 'KLFK'),
 ('Näkki', 'Ghost', 'Very wet creature.', 'KSEA'),
-('Mutated Melvin', 'Melvin', 'Your old friend seems off.', 'KBNA');
+('Mutated Melvin', 'Melvin', 'Your old friend seems off.', 'KBNA'),
+('Saunatonttu', 'Tonttu', 'Viaton pieni saunatonttu. Has mysterious game-breaking powers.', 'EFHK');
