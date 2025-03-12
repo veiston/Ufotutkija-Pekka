@@ -7,6 +7,7 @@ from utilities import type_writer, print_separator,input_integer
 from player import *
 from items import items
 from notifications import SCARY_REMINDERS
+player = get_current_player()
 
 investigations = {
     "tutorial": { # story ident, important
