@@ -34,6 +34,7 @@ def initialize_game():
     type_writer(get_messages("START_EMAIL_TEXT"), 0.03)
     input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
     print(get_messages("START_NOKIA"))
+    update_data_in_database(f'INSERT INTO inventory(player_id, item) VALUES ({current_player["id"]}, "Nokia");')
     input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
 
 def show_main_menu():
