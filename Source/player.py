@@ -2,13 +2,13 @@
 from database import *
 current_player_id = None
 
-player = {
-    "name": "Pekka",  # the player's default name is Pekka, but they can change it
-    "airport": 'QWE', # the unique key of current investigation
-    "money": 100,  # player needs money for the shop and flights
-    "level": 1,  # player's level determines access to new locations
-    "inventory": ["nokia"]  # here is the list of bought items from "items", example: ["nokia", "salt"]
-}
+# player = {
+#     "name": "Pekka",  # the player's default name is Pekka, but they can change it
+#     "airport": 'QWE', # the unique key of current investigation
+#     "money": 100,  # player needs money for the shop and flights
+#     "level": 1,  # player's level determines access to new locations
+#     "inventory": ["nokia"]  # here is the list of bought items from "items", example: ["nokia", "salt"]
+# }
 
 def reset_player():
     global current_player_id
@@ -57,7 +57,7 @@ def get_current_player():
         query = f"SELECT * FROM player WHERE id = {current_player_id}"
         result = get_data_from_database(query)
         if result:
-            columns = ["id", "name", "location_ident", "money", "player_level"]
+            columns = ["id", "name", "location_ident", "hp", "attack", "money", "player_level"]
             player_data = result[0]
             player = {columns[i]: player_data[i] for i in range(len(columns))}
             return player
@@ -69,7 +69,7 @@ add_player('')
 # Test block
 if __name__ == "__main__":
     test_player = get_current_player()
-    if player:
+    if test_player:
         print("Current player data:")
         for key, value in test_player.items():
             print(f"{key}: {value}")
