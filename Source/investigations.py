@@ -5,8 +5,9 @@ import random
 
 from utilities import type_writer, print_separator,input_integer
 from player import *
-from items import items
 from notifications import SCARY_REMINDERS
+from combat import battle
+from database import update_data_in_database
 
 player = get_current_player()
 
@@ -14,11 +15,13 @@ investigations = {
     "tutorial": { # story ident, important
         "description": f"{player['name']}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
         "airport": "KBNA",  # airport code related to this story
-        "reward": 200,  # mission completion reward (money)
+        "reward": 300,  # mission completion reward (money)
         "turns_limit": 100,  # number of attempts allowed for the location
         "level": 1,  # location level, must match the player's level to access
-        "win_text":  f"{player['name']}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $200 for new flights.",
+        "win_text":  f"{player['name']}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $300 for new flights and equipment.\n",
         "lose_text": f"{player['name']}, your resources have run out, and now you lose.",
+        "creature": "Alien",
+        "is_completed": False,
         "steps": {
             1: {
                 "text": "\nUpon arriving you find Melvin’s car still parked in his yard and the door to his house is ajar.\nIn the air, you can smell the smoke. Suddenly, you get a headache.\nYou call out for Melvin, but there’s no answer.“Something about this reminds me...\nI’m sure someone unusual has visited Melvin. It’s best to investigate the house and find out who,”\nyou decide and head inside.\n",
@@ -102,24 +105,24 @@ investigations = {
                 "can_examine": False,
                 "is_examined": False,
                 "choices": {
+                    "choose_nakki": {
+                        "text": "Näkki. A ghostly water entity that lures its victims to the depths.",
+                        "next_step": 6,
+                    },
+                    "choose_mg": {
+                        "text": "Metal Goblin. Small, metallic alien creature that steals electronics and hides in the dark.",
+                        "next_step": 6,
+                    },
                     "choose_alien": {
-                        "text": "Unknown Alien",
+                        "text": "Unknown Alien. A little gray troublemaker who can’t be knocked out even with a Nokia throw.",
                         "next_step": 7,
-                    },
-                    "choose_ghost": {
-                        "text": "The Lady in White",
-                        "next_step": 6,
-                    },
-                    "choose_cryptid": {
-                        "text": "Bigfoot",
-                        "next_step": 6,
                     },
                 },
             },
             7: {
                 "can_examine": False,
                 "is_examined": False,
-                "text": "You don’t believe it yourself, but there is no mistake… Aliens! Melvin, where are you?\nSuddenly, in the corner of the room, you notice Melvin’s notebook.\nMost of the pages have been torn out with inhuman strength,\nand on the remaining ones — strange symbols and the coordinates of three locations.\nWell, now it’s clear where to search for your friend\n(and who you’ll have to face along the way).",
+                "text": "You don’t believe it yourself, but there is no mistake… Aliens! Melvin, where are you?\nSuddenly, in the corner of the room, you notice Melvin’s notebook.\nMost of the pages have been torn out with inhuman strength,\nand on the remaining ones — strange symbols and the coordinates of three locations.\nWell, now it’s clear where to search for your friend\n(and who you’ll have to face along the way).\n",
                 "choices": {
                     "end_investigation": {
                         "text": "Finish the investigation",
@@ -137,6 +140,8 @@ investigations = {
         "level": 2,
         "win_text": f"You leave Kelly, but before that, you pick up a floppy disk from the sticky floor of the barn. On it — Melvin's name. What could it mean...",
         "lose_text": f"{player['name']}, you have exhausted all your resources and failed to uncover the mystery.",
+        "creature": "Alien",
+        "is_completed": False,
         "steps": {
             1: {
                 "text": "Where should the investigation begin?\n",
@@ -245,158 +250,6 @@ investigations = {
             }
         }
     },
-    "flatwoods_monster": {
-        "description": f"{player['name']}, the coordinates from Melvin's notebook have led you to Flatwoods, Braxton County, West Virginia.\nThis place is a living legend. Half a century ago, something was seen here: a red sphere descending from\nthe sky, a metallic stench in the air, scorched patches of earth where nothing grows to this day.\nThe locals whisper: it has returned. Do you feel it?\n",
-        "airport": "KHTS",
-        "reward": 300,
-        "turns_limit": 15,
-        "level": 1,
-        "win_text": f"You run out of the forest at full speed and stop only near the bar. On the ground, you see a floppy disk with Melvin's name on it. What the f...",
-        "lose_text": f"{player['name']}, your resources have run out, and the mystery remains unsolved.",
-        "steps": {
-            1: {
-                "text": "What should we do in this small, half-empty town?\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "check_bar": {
-                        "text": "Enter the bar",
-                        "next_step": 2,
-                    },
-                }
-            },
-            2: {
-                "text": "The bar is nearly empty. The bartender silently wipes a glass. In the corner sits an old man, his eyes\ninflamed, his hands trembling. He says he has seen the red sphere in the forest again.\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "press_old_man": {
-                        "text": "Demand more information",
-                        "next_step": 3,
-                    },
-                }
-            },
-            3: {
-                "text": "The old man speaks of a creature. It is tall—about three meters. A red face, a green body. It stands\nin the shadows of the trees, watching.\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "go_forest": {
-                        "text": "Go into the forest",
-                        "next_step": 4,
-                    },
-                    "stay_bar": {
-                        "text": "Order a beer",
-                        "next_step": 11,
-                    },
-                }
-            },
-            11: {
-                "text": "Nice try, but you don't drink on the job!\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "go_forest": {
-                        "text": "Go into the forest",
-                        "next_step": 4,
-                    },
-                }
-            },
-            9: {
-                "text": "We need to check what the strange old man was talking about.",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "go_forest": {
-                        "text": "Go into the forest",
-                        "next_step": 4,
-                    },
-                }
-            },
-            4: {
-                "text": "The forest is quiet, but the air is thick with a disgusting, burnt, metallic smell. Underfoot are old\nscorched patches of earth. Your eyes start to burn.\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "inspect_ground": {
-                        "text": "Examine the patches",
-                        "next_step": 5,
-                    },
-                    "inspect_trees": {
-                        "text": "Examine the trees around",
-                        "next_step": 10,
-                    },
-                }
-            },
-            10: {
-                "text": "Trees look like trees, nothing interesting, but what are these scorched patches beneath you?\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "inspect_ground": {
-                        "text": "Examine the patches on the ground",
-                        "next_step": 5,
-                    },
-                }
-            },
-            5: {
-                "text": "The scorched patches are sticky to the touch—some kind of black liquid. The substance reacts to light.\n",
-                "can_examine": True,
-                "is_examined": False,
-                "choices": {
-                    "examine": {
-                        "text": "Analyze the substance using equipment",
-                        "next_step": 6,
-                    },
-                }
-            },
-            6: {
-                "text": "Did you hear that? A branch snapped above your head. Is something watching you?",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "look_up": {
-                        "text": "Look up",
-                        "next_step": 7,
-                    },
-                    "step_back": {
-                        "text": "Step back",
-                        "next_step": 7,
-                    },
-                }
-            },
-            7: {
-                "text": "Hissing. Red light. The creature stands—or rather, levitates—in front of you. A towering three-meter\nfigure with burning eyes, a triangular head, and a dark body resembling armor or a cloak. A sharp\nmetallic stench fills the air, and the ground beneath is scorched.\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "choose_mg": {
-                        "text": "Metal Goblin. Small, metallic alien creature that steals electronics and hides in the dark.",
-                        "next_step": 7,
-                    },
-                    "choose_braxie": {
-                        "text": "Braxie. A towering, faceless entity with glowing red eyes and a metallic hood. It reeks of burning metal and fear.",
-                        "next_step": 8,
-                    },
-                    "choose_ghost": {
-                        "text": "Wounded Grey. A disoriented, lanky being with hollow eyes. Very aggressive. Looks extraterrestrial.",
-                        "next_step": 7,
-                    },
-                }
-            },
-            8: {
-                "text": "Run!\n",
-                "can_examine": False,
-                "is_examined": False,
-                "choices": {
-                    "run": {
-                        "text": "Finish the investigation with a heroic escape!",
-                        "next_step": None,
-                    },
-                }
-            }
-        }
-    },
     "nakki": {
         "description": f"{player['name']}, the coordinates in Melvin's notebook lead you to Aberdeen, Washington. Here, by the banks\nof the Chihalis River, something strange is happening - late at night, fishermen saw a dark\nfigure in the water, then began to find drowned people. People say that at night someone splashes\nin the water, and in the morning they find ashy gray slime on the pier. Who is it and what does it\nhave to do with Melvin?\n",
         "airport": "KSEA",
@@ -405,6 +258,8 @@ investigations = {
         "level": 2,
         "win_text": f"{player['name']}, lost in thought, you slowly wander along the pier toward your next destination\nwhen you notice a little floppy disk underfoot. Strange symbols cover it, and… Melvin’s name.\nWhat could this mean?",
         "lose_text": f"{player['name']}, you have exhausted all resources and never discovered what lurks in the water.",
+        "creature": "Ghost",
+        "is_completed": False,
         "steps": {
             1: {
                 "text": "Where should the investigation begin?\n",
@@ -557,6 +412,160 @@ investigations = {
             },
         }
     },
+    "flatwoods_monster": {
+        "description": f"{player['name']}, the coordinates from Melvin's notebook have led you to Flatwoods, Braxton County, West Virginia.\nThis place is a living legend. Half a century ago, something was seen here: a red sphere descending from\nthe sky, a metallic stench in the air, scorched patches of earth where nothing grows to this day.\nThe locals whisper: it has returned. Do you feel it?\n",
+        "airport": "KHTS",
+        "reward": 300,
+        "turns_limit": 15,
+        "level": 2,
+        "win_text": f"You run out of the forest at full speed and stop only near the bar. On the ground, you see a floppy disk with Melvin's name on it. What the f...",
+        "lose_text": f"{player['name']}, your resources have run out, and the mystery remains unsolved.",
+        "creature": "Alien",
+        "is_completed": False,
+        "steps": {
+            1: {
+                "text": "What should we do in this small, half-empty town?\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "check_bar": {
+                        "text": "Enter the bar",
+                        "next_step": 2,
+                    },
+                }
+            },
+            2: {
+                "text": "The bar is nearly empty. The bartender silently wipes a glass. In the corner sits an old man, his eyes\ninflamed, his hands trembling. He says he has seen the red sphere in the forest again.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "press_old_man": {
+                        "text": "Demand more information",
+                        "next_step": 3,
+                    },
+                }
+            },
+            3: {
+                "text": "The old man speaks of a creature. It is tall—about three meters. A red face, a green body. It stands\nin the shadows of the trees, watching.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "go_forest": {
+                        "text": "Go into the forest",
+                        "next_step": 4,
+                    },
+                    "stay_bar": {
+                        "text": "Order a beer",
+                        "next_step": 11,
+                    },
+                }
+            },
+            11: {
+                "text": "Nice try, but you don't drink on the job!\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "go_forest": {
+                        "text": "Go into the forest",
+                        "next_step": 4,
+                    },
+                }
+            },
+            9: {
+                "text": "We need to check what the strange old man was talking about.",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "go_forest": {
+                        "text": "Go into the forest",
+                        "next_step": 4,
+                    },
+                }
+            },
+            4: {
+                "text": "The forest is quiet, but the air is thick with a disgusting, burnt, metallic smell. Underfoot are old\nscorched patches of earth. Your eyes start to burn.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "inspect_ground": {
+                        "text": "Examine the patches",
+                        "next_step": 5,
+                    },
+                    "inspect_trees": {
+                        "text": "Examine the trees around",
+                        "next_step": 10,
+                    },
+                }
+            },
+            10: {
+                "text": "Trees look like trees, nothing interesting, but what are these scorched patches beneath you?\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "inspect_ground": {
+                        "text": "Examine the patches on the ground",
+                        "next_step": 5,
+                    },
+                }
+            },
+            5: {
+                "text": "The scorched patches are sticky to the touch—some kind of black liquid. The substance reacts to light.\n",
+                "can_examine": True,
+                "is_examined": False,
+                "choices": {
+                    "examine": {
+                        "text": "Analyze the substance using equipment",
+                        "next_step": 6,
+                    },
+                }
+            },
+            6: {
+                "text": "Did you hear that? A branch snapped above your head. Is something watching you?",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "look_up": {
+                        "text": "Look up",
+                        "next_step": 7,
+                    },
+                    "step_back": {
+                        "text": "Step back",
+                        "next_step": 7,
+                    },
+                }
+            },
+            7: {
+                "text": "Hissing. Red light. The creature stands—or rather, levitates—in front of you. A towering three-meter\nfigure with burning eyes, a triangular head, and a dark body resembling armor or a cloak. A sharp\nmetallic stench fills the air, and the ground beneath is scorched.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "choose_mg": {
+                        "text": "Metal Goblin. Small, metallic alien creature that steals electronics and hides in the dark.",
+                        "next_step": 7,
+                    },
+                    "choose_braxie": {
+                        "text": "Braxie. A towering, faceless entity with glowing red eyes and a metallic hood. It reeks of burning metal and fear.",
+                        "next_step": 8,
+                    },
+                    "choose_ghost": {
+                        "text": "Wounded Grey. A disoriented, lanky being with hollow eyes. Very aggressive. Looks extraterrestrial.",
+                        "next_step": 7,
+                    },
+                }
+            },
+            8: {
+                "text": "Run!\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "run": {
+                        "text": "Finish the investigation with a heroic escape!",
+                        "next_step": None,
+                    },
+                }
+            }
+        }
+    },
     "endgame": {
         "description": f"{player['name']}, strange creatures, floppy disks, notebook pages—every investigation\nsite had traces linked to Melvin. It's time to uncover the truth.\n",
         "airport": "KBNA",
@@ -565,6 +574,8 @@ investigations = {
         "level": 3,
         "win_text": f"{player['name']}, it's time to accept congratulations! You managed to stop Melvin and escape this nightmare, but what will you do with this knowledge now?..",
         "lose_text": f"{player['name']}, you failed to resist Melvin. Now you are part of his insane plan.",
+        "creature": "Melvin",
+        "is_completed": False,
         "steps": {
             1: {
                 "text": f"You return to Melvin’s house. Everything looks the same as the first time,\nbut now you notice the details: strange devices, flickering screens, wires\nstretching from room to room. The air is filled with the scent of burning\nand something... chemical.\n",
@@ -626,26 +637,31 @@ def investigate(ident):
     while True:
         if step is None:
             print(f"{investigation['win_text']}")
-            # Retrieve the full, updated player data. This returns a dictionary with an 'id' key.
+            investigation["is_completed"] = True  # Отмечаем расследование как завершённое
+
             current = get_current_player()
-            # Ensure current money and player_level are valid numbers.
-            current_money = current.get("money")
-            if current_money is None:
-                current_money = 0
-            current_level = current.get("player_level")
-            if current_level is None:
-                current_level = 0
+            current_money = current.get("money", 0)
+            current_level = current.get("player_level", 1)
 
             new_money = current_money + investigation["reward"]
-            new_level = current_level + 1
-            # Update player's data with the new money and level.
+            new_level = current_level
+
             update_player("money", new_money, current["id"])
             update_player("player_level", new_level, current["id"])
+
+            if not has_unfinished_investigations(current_level):
+                player["player_level"] += 1
+                update_player("player_level", player["player_level"], current["id"])
+                print(f"🎉 Congratulations! You've reached level {player['player_level']}!")
+
             break
 
         if turns <= 0:
-            print(f"{investigation['lose_text']}")
-            # TODO: Fighting logic could be placed here.
+            battle_result = battle()
+            if battle_result:
+                print(f"{investigation['win_text']}")
+            else:
+                print(f"{investigation['lose_text']}")
             break
 
         if len(investigation["steps"]) > 4 and ((turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3)):
@@ -656,12 +672,11 @@ def investigate(ident):
         step_data = investigation["steps"][step]
         step_choices_dict = step_data["choices"]
         step_choices_list = list(step_choices_dict.values())
-        step_description = step_data["text"] if not step_data["is_examined"] else f"{step_data["text"]}\n\nYou’ve already examined this area... What's next?\n"
+        step_description = step_data["text"] if not step_data["is_examined"] else f"{step_data['text']}\nYou’ve already examined this area... What's next?\n"
 
         print(step_description)
 
         for number, choice in enumerate(step_choices_list, 1):
-            # Skip re-displaying the "examine" option if already examined.
             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
                 continue
             print(f"{number}. {choice['text']}")
@@ -677,14 +692,13 @@ def investigate(ident):
         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
 
         if selected_key == "examine" and not step_data["is_examined"]:
-            examine()
+            examine(ident)
             investigation["steps"][step]["is_examined"] = True
 
-            is_all_explored = True
-            for step_data in investigation["steps"].values():
-                if step_data["can_examine"] and not step_data["is_examined"]:
-                    is_all_explored = False
-                    break
+            is_all_explored = all(
+                step_data["is_examined"] if step_data["can_examine"] else True
+                for step_data in investigation["steps"].values()
+            )
 
             if is_all_explored:
                 step = selected_choice["next_step"]
@@ -694,17 +708,119 @@ def investigate(ident):
             step = selected_choice["next_step"]
 
         turns -= 1
+        print_separator()
+
+
+def has_unfinished_investigations(current_level):
+    for investigation in investigations.values():
+        if investigation["level"] == current_level and not investigation["is_completed"]:
+            return True
+    return False
+
+import random
+
+def get_inventory():
+    query = f"""
+        SELECT inventory.item, items.description, inventory.amount, items.item_type
+        FROM inventory
+        LEFT JOIN items ON inventory.item = items.name
+        WHERE inventory.player_id = {player["id"]};
+    """
+    return get_data_from_database(query)
+
+def get_creature_types():
+    query = "SELECT name, weakness FROM creature_types;"
+    creature_results = get_data_from_database(query)
+    return {row[0]: row[1] for row in creature_results}
+
+def update_inventory(selected_item):
+    query = f"UPDATE inventory SET amount = amount - 1 WHERE player_id = {player['id']} AND item = '{selected_item}';"
+    update_data_in_database(query)
+
+    query = f"DELETE FROM inventory WHERE player_id = {player['id']} AND item = '{selected_item}' AND amount = 0;"
+    update_data_in_database(query)
+
+def use_equipment(selected_item, item_type, current_creature, creature_types):
+    is_effective = selected_item == "Nokia" or item_type == creature_types.get(current_creature)
+
+    if is_effective:
+        confidence = random.randint(40, 95)
+        print(f"Your analysis suggests: with {confidence}% confidence, the creature is {current_creature}.\n")
+        return True
+
+    if random.randint(1, 100) <= 5:
+        wrong_creatures = list(creature_types.keys())
+        guess = random.choice(wrong_creatures)
+        confidence = random.randint(10, 30)
+        print(f"Your equipment gives an uncertain reading... With {confidence}% confidence, it says, that the creature might be {guess}. Too vague. You should try again.\n")
+    else:
+        print("You try using the item, but nothing happens.")
+
+    return False
+
+def examine(investigation_ident):
+    inventory_results = get_inventory()
+
+    if not inventory_results:
+        print("No items in inventory.")
+        return
+
+    creature_types = get_creature_types()
+    current_creature = investigations[investigation_ident]["creature"]
+
+    print_separator()
+
+    print("\nYou're going to use the equipment to determine what kind of creature you're dealing with.")
+    print("You think it might be: " + ", ".join(creature_types.keys()) + ".\n")
+
+    while True:
+        print("Choose equipment from your inventory to perform a more accurate analysis.\n")
+
+        inventory = {}
+        for index, (item, description, amount, item_type) in enumerate(inventory_results, 1):
+            print(f"{index}. {item} | {description} | {'Unlimited' if amount is None else f'{amount} pcs'}")
+            inventory[index] = (item, item_type, amount)
+
+        choice = input_integer("\nSelect an item by its number: ")
 
         print_separator()
 
-def examine():
-    print_separator()
-    # TODO
-    print('TODO The user uses items and actions. The user returns to the room.')
-    print_separator()
-    return True
+        if choice not in inventory:
+            print("Dude, there are no such options here. Try again!")
+            continue
+
+        selected_item, item_type, amount = inventory[choice]
+
+        if selected_item != "Nokia" and item_type not in creature_types.values():
+            print("Sorry, but you should try again, this item cannot be used here.")
+            continue
+
+        if selected_item != "Nokia" and amount is not None:
+            update_inventory(selected_item)
+            inventory_results = get_inventory()  # Обновляем список после удаления
+
+        if use_equipment(selected_item, item_type, current_creature, creature_types):
+            break
 
 if __name__ == "__main__":
-    # Test block to run functions.
-    print("Running investigation test: 'endgame'")
-    investigate("endgame")
+    # update_data_in_database(f'INSERT INTO inventory(player_id, item) VALUES ({1}, "Nokia");')
+    # update_data_in_database(f'INSERT INTO inventory(player_id, item, amount) values (1, "Salt", 5), (1, "EMF Detector", 5), (1, "Coffee", 5);')
+    # examine('metal_goblin')
+
+
+    while True:
+        print_separator()
+        print("Investigations Menu:")
+        keys = list(investigations.keys())
+        for i, inv in enumerate(keys, 1):
+            print(f"{i}. {inv}")
+        print(f"{len(keys) + 1}. Exit")
+        print_separator()
+        choice = input_integer("Select an investigation by its number: ")
+        if choice == len(keys) + 1:
+            print("Exiting investigation menu...")
+            break
+        elif 1 <= choice <= len(keys):
+            investigate(keys[choice - 1])
+        else:
+            print("No such option. Please try again.")

@@ -26,7 +26,7 @@ name VARCHAR(40) DEFAULT 'Pekka',
 location_ident VARCHAR(40) DEFAULT 'EFHK',
 hp INT DEFAULT 200,
 attack INT DEFAULT 10,
-money INT DEFAULT 0,
+money INT DEFAULT 500,
 player_level INT DEFAULT 1,
 PRIMARY KEY (id),
 FOREIGN KEY (location_ident) REFERENCES airport(ident)

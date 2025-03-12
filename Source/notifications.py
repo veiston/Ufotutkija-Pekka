@@ -33,10 +33,10 @@ def get_messages(message_key):
 
             Cya,
             Melvin
-            P.S. I''ve added {Fore.MAGENTA}$100{Style.RESET_ALL} to your bank account for your plane ticket!1! HURRY UP!!
+            P.S. I''ve added {Fore.MAGENTA}$500{Style.RESET_ALL} to your bank account for your plane ticket!1! HURRY UP!!
         """,
         "START_NOKIA": "Hooray! A business trip! Before leaving the office, don’t forget to take your Nokia from the desk. You’ll definitely need it.",
-        "MAIN_WHAT_TO_DO": "Well, what do you want to do next?",
+        "MAIN_WHAT_TO_DO": "\nWell, what do you want to do next?",
         "MAIN_TRAVEL": "Go to the airport",
         "MAIN_SHOP": "Buy equipment",
     }

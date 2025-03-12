@@ -8,8 +8,6 @@ from notifications import get_messages
 from inventory import list_inventory
 from creature import get_creature, creature_turn, how_is_the_creature_doing
 
-
-
 def battle():
     fight = True
     creature = get_creature()
