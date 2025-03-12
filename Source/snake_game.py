@@ -3,7 +3,7 @@
 
 import random
 import curses
-from utilities import print_separator
+from utilities import print_separator, input_integer
 from colorama import Fore, Style
 
 def play_snake(player):
@@ -91,21 +91,21 @@ def run_snake_game(stdscr, player, bet):
     print_separator()
     print(f"{Fore.GREEN}Game Over!{Style.RESET_ALL}")
     print(f"Snake length: {score + 1}")
-    print(f"You won: ${winnings}")
+    print(f"You won: {Fore.GREEN}${winnings}{Style.RESET_ALL}")
+    return player["money"]
 
 def get_bet(player):
-    """Asks the player for a bet before playing."""
+    """Asks the player for a bet before playing. Type 'exit' to cancel."""
     while True:
-        print("\nEnter your bet amount or type 'exit' to leave:")
-        bet_input = input("> ")
-        if bet_input.lower() == "exit":
-            return None
-
+        user_input = input("\nEnter your bet amount (or type 'exit' to quit):\n")
+        if user_input.lower() == "exit":
+            return None  # Exit option chosen
         try:
-            bet = int(bet_input)
-            if 10 <= bet <= player["money"]:
-                return bet
-            else:
-                print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
+            bet = int(user_input)
         except ValueError:
-            print(f"{Fore.RED}Invalid input. Enter a number.{Style.RESET_ALL}")
+            print("Invalid input. Please enter a number or 'exit'.")
+            continue
+        if 10 <= bet <= player["money"]:
+            return bet
+        else:
+            print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")

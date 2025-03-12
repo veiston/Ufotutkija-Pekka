@@ -4,7 +4,7 @@ from colorama import Fore, Style
 from utilities import print_separator
 from database import get_data_from_database, update_data_in_database
 from player import get_current_player, update_player
-from gambling_manager import menu
+from gambling_manager import gambling_menu
 
 def get_items_from_database():
     query = "SELECT * FROM items"
@@ -50,7 +50,10 @@ def shop():
     choice = input("Enter the option number: ")
     if choice.isdigit():
         choice = int(choice)
-        if choice == display_index:
+        if choice == display_index:  # Gambling option selected
+            gambling_menu()
+            return
+        elif choice == display_index + 1:  # Exit shop
             return
         elif 1 <= choice < display_index:
             selected_key, selected_item = filtered_items[choice - 1]
@@ -59,11 +62,6 @@ def shop():
             # Retrieve current player's money.
             if not player:
                 print("ERROR: No player found. Please create a player first.")
-                return
-
-            # Select Gambling option
-            if selected_item == display_index+1:
-                menu()
                 return
             
             # Check if the player has enough money
@@ -81,7 +79,7 @@ def shop():
         else:
             print("Invalid option.")
     else:
-        print("Invalid airport_data = get_airport_data(airport_symbol)input.")
+        print("Invalid input.")
 
 if __name__ == "__main__":
     while True:

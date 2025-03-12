@@ -4,7 +4,7 @@
 import random
 import time
 from colorama import Fore, Style
-from utilities import print_separator, type_writer  # Import helper functions
+from utilities import print_separator, type_writer, input_integer  # added input_integer
 
 def play_blackjack(player):
     """
@@ -64,13 +64,16 @@ def play_blackjack(player):
     print(f"Dealer's total: {dealer_total}")
 
     if dealer_total > 21 or player_total > dealer_total:
-        print(f"{Fore.GREEN}You win!{Style.RESET_ALL}")
         player["money"] += bet
+        print(f"{Fore.GREEN}You win!{Style.RESET_ALL} {Fore.GREEN}+${bet}{Style.RESET_ALL}")
+        return player["money"]
+
     elif player_total == dealer_total:
         print(f"{Fore.YELLOW}It's a tie!{Style.RESET_ALL}")
     else:
-        print(f"{Fore.RED}Dealer wins!{Style.RESET_ALL}")
+        print(f"{Fore.RED}Dealer wins!{Style.RESET_ALL} {Fore.RED}-${bet}{Style.RESET_ALL}")
         player["money"] -= bet
+        return player["money"]
 
 ##########################################################################################
 # Helper functions
@@ -84,21 +87,20 @@ def format_hand(hand):
     return ", ".join(str(card) for card in hand) + f" (Total: {sum(hand)})"
 
 def get_bet(player):
-    """Asks the player for a bet and validates the input."""
+    """Asks the player for a bet and validates the input. Type 'exit' to cancel."""
     while True:
-        print("\nEnter your bet amount or type 'exit' to leave:")
-        bet_input = input("> ")
-        if bet_input.lower() == "exit":
-            return None
-
+        user_input = input("\nEnter your bet amount (or type 'exit' to quit):\n")
+        if user_input.lower() == "exit":
+            return None  # Exit option chosen
         try:
-            bet = int(bet_input)
-            if 10 <= bet <= player["money"]:
-                return bet
-            else:
-                print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
+            bet = int(user_input)
         except ValueError:
-            print(f"{Fore.RED}Invalid input. Enter a number.{Style.RESET_ALL}")
+            print("Invalid input. Please enter a number or 'exit'.")
+            continue
+        if 10 <= bet <= player["money"]:
+            return bet
+        else:
+            print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     play_blackjack()

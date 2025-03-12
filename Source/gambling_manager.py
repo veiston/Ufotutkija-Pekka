@@ -5,47 +5,47 @@ import os
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
-from utilities import *
+from utilities import print_separator, input_integer
 from colorama import Fore, Style
 from snake_game import play_snake
-from poker import play_poker
+#from poker import play_poker  # RIP
 from blackjack import play_blackjack
-from player import get_current_player
+from player import get_current_player, update_player
 
-player = get_current_player()
-selection_of_games = ['Blackjack', 'Snake', 'Poker', 'Exit']
+available_games = {
+    "Blackjack": play_blackjack,
+    "Snake": play_snake
+}
 
-# Main function to call from shop
-def menu():
-    choice = int
-    while choice != 4:
+def gambling_menu():
+    player = get_current_player()
+    while True:
         print_separator()
-        print(f'Welcome to the gambling corner!\nHere you can turn your {Fore.MAGENTA}💵 money 💵 {Style.RESET_ALL}into.. MORE MONEY!')
-        # time.sleep(0.5)
-
-        # Print game selection
-        i=0
-        for game in selection_of_games:
-            i += 1
-            print(str(i) + '. ' + game)
+        print(f"Welcome to the gambling corner!\nHere you can turn your {Fore.MAGENTA}💵 money 💵{Style.RESET_ALL} into.. MORE MONEY!\n")
+        
+        menu_options = list(available_games.keys()) + ["Exit"]
+        for i, game_name in enumerate(menu_options, start=1):
+            print(f"{i}. {game_name}")
         print_separator()
-
-        # Check game choice and laucnh said-
+        
         choice = input_integer('\nWhat do you want to play?\n')
-        if choice == 1:
-            play_blackjack(player)
-        elif choice == 2:
-            play_blackjack(player)
-        elif choice == 3:
-            play_poker(player)
-        elif choice == 4:
+        if choice < 1 or choice > len(menu_options):
+            print(f"{Fore.RED}No such option. Please choose a valid number.{Style.RESET_ALL}")
             continue
-        else:
-            'No such option. Sorry mate.'
-            menu()
-    
+        
+        # Exit if choise = last in menu
+        if choice == len(menu_options):
+            print(f"{Fore.YELLOW}Exiting gambling corner...{Style.RESET_ALL}")
+            break
+        
+        # Launch game.
+        selected_game = menu_options[choice - 1]
+        game_function = available_games[selected_game]
 
-
-# Test function
+        # Give reward if player wins
+        new_money = game_function(player)
+        if new_money is not None:
+            update_player("money", new_money, player["id"])
+        
 if __name__ == "__main__":
-    menu()
+    gambling_menu()

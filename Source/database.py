@@ -20,7 +20,7 @@ def connect_to_database():
         user='root',  # attention! do not forget to replace user and password with yours
         password='1234',
         autocommit=True,
-        collation = 'utf8mb3_unicode_ci'
+        #collation = 'utf8mb3_unicode_ci' I think this breaks the database on windows
     )
     return connection
 
