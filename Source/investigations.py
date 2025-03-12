@@ -2,7 +2,6 @@
 
 import time
 import random
-
 from utilities import type_writer, print_separator,input_integer
 from player import *
 from notifications import SCARY_REMINDERS
@@ -136,7 +135,7 @@ investigations = {
         "description": f"{player['name']}, the coordinates from the infamous notebook have led you to Kentucky, to the village of Kelly\n— a place where strange occurrences have long been the norm. For half a century, Hopkinsville County\nhas intrigued people: at night, household appliances disappear, and witnesses speak of tiny creatures\nwith shimmering skin hiding in the woods. If stolen toasters and radio transmitters hold the key\nto Melvin’s disappearance, it's worth figuring out who is behind this.\n",
         "airport": "KDEN",
         "reward": 250,
-        "turns_limit": 12,
+        "turns_limit": 2,
         "level": 2,
         "win_text": f"You leave Kelly, but before that, you pick up a floppy disk from the sticky floor of the barn. On it — Melvin's name. What could it mean...",
         "lose_text": f"{player['name']}, you have exhausted all your resources and failed to uncover the mystery.",
@@ -717,8 +716,6 @@ def has_unfinished_investigations(current_level):
             return True
     return False
 
-import random
-
 def get_inventory():
     query = f"""
         SELECT inventory.item, items.description, inventory.amount, items.item_type
@@ -806,8 +803,6 @@ if __name__ == "__main__":
     # update_data_in_database(f'INSERT INTO inventory(player_id, item) VALUES ({1}, "Nokia");')
     # update_data_in_database(f'INSERT INTO inventory(player_id, item, amount) values (1, "Salt", 5), (1, "EMF Detector", 5), (1, "Coffee", 5);')
     # examine('metal_goblin')
-
-
     while True:
         print_separator()
         print("Investigations Menu:")
