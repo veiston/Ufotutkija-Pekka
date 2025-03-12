@@ -5,6 +5,7 @@ import random
 import time
 from colorama import Fore, Style
 from utilities import print_separator, type_writer, input_integer  # added input_integer
+from player import get_current_player
 
 def play_blackjack(player):
     """
@@ -103,4 +104,4 @@ def get_bet(player):
             print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
 
 if __name__ == "__main__":
-    play_blackjack()
+    play_blackjack(get_current_player())
