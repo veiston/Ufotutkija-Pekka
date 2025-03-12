@@ -554,7 +554,125 @@ investigations = {
                 }
             },
         }
-    }
+    },
+    "tutorial": {
+        "description": f"{player['name']}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
+        "airport": "KBNA",  # airport code related to this story
+        "reward": 200,  # mission completion reward (money)
+        "turns_limit": 100,  # number of attempts allowed for the location
+        "level": 1,  # location level, must match the player's level to access
+        "win_text":  f"{player['name']}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $200 for new flights.",
+        "lose_text": f"{player['name']}, your resources have run out, and now you lose.",
+        "steps": {
+            1: {
+                "text": "\nUpon arriving you find Melvin’s car still parked in his yard and the door to his house is ajar.\nIn the air, you can smell the smoke. Suddenly, you get a headache.\nYou call out for Melvin, but there’s no answer.“Something about this reminds me...\nI’m sure someone unusual has visited Melvin. It’s best to investigate the house and find out who,”\nyou decide and head inside.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "go_office": {
+                        "text": "Go to the office",
+                        "next_step": 2,
+                    },
+                    "go_kitchen": {
+                        "text": "Go to the kitchen",
+                        "next_step": 3,
+                    },
+                }
+            },
+            2: {
+                "text": "You enter the office. The floor is covered with strange marks, unlike anything human,\nbut they definitely have a shape. It's hard to tell what (or who) caused them without a closer look.\nMaybe you should use your equipment.\n",
+                "can_examine": True,
+                "is_examined": False,
+                "choices": {
+"                   search_desk": {
+                        "text": "Search the desk drawers" ,
+                        "next_step": 5,
+                    },
+                    "go_kitchen": {
+                        "text": "Go to the kitchen",
+                        "next_step": 3,
+                    },
+                    "examine": {
+                        "text": "Examine the room with equipment",
+                        "next_step": 6,
+                    }
+                }
+            },
+            3: {
+                "text": "You enter the kitchen. In the air, there’s a strange chemical smell,\nbut without equipment, it’s hard to tell what (or who) caused it.\n",
+                "can_examine": True,
+                "is_examined": False,
+                "choices": {
+                    "investigate_shelf": {
+                        "text": "Investigate the shelf with with groceries" ,
+                        "next_step": 4,
+                    },
+                    "go_office": {
+                        "text": "Go to the office",
+                        "next_step": 2,
+                    },
+                    "examine": {
+                        "text": "Examine the room with equipment",
+                        "next_step": 6,
+                    }
+                }
+            },
+            4: {
+                "text": "You are looking at the shelf with groceries. Cans of tuna, beans, and an old chocolate bar.\nNothing unusual.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "go_kitchen": {
+                        "text": "Return to the kitchen",
+                        "next_step": 3,
+                    },
+
+                }
+            },
+            5: {
+                "text": "You are searching Melvin’s desk and find his laptop.\nYou open it and go to Melvin’s research folder, but all the files are encrypted.\nSuch a shame.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "go_office": {
+                        "text": "Return to the office",
+                        "next_step": 2,
+                    },
+
+                }
+            },
+            6: {
+                "text": "Now think twice! After investigating all rooms, you begin to see a pattern.\nThe strange marks and smells in each room are clearly not of human origin.\nThe equipment you used has confirmed it — this is clearly the work of...\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "choose_alien": {
+                        "text": "Unknown Alien",
+                        "next_step": 7,
+                    },
+                    "choose_ghost": {
+                        "text": "The Lady in White",
+                        "next_step": 6,
+                    },
+                    "choose_cryptid": {
+                        "text": "Bigfoot",
+                        "next_step": 6,
+                    },
+                },
+            },
+            7: {
+                "can_examine": False,
+                "is_examined": False,
+                "text": "You don’t believe it yourself, but there is no mistake… Aliens! Melvin, where are you?\nSuddenly, in the corner of the room, you notice Melvin’s notebook.\nMost of the pages have been torn out with inhuman strength,\nand on the remaining ones — strange symbols and the coordinates of three locations.\nWell, now it’s clear where to search for your friend\n(and who you’ll have to face along the way).",
+                "choices": {
+                    "end_investigation": {
+                        "text": "Finish the investigation",
+                        "next_step": None,
+                    }
+                },
+            }
+        }
+    },
 }
 
 def investigate(ident):
