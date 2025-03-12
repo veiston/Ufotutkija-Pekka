@@ -39,6 +39,7 @@
       ```sh
       mariadb -u root -p < ufo_peli.sql
       ```
+    - The database is accessed using the `root` user with the password `1234`
       
  ## Start the Game
  Start the game by executing the following command:

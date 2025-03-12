@@ -401,7 +401,7 @@ investigations = {
         "reward": 300,
         "turns_limit": 20,
         "level": 2,
-        "win_text": f"{player['name']}, lost in thought, you slowly wander along the pier toward your next destination\nwhen you notice a piece of paper underfoot. Strange symbols cover it, and… Melvin’s name.\nWhat could this mean?",
+        "win_text": f"{player['name']}, lost in thought, you slowly wander along the pier toward your next destination\nwhen you notice a little floppy disk underfoot. Strange symbols cover it, and… Melvin’s name.\nWhat could this mean?",
         "lose_text": f"{player['name']}, you have exhausted all resources and never discovered what lurks in the water.",
         "steps": {
             1: {
@@ -554,7 +554,62 @@ investigations = {
                 }
             },
         }
-    }
+    },
+    "endgame": {
+        "description": f"{player['name']}, strange creatures, floppy disks, notebook pages—every investigation\nsite had traces linked to Melvin. It's time to uncover the truth.\n",
+        "airport": "KBNA",
+        "reward": 500,
+        "turns_limit": 4,
+        "level": 3,
+        "win_text": f"{player['name']}, it's time to accept congratulations! You managed to stop Melvin and escape this nightmare, but what will you do with this knowledge now?..",
+        "lose_text": f"{player['name']}, you failed to resist Melvin. Now you are part of his insane plan.",
+        "steps": {
+            1: {
+                "text": f"You return to Melvin’s house. Everything looks the same as the first time,\nbut now you notice the details: strange devices, flickering screens, wires\nstretching from room to room. The air is filled with the scent of burning\nand something... chemical.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "warn": {
+                        "text": "Insert the assembled floppies into Melvin's laptop.",
+                        "next_step": 2,
+                    },
+                }
+            },
+            2: {
+                "text": f"You insert the floppy disks into Melvin's old computer. This time, strange\nsymbols appear on the screen, followed by fragments of text:\n'Project Assimilation.\nStage 1: Contact.\nStage 2: Transformation.\nStage 3: Colonization.'\n\nThe last disk contains a video: Melvin—but not quite Melvin. His eyes glow,\nand his voice sounds mechanical: 'PRepare THe f00th0ld. EarTH wiLL be 0urs.'\n\nWhat does all this mean?\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "warn": {
+                        "text": "Call someone.",
+                        "next_step": 3,
+                    },
+                }
+            },
+            3: {
+                "text": "You pull out your phone to warn your colleagues — someone must be able\nto stop this madness, but at that moment, you hear footsteps.\n\nMelvin steps out from the shadows of the office, but he is no longer\nthe Melvin you once knew. His eyes glow with an unnatural light, his skin\nappears to be partially covered in metallic scales. He speaks, but his voice\nsounds strange, as if two people are talking at once:\n'Y0u're t00 laTE, space c0wb0y. It's alREady begUN.'\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "try_reason": {
+                        "text": "'Melvin, stop! This isn't you!'",
+                        "next_step": 4,
+                    },
+                }
+            },
+            4: {
+                "text": f"Melvin freezes for a moment. His eyes flicker:\n'I... I can't stop this. They're inside me. They're everywhere.'\n\nSuddenly, his face contorts, and he laughs—a sound more like grinding metal:\n'THey f0und mE. THey ch0se mE. I am m0re THan huMAn n0w. I am THe veSSel.\nSoon, EVeryTHing wiLL change. EarTH will bec0me a new... c0l0ny. AnD y0u, {player['name']}...\nWe neED experts lIKe y0u. Y0u muST bec0me part 0f this. WiLLingly... 0r n0t.'\n\nMelvin steps forward, and you see he is holding a syringe filled with a thick, shimmering liquid.\n",
+                "can_examine": False,
+                "is_examined": False,
+                "choices": {
+                    "fight": {
+                        "text": "Fight!",
+                        "next_step": 4,
+                    },
+                }
+            },
+        }
+    },
 }
 
 def investigate(ident):
@@ -591,7 +646,7 @@ def investigate(ident):
             # TODO: Fighting logic could be placed here.
             break
 
-        if (turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3):
+        if len(investigation["steps"]) > 4 and ((turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3)):
             type_writer(f"{random.choice(SCARY_REMINDERS)}\nYou have {turns} turns left", 0.03)
             time.sleep(2)
             print_separator()
@@ -649,5 +704,5 @@ def examine():
 
 if __name__ == "__main__":
     # Test block to run functions.
-    print("Running investigation test: 'flatwoods_monster'")
-    investigate("flatwoods_monster")
+    print("Running investigation test: 'endgame'")
+    investigate("endgame")

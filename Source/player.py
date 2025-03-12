@@ -1,5 +1,6 @@
 # player.py
 from database import *
+current_player_id = None
 
 player = {
     "name": "Pekka",  # the player's default name is Pekka, but they can change it
@@ -12,14 +13,13 @@ player = {
 def reset_player():
     global current_player_id
     current_player_id = None
-    # For some reason, inventory needs to be deleted first, otherwise it will not reset the auto_increment and crash the game
     update_data_in_database("DELETE FROM inventory")
     update_data_in_database("ALTER TABLE inventory AUTO_INCREMENT = 1")
     update_data_in_database("DELETE FROM player")
     update_data_in_database("ALTER TABLE player AUTO_INCREMENT = 1")
 
-def update_player(field, value, player_id):
-    update_data_in_database(f"UPDATE player SET {field} = '{value}' WHERE id = {player_id}")
+def update_player(field, new_value, player_id):
+    update_data_in_database(f"UPDATE player SET {field} = '{new_value}' WHERE id = {player_id}")
 
 def add_player(new_player_name):
     reset_player()
@@ -29,10 +29,10 @@ def add_player(new_player_name):
         host='127.0.0.1',
         port=3306,
         database='ufo_peli',
-        user='root',  # attention! do not forget to replace user and password with yours
+        user='root',  # Attention! do not forget to replace user and password with yours
         password='1234',
         autocommit=True,
-        collation="utf8mb4_unicode_ci" # this field may be inappropriate for windows or linux, but we did it in class, use your own configuration instead, if it doesn't work
+        collation="utf8mb4_unicode_ci"
     )
 
     if new_player_name:
@@ -68,10 +68,10 @@ add_player('')
 
 # Test block
 if __name__ == "__main__":
-    player = get_current_player()
+    test_player = get_current_player()
     if player:
         print("Current player data:")
-        for key, value in player.items():
+        for key, value in test_player.items():
             print(f"{key}: {value}")
     else:
         print("ERROR: No player.")

@@ -7,21 +7,22 @@ from notifications import get_messages
 from travel import travel
 from shop import shop
 
-# run_game function first initializes the game (player’s name, Melvin’s letter), then shows menu (travel or shop)
 def run_game():
     initialize_game()
-    print_separator() # utility function print_separator, see utilities.py
+    print_separator()
     show_main_menu()
 
 def initialize_game():
     print(get_messages("START_WELCOME"))
     input_press_enter(get_messages("START_PRESS_ENTER_START"))
-    
-    set_player_name()
-    
+
+    user_name = input(get_messages("START_ENTER_YOUR_NAME"))
+
     # Ensure player level is set to 1 after creating the player
     current_player = get_current_player()
     if current_player:
+        if user_name:
+            update_player("name", user_name, current_player["id"])
         update_player("player_level", 1, current_player["id"])
     
     print_separator()
@@ -31,11 +32,8 @@ def initialize_game():
     input_press_enter(get_messages("START_PRESS_ENTER_EMAIL"))
     type_writer(get_messages("START_EMAIL_TEXT"), 0.03)
     input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
-
-def set_player_name():
-    user_name = input(get_messages("START_ENTER_YOUR_NAME"))
-    if user_name:
-        update_player("name", user_name)
+    print(get_messages("START_NOKIA"))
+    input_press_enter(get_messages("COMMON_PRESS_ENTER_CONTINUE"))
 
 def show_main_menu():
     while True:
