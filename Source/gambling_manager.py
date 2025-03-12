@@ -7,11 +7,12 @@ dname = os.path.dirname(abspath)
 os.chdir(dname)
 from utilities import *
 from colorama import Fore, Style
-from gambling_games.snake_game import snake
-from gambling_games.poker import poker
-from gambling_games.blackjack import blackjack
+from snake_game import play_snake
+from poker import play_poker
+from blackjack import play_blackjack
+from player import get_current_player
 
-
+player = get_current_player()
 selection_of_games = ['Blackjack', 'Snake', 'Poker', 'Exit']
 
 # Main function to call from shop
@@ -32,11 +33,11 @@ def menu():
         # Check game choice and laucnh said-
         choice = input_integer('\nWhat do you want to play?\n')
         if choice == 1:
-            blackjack()
+            play_blackjack(player)
         elif choice == 2:
-            snake()
+            play_blackjack(player)
         elif choice == 3:
-            poker()
+            play_poker(player)
         elif choice == 4:
             continue
         else:

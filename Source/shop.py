@@ -4,7 +4,7 @@ from colorama import Fore, Style
 from utilities import print_separator
 from database import get_data_from_database, update_data_in_database
 from player import get_current_player, update_player
-from gambling import menu
+from gambling_manager import menu
 
 def get_items_from_database():
     query = "SELECT * FROM items"
@@ -61,9 +61,11 @@ def shop():
                 print("ERROR: No player found. Please create a player first.")
                 return
 
+            # Select Gambling option
             if selected_item == display_index+1:
                 menu()
                 return
+            
             # Check if the player has enough money
             if player.get("money", 0) < price:
                 print(f"Insufficient funds to purchase {selected_item['name']} mate. Check your balance again. You have ${player.get('money')}.")

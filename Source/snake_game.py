@@ -3,7 +3,7 @@
 
 import random
 import curses
-from Source.utilities import print_separator
+from utilities import print_separator
 from colorama import Fore, Style
 
 def play_snake(player):

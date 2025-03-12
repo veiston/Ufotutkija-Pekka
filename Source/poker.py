@@ -1,10 +1,10 @@
 # I added this because I like poker. I'll try to implement this tomorrow, but let's see. :D
 
-def poker():
+def play_poker(player):
 
     # Maybe return win amount?
     return
 
 if __name__ == '__main__':
-    poker()
+    play_poker()
     print('Test passed')

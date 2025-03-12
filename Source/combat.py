@@ -107,3 +107,6 @@ def battle():
             print(f"\nWith your extensive knowledge of all things weird, you determine the creature is the {Fore.CYAN}{creature["type"]}{Style.RESET_ALL}-type and has {Fore.MAGENTA}{creature['hp']} HP{Style.RESET_ALL}")
             input_press_enter('')
             print_separator()
+
+if __name__ == "__main__":
+    battle()

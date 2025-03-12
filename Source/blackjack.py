@@ -4,7 +4,7 @@
 import random
 import time
 from colorama import Fore, Style
-from Source.utilities import print_separator, type_writer  # Import helper functions
+from utilities import print_separator, type_writer  # Import helper functions
 
 def play_blackjack(player):
     """
@@ -99,3 +99,6 @@ def get_bet(player):
                 print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
         except ValueError:
             print(f"{Fore.RED}Invalid input. Enter a number.{Style.RESET_ALL}")
+
+if __name__ == "__main__":
+    play_blackjack()
