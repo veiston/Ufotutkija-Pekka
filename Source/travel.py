@@ -4,7 +4,7 @@ from database import get_data_from_database, update_data_in_database
 from colorama import Fore, Style
 from utilities import type_writer
 from player import get_current_player, update_player, add_player
-from investigations import investigate
+from investigations import investigate, investigations
 
 PRICE_PER_KM = 0.01
 FLIGHT_COST = 100
@@ -27,16 +27,26 @@ def get_available_airports(player_level):
     Here it returns a list of airport symbols unlocked based on the player's level.
     Level 5 or higher: All configured airports become available.
     """
+    # if player_level == 1:
+    #     return ["KBNA"]
+    # elif player_level == 2:
+    #     return ["KDEN", "KSEA"]
+    # elif player_level == 3:
+    #     return ["KDEN", "KSEA", "KBNA"]
+    # elif player_level == 4:
+    #     return ["KDEN", "KSEA", "KBNA", "KHTS"]
+    # else:
+    #     return ["KDEN", "KSEA", "KBNA", "KHTS", "KLFK", "KROW"]
+
+    # Reduction of the airport list for the first release
     if player_level == 1:
-        return ["KDEN"]
+        return ["KBNA"]
     elif player_level == 2:
-        return ["KDEN", "KSEA"]
+        return ["KDEN", "KSEA", "KHTS"]
     elif player_level == 3:
-        return ["KDEN", "KSEA", "KBNA"]
-    elif player_level == 4:
-        return ["KDEN", "KSEA", "KBNA", "KHTS"]
+        return ["KBNA"]
     else:
-        return ["KDEN", "KSEA", "KBNA", "KHTS", "KLFK", "KROW"]
+        return ["KDEN", "KSEA", "KBNA", "KHTS"]
 
 def travel():
     current_player = get_current_player()
@@ -86,9 +96,17 @@ def travel():
             new_money = current_player['money'] - FLIGHT_COST
             update_player('money', new_money, current_player['id'])
             print(f"Flight cost ${FLIGHT_COST} deducted. New balance: ${new_money}")
-            
-            # Start investigation
-            investigate('tutorial')
+
+            current_investigation = None
+
+            for key, value in investigations.items():
+                if value["airport"] == selected_symbol:
+                    current_investigation = key
+                    break
+
+            if current_investigation:
+                # Start investigation
+                investigate(current_investigation)
         else:
             print("Invalid option selected.")
     else:
