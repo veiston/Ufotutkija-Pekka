@@ -38,7 +38,7 @@ def add_player(new_player_name):
     if new_player_name:
         query = f"INSERT INTO player (name) VALUES ('{new_player_name}')"
     else:
-        query = "INSERT INTO player () VALUES ()"
+        query = "INSERT INTO player (name, location_ident, money, player_level) VALUES ('Pekka', 'KBNA', 100, 1)"
 
     cursor = connection.cursor()
     cursor.execute(query)
