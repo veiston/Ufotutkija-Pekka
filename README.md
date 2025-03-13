@@ -46,7 +46,29 @@
   ```sh
   python game.py
   ```
- 
+
+## Troubleshooting
+
+### Error: Unknown collation: 'utf8mb4_0900_ai_ci'
+
+If you encounter the following error when running the application:
+
+```
+mysql.connector.errors.DatabaseError: 1273 (HY000): Unknown collation: 'utf8mb4_0900_ai_ci'
+```
+
+This error occurs because MySQL does not support the specified collation.
+
+### Solution
+
+In the `database.py` file, inside the `connect_to_database` function, uncomment the following line:
+
+```python
+collation = 'utf8mb3_unicode_ci'  # I think this breaks the database on Windows
+```
+
+This change ensures compatibility with your MySQL version.
+
  ## Contributors
  - Veikka Liukkonen
  - Unna Postila

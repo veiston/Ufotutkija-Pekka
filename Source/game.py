@@ -24,7 +24,7 @@ def initialize_game():
         if user_name:
             update_player("name", user_name, current_player["id"])
         update_player("player_level", 1, current_player["id"])
-        update_player("money", 100, current_player["id"])
+        update_player("money", 500, current_player["id"])
     
     print_separator()
     print(get_messages("START_HELLO_USER_NAME"))
@@ -40,15 +40,15 @@ def initialize_game():
 def show_main_menu():
     while True:
         print(get_messages("MAIN_WHAT_TO_DO"))
-        print(f"1. {Fore.GREEN}{get_messages("MAIN_TRAVEL")}{Style.RESET_ALL}")
-        print(f"2. {Fore.MAGENTA}{get_messages("MAIN_SHOP")}{Style.RESET_ALL}")
+        print(f"1. {Fore.MAGENTA}{get_messages("MAIN_SHOP")}{Style.RESET_ALL}")
+        print(f"2. {Fore.GREEN}{get_messages("MAIN_TRAVEL")}{Style.RESET_ALL}")
 
         choice = input_integer(get_messages("COMMON_PRINT_OPTION_NUMBER"))
 
         if choice == 1:
-            travel()
-        elif choice == 2:
             shop()
+        elif choice == 2:
+            travel()
         else:
             print(get_messages("COMMON_WRONG_INPUT"))
 
