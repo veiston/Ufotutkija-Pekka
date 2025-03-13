@@ -651,7 +651,7 @@ def investigate(ident):
             if not has_unfinished_investigations(current_level):
                 player["player_level"] += 1
                 update_player("player_level", player["player_level"], current["id"])
-                print(f"🎉 Congratulations! You've reached level {player['player_level']}!")
+                print(f"You've reached level {player['player_level']}!")
 
             break
 
