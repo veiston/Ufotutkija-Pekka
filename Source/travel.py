@@ -2,7 +2,7 @@
 import time
 from database import get_data_from_database, update_data_in_database
 from colorama import Fore, Style
-from utilities import type_writer
+from utilities import type_writer, clear_screen
 from player import get_current_player, update_player, add_player
 from investigations import investigate, investigations
 
@@ -88,7 +88,7 @@ def travel():
             
             # Check if the player has enough money for the flight
             if current_player["money"] < FLIGHT_COST:
-                print(f"Insufficient funds for the flight. You have ${current_player['money']}, but the flight costs ${FLIGHT_COST}. Have you tried to earn by gambling?")
+                print(f"Insufficient funds for the flight. You have ${current_player['money']}, but the flight costs ${FLIGHT_COST}. Have you tried to earn more money by gambling?")
                 return
             
             # Update player's airport and deduct flight cost.
@@ -106,6 +106,7 @@ def travel():
 
             if current_investigation:
                 # Start investigation
+                clear_screen()
                 investigate(current_investigation)
         else:
             print("Invalid option selected.")
