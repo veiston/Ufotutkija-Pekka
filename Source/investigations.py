@@ -636,7 +636,7 @@ def investigate(ident):
     while True:
         if step is None:
             print(f"{investigation['win_text']}")
-            investigation["is_completed"] = True  # Отмечаем расследование как завершённое
+            investigation["is_completed"] = True
 
             current = get_current_player()
             current_money = current.get("money", 0)
