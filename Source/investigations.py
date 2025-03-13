@@ -794,7 +794,7 @@ def examine(investigation_ident):
 
         if selected_item != "Nokia" and amount is not None:
             update_inventory(selected_item)
-            inventory_results = get_inventory()  # Обновляем список после удаления
+            inventory_results = get_inventory()
 
         if use_equipment(selected_item, item_type, current_creature, creature_types):
             break
