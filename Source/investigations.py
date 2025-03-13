@@ -135,7 +135,7 @@ investigations = {
         "description": f"{player['name']}, the coordinates from the infamous notebook have led you to Kentucky, to the village of Kelly\n— a place where strange occurrences have long been the norm. For half a century, Hopkinsville County\nhas intrigued people: at night, household appliances disappear, and witnesses speak of tiny creatures\nwith shimmering skin hiding in the woods. If stolen toasters and radio transmitters hold the key\nto Melvin’s disappearance, it's worth figuring out who is behind this.\n",
         "airport": "KDEN",
         "reward": 250,
-        "turns_limit": 2,
+        "turns_limit": 15,
         "level": 2,
         "win_text": f"You leave Kelly, but before that, you pick up a floppy disk from the sticky floor of the barn. On it — Melvin's name. What could it mean...",
         "lose_text": f"{player['name']}, you have exhausted all your resources and failed to uncover the mystery.",
