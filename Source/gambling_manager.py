@@ -5,7 +5,7 @@ import os
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
-from utilities import print_separator, input_integer
+from utilities import print_separator, input_integer, clear_screen
 from colorama import Fore, Style
 from snake_game import play_snake
 #from poker import play_poker  # RIP
@@ -18,6 +18,7 @@ available_games = {
 }
 
 def gambling_menu():
+    clear_screen()
     player = get_current_player()
     while True:
         print_separator()

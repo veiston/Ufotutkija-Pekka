@@ -2,6 +2,7 @@
 
 import time
 import sys
+import os
 
 def type_writer(text, speed=0.05):
     for char in text:
@@ -34,6 +35,9 @@ def yes_no(prompt):
             return user_input
         else:
             print('Dude, there are no such options here, try again')
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def waiting_action():
     time.sleep(0.5)

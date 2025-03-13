@@ -4,13 +4,14 @@
 import random
 import time
 from colorama import Fore, Style
-from utilities import print_separator, type_writer, input_integer  # added input_integer
+from utilities import print_separator, type_writer, input_integer, clear_screen
 from player import get_current_player
 
 def play_blackjack(player):
     """
     Simple Blackjack game where the player tries to get as close to 21 as possible without going over.
     """
+    clear_screen()
     print_separator()
     print(f"{Fore.YELLOW}Welcome to Blackjack!{Style.RESET_ALL}")
     print(f"Your current balance: {Fore.GREEN}${player['money']}{Style.RESET_ALL}")

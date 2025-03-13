@@ -1,7 +1,7 @@
 # shop.py
 
 from colorama import Fore, Style
-from utilities import print_separator
+from utilities import print_separator, clear_screen
 from database import get_data_from_database, update_data_in_database
 from player import get_current_player, update_player
 from gambling_manager import gambling_menu
@@ -22,6 +22,7 @@ def get_items_from_database():
     return items
 
 def shop():
+    clear_screen()
     print_separator()
     items = get_items_from_database()
     player = get_current_player()

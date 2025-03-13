@@ -3,7 +3,7 @@
 
 import random
 import curses
-from utilities import print_separator, input_integer
+from utilities import print_separator, input_integer, clear_screen
 from colorama import Fore, Style
 from player import get_current_player
 
@@ -11,7 +11,7 @@ def play_snake(player):
     """
     Classic Snake game where the player earns money based on how long they survive.
     """
-
+    clear_screen()
     print_separator()
     print(f"{Fore.YELLOW}Welcome to Snake!{Style.RESET_ALL}")
     print(f"Your current balance: {Fore.GREEN}${player['money']}{Style.RESET_ALL}")
@@ -25,6 +25,7 @@ def play_snake(player):
     curses.wrapper(lambda stdscr: run_snake_game(stdscr, player, bet))
 
 def run_snake_game(stdscr, player, bet):
+    clear_screen()
     """Runs the Snake game inside a curses window."""
     curses.curs_set(0)
     stdscr.nodelay(1)
