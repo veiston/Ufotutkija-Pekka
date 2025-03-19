@@ -100,7 +100,7 @@ def travel():
             current_investigation = None
 
             for key, value in investigations.items():
-                if value["airport"] == selected_symbol:
+                if value["airport"] == selected_symbol and not value["is_completed"]:
                     current_investigation = key
                     break
 
