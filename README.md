@@ -40,12 +40,23 @@
       mariadb -u root -p < ufo_peli.sql
       ```
     - The database is accessed using the `root` user with the password `1234`
-      
- ## Start the Game
- Start the game by executing the following command:
-  ```sh
-  python game.py
-  ```
+
+## Start the Server and Interface
+
+1. Navigate to the `Source` directory:
+   ```sh
+   cd Source
+   ```
+
+2. Launch the server:
+   ```sh
+   python server.py
+   ```
+
+3. Open your browser and go to:
+   ```
+   http://127.0.0.1:5000
+   ```
 
 ## Troubleshooting
 
