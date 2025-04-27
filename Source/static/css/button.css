@@ -1,0 +1,42 @@
+/*
+Link this file to your page ad  <link rel="stylesheet" href="/static/css/button.css"> if you have a button on your page.
+Add the markup like this:
+ <button class="button">
+      Button text
+ </button>
+*/
+
+.button {
+    border: none;
+    background-color: #FDC00B;
+    color: #303031;
+    font-family: 'Bungee', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button.button--gray-light {
+    background-color: #48526A;
+    color: #FFFFFF;
+}
+
+.button.button--blue-dark {
+    background-color: #101D25;
+    color: #FFFFFF;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.button:focus {
+    outline: none;
+}

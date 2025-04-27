@@ -1,5 +1,3 @@
-# game.py
-
 from colorama import Fore, Style
 from utilities import type_writer, print_separator, input_press_enter, input_integer, clear_screen
 from player import *

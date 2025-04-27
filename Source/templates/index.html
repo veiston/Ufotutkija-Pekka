@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UFOtutkiJA</title>
+    <link rel="icon" href="static/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <link rel="stylesheet" href="/static/css/logo.css" />
+    <link rel="stylesheet" href="/static/css/button.css" />
+    <link rel="stylesheet" href="/static/css/hero.css" />
+
+    <script src="/static/js/hero.js" defer></script>
+  </head>
+  <body>
+    <div class="hero" id="indexScreen">
+      <div class="hero__container">
+        <h1 class="hero__title">UF0tutkiJA</h1>
+        <button id="startButton" class="hero__button button">Start</button>
+        <button id="startButton" class="hero__button button button--gray-light">
+          How to play
+        </button>
+      </div>
+    </div>
+
+    <div class="hero" id="nameEntryScreen" style="display: none">
+      <div class="logo">UF0tutkiJA</div>
+
+      <div class="hero__container">
+        <form id="nameForm" class="hero__form">
+          <div class="hero__form-container">
+            <label for="playerName" class="hero__label">
+              Enter your name
+            </label>
+            <input
+              type="text"
+              id="playerName"
+              name="playerName"
+              placeholder="Pekka"
+              class="hero__input"
+            />
+          </div>
+          <button type="submit" id="continueButton" class="hero__button button">
+            Continue
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="hero" id="welcomeScreen" style="display: none">
+      <div class="logo">UF0tutkiJA</div>
+      <div class="hero__container hero__background">
+        <div class="hero__box">
+          <div class="hero__text-wrap">
+            <div class="hero__text" id="welcomeText">
+              <!-- welcome messages container-->
+            </div>
+          </div>
+          <button class="button hero__button" id="continueWelcomeButton">
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

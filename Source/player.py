@@ -56,7 +56,7 @@ def get_current_player():
     else:
         return {}
 
-add_player('')
+# add_player('')
 
 # Test block
 if __name__ == "__main__":

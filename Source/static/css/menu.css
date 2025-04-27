@@ -1,0 +1,80 @@
+.menu {
+    height: 100%;
+    width: 100%;
+}
+
+.menu__container {
+    display: flex;
+    height: 100%;
+}
+
+.menu__button {
+    position: relative;
+    padding: 20px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    width: 100%;
+    flex: 1;
+    height: 100%;
+    cursor: pointer;
+}
+
+.menu__button-overlay {
+    background-color: rgba(16, 29, 37, 0.5);
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+}
+
+.menu__button-text {
+    position: relative;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: 'Bungee', sans-serif;
+    z-index: 2;
+    font-size: 42px;
+    transition: opacity 0.3s ease;
+}
+
+.menu__button-description {
+    display: none;
+    color: #303031;
+    transition: opacity 0.3s ease;
+
+    flex-direction: column;
+}
+
+.menu__button-description-title {
+    text-align: center;
+    font-size: 42px;
+    font-family: 'Bungee', sans-serif;
+}
+
+.menu__button-description-text {
+    padding-top: 32px;
+    font-family: 'Bungee Hairline', sans-serif;
+    font-size: 18px;
+}
+
+.menu__button:hover {
+    background-color: #FDC00B;
+}
+
+.menu__button:hover .menu__button-overlay {
+    opacity: 0;
+}
+
+.menu__button:hover .menu__button-text {
+    display: none;
+}
+
+.menu__button:hover .menu__button-description {
+    display: flex;
+}

@@ -1,0 +1,18 @@
+/*
+Link this file to your page ad  <link rel="stylesheet" href="/static/css/logo.css"> if you have a logo on your page.
+Add the markup like this:
+ <div class="logo">
+      UF0tutkiJA
+ </div>
+*/
+
+.logo {
+    position: fixed;
+    top: 10px;
+    left: 20px;
+    font-family: 'Bungee Shade', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: #101D25;
+    z-index: 1000;
+}
