@@ -18,8 +18,12 @@ def reset_player():
     update_data_in_database("DELETE FROM player")
     update_data_in_database("ALTER TABLE player AUTO_INCREMENT = 1")
 
-def update_player(field, new_value, player_id):
-    update_data_in_database(f"UPDATE player SET {field} = '{new_value}' WHERE id = {player_id}")
+def update_player(updates, player_id):
+    if not updates:
+        return
+    set_clause = ', '.join([f"{field} = '{value}'" for field, value in updates.items()])
+    query = f"UPDATE player SET {set_clause} WHERE id = {player_id}"
+    update_data_in_database(query)
 
 def add_player(new_player_name):
     reset_player()
