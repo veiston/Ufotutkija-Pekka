@@ -1,0 +1,17 @@
+/* Add the spotlight element to your page*/
+/* <div id="spotlight" class="spotlight"></div>*/
+
+/* Add the script to your page*/
+/* <script src="/static/js/spotlight.js" defer></script>*/
+
+/* Add the styles to your page*/
+/* <link rel="stylesheet" href="/static/css/spotlight.css" />*/
+
+.spotlight {
+    position: fixed;
+    z-index: 100000;
+    inset: 0;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.85);
+    transition: mask-position 0.1s, -webkit-mask-position 0.1s;
+}
