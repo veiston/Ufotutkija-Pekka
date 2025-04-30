@@ -3,22 +3,23 @@
 import time
 import random
 from utilities import type_writer, print_separator,input_integer
-from player import *
+from player import Player
 from notifications import SCARY_REMINDERS
 from combat import battle
-from database import update_data_in_database
+from database import update_data_in_database, get_data_from_database
 
-player = get_current_player()
+player_instance: Player | None = None
+player: dict | None = None
 
 investigations = {
     "tutorial": { # story ident, important
-        "description": f"{player['name']}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
+        "description": "{player_name}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
         "airport": "KBNA",  # airport code related to this story
         "reward": 300,  # mission completion reward (money)
         "turns_limit": 100,  # number of attempts allowed for the location
         "level": 1,  # location level, must match the player's level to access
-        "win_text":  f"{player['name']}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $300 for new flights and equipment.\n",
-        "lose_text": f"{player['name']}, your resources have run out, and now you lose.",
+        "win_text":  "{player_name}, it looks like you now have to find out what happened to Melvin\nand where the mysterious coordinates from his notebook will lead you.\nYou receive $300 for new flights and equipment.\n",
+        "lose_text": "{player_name}, your resources have run out, and now you lose.",
         "creature": "Alien",
         "is_completed": False,
         "steps": {
@@ -132,13 +133,13 @@ investigations = {
         }
     },
     "metal_goblin": {
-        "description": f"{player['name']}, the coordinates from the infamous notebook have led you to Kentucky, to the village of Kelly\n— a place where strange occurrences have long been the norm. For half a century, Hopkinsville County\nhas intrigued people: at night, household appliances disappear, and witnesses speak of tiny creatures\nwith shimmering skin hiding in the woods. If stolen toasters and radio transmitters hold the key\nto Melvin’s disappearance, it's worth figuring out who is behind this.\n",
+        "description": "{player_name}, the coordinates from the infamous notebook have led you to Kentucky, to the village of Kelly\n— a place where strange occurrences have long been the norm. For half a century, Hopkinsville County\nhas intrigued people: at night, household appliances disappear, and witnesses speak of tiny creatures\nwith shimmering skin hiding in the woods. If stolen toasters and radio transmitters hold the key\nto Melvin’s disappearance, it's worth figuring out who is behind this.\n",
         "airport": "KDEN",
         "reward": 250,
         "turns_limit": 15,
         "level": 2,
         "win_text": f"You leave Kelly, but before that, you pick up a floppy disk from the sticky floor of the barn. On it — Melvin's name. What could it mean...",
-        "lose_text": f"{player['name']}, you have exhausted all your resources and failed to uncover the mystery.",
+        "lose_text": "{player_name}, you have exhausted all your resources and failed to uncover the mystery.",
         "creature": "Alien",
         "is_completed": False,
         "steps": {
@@ -250,13 +251,13 @@ investigations = {
         }
     },
     "nakki": {
-        "description": f"{player['name']}, the coordinates in Melvin's notebook lead you to Aberdeen, Washington. Here, by the banks\nof the Chihalis River, something strange is happening - late at night, fishermen saw a dark\nfigure in the water, then began to find drowned people. People say that at night someone splashes\nin the water, and in the morning they find ashy gray slime on the pier. Who is it and what does it\nhave to do with Melvin?\n",
+        "description": "{player_name}, the coordinates in Melvin's notebook lead you to Aberdeen, Washington. Here, by the banks\nof the Chihalis River, something strange is happening - late at night, fishermen saw a dark\nfigure in the water, then began to find drowned people. People say that at night someone splashes\nin the water, and in the morning they find ashy gray slime on the pier. Who is it and what does it\nhave to do with Melvin?\n",
         "airport": "KSEA",
         "reward": 300,
         "turns_limit": 20,
         "level": 2,
-        "win_text": f"{player['name']}, lost in thought, you slowly wander along the pier toward your next destination\nwhen you notice a little floppy disk underfoot. Strange symbols cover it, and… Melvin’s name.\nWhat could this mean?",
-        "lose_text": f"{player['name']}, you have exhausted all resources and never discovered what lurks in the water.",
+        "win_text": "{player_name}, lost in thought, you slowly wander along the pier toward your next destination\nwhen you notice a little floppy disk underfoot. Strange symbols cover it, and… Melvin’s name.\nWhat could this mean?",
+        "lose_text": "{player_name}, you have exhausted all resources and never discovered what lurks in the water.",
         "creature": "Ghost",
         "is_completed": False,
         "steps": {
@@ -412,13 +413,13 @@ investigations = {
         }
     },
     "flatwoods_monster": {
-        "description": f"{player['name']}, the coordinates from Melvin's notebook have led you to Flatwoods, Braxton County, West Virginia.\nThis place is a living legend. Half a century ago, something was seen here: a red sphere descending from\nthe sky, a metallic stench in the air, scorched patches of earth where nothing grows to this day.\nThe locals whisper: it has returned. Do you feel it?\n",
+        "description": "{player_name}, the coordinates from Melvin's notebook have led you to Flatwoods, Braxton County, West Virginia.\nThis place is a living legend. Half a century ago, something was seen here: a red sphere descending from\nthe sky, a metallic stench in the air, scorched patches of earth where nothing grows to this day.\nThe locals whisper: it has returned. Do you feel it?\n",
         "airport": "KHTS",
         "reward": 300,
         "turns_limit": 15,
         "level": 2,
-        "win_text": f"You run out of the forest at full speed and stop only near the bar. On the ground, you see a floppy disk with Melvin's name on it. What the f...",
-        "lose_text": f"{player['name']}, your resources have run out, and the mystery remains unsolved.",
+        "win_text": "You run out of the forest at full speed and stop only near the bar. On the ground, you see a floppy disk with Melvin's name on it. What the f...",
+        "lose_text": "{player_name}, your resources have run out, and the mystery remains unsolved.",
         "creature": "Alien",
         "is_completed": False,
         "steps": {
@@ -566,13 +567,13 @@ investigations = {
         }
     },
     "endgame": {
-        "description": f"{player['name']}, strange creatures, floppy disks, notebook pages—every investigation\nsite had traces linked to Melvin. It's time to uncover the truth.\n",
+        "description": "{player_name}, strange creatures, floppy disks, notebook pages—every investigation\nsite had traces linked to Melvin. It's time to uncover the truth.\n",
         "airport": "KBNA",
         "reward": 500,
         "turns_limit": 4,
         "level": 3,
-        "win_text": f"{player['name']}, it's time to accept congratulations! You managed to stop Melvin and escape this nightmare, but what will you do with this knowledge now?..",
-        "lose_text": f"{player['name']}, you failed to resist Melvin. Now you are part of his insane plan.",
+        "win_text": "{player_name}, it's time to accept congratulations! You managed to stop Melvin and escape this nightmare, but what will you do with this knowledge now?..",
+        "lose_text": "{player_name}, you failed to resist Melvin. Now you are part of his insane plan.",
         "creature": "Melvin",
         "is_completed": False,
         "steps": {
@@ -610,7 +611,7 @@ investigations = {
                 }
             },
             4: {
-                "text": f"Melvin freezes for a moment. His eyes flicker:\n'I... I can't stop this. They're inside me. They're everywhere.'\n\nSuddenly, his face contorts, and he laughs—a sound more like grinding metal:\n'THey f0und mE. THey ch0se mE. I am m0re THan huMAn n0w. I am THe veSSel.\nSoon, EVeryTHing wiLL change. EarTH will bec0me a new... c0l0ny. AnD y0u, {player['name']}...\nWe neED experts lIKe y0u. Y0u muST bec0me part 0f this. WiLLingly... 0r n0t.'\n\nMelvin steps forward, and you see he is holding a syringe filled with a thick, shimmering liquid.\n",
+                "text": "Melvin freezes for a moment. His eyes flicker:\n'I... I can't stop this. They're inside me. They're everywhere.'\n\nSuddenly, his face contorts, and he laughs—a sound more like grinding metal:\n'THey f0und mE. THey ch0se mE. I am m0re THan huMAn n0w. I am THe veSSel.\nSoon, EVeryTHing wiLL change. EarTH will bec0me a new... c0l0ny. AnD y0u, {player_name}...\nWe neED experts lIKe y0u. Y0u muST bec0me part 0f this. WiLLingly... 0r n0t.'\n\nMelvin steps forward, and you see he is holding a syringe filled with a thick, shimmering liquid.\n",
                 "can_examine": False,
                 "is_examined": False,
                 "choices": {
@@ -625,9 +626,18 @@ investigations = {
 }
 
 def investigate(ident):
+    global player_instance, player
+    player_instance = Player()
+    player_instance.id = Player.current_id
+    player = player_instance.get_current()
+
+    player_name = player.get("name", "Player")
+    story_template = investigations[ident]
+    investigation = eval(str(story_template).replace("{player_name}", player_name))
+    investigations[ident] = investigation
+
     print_separator()
 
-    investigation = investigations[ident]
     turns = investigation["turns_limit"]
     step = 1
 
@@ -638,19 +648,19 @@ def investigate(ident):
             print(f"{investigation['win_text']}")
             investigation["is_completed"] = True
 
-            current = get_current_player()
+            current = player
             current_money = current.get("money", 0)
             current_level = current.get("player_level", 1)
 
             new_money = current_money + investigation["reward"]
             new_level = current_level
 
-            update_player("money", new_money, current["id"])
-            update_player("player_level", new_level, current["id"])
+            player_instance.update({"money": new_money})
+            player_instance.update({"player_level": new_level})
 
             if not has_unfinished_investigations(current_level):
                 player["player_level"] += 1
-                update_player("player_level", player["player_level"], current["id"])
+                player_instance.update({"player_level": player["player_level"]})
                 print(f"You've reached level {player['player_level']}!")
 
             break
@@ -800,9 +810,6 @@ def examine(investigation_ident):
             break
 
 if __name__ == "__main__":
-    # update_data_in_database(f'INSERT INTO inventory(player_id, item) VALUES ({1}, "Nokia");')
-    # update_data_in_database(f'INSERT INTO inventory(player_id, item, amount) values (1, "Salt", 5), (1, "EMF Detector", 5), (1, "Coffee", 5);')
-    # examine('metal_goblin')
     while True:
         print_separator()
         print("Investigations Menu:")
@@ -816,6 +823,17 @@ if __name__ == "__main__":
             print("Exiting investigation menu...")
             break
         elif 1 <= choice <= len(keys):
-            investigate(keys[choice - 1])
+            selected_ident = keys[choice - 1]
+
+            # Set location to investigation's airport
+            player_instance = Player('Pekka')
+            player_instance.add()
+            player_instance.id = Player.current_id
+            airport_code = investigations[selected_ident]["airport"]
+            player_instance.update({"location_ident": airport_code})
+            investigate(selected_ident)
+
+            # Reset location back to EFHK after investigation
+            player_instance.update({"location_ident": "EFHK"})
         else:
             print("No such option. Please try again.")

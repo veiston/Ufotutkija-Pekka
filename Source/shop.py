@@ -3,7 +3,7 @@
 from colorama import Fore, Style
 from utilities import print_separator, clear_screen
 from database import get_data_from_database, update_data_in_database
-from player import get_current_player, update_player
+from player import Player
 from gambling_manager import gambling_menu
 
 def get_items_from_database():
@@ -25,14 +25,16 @@ def shop():
     clear_screen()
     print_separator()
     items = get_items_from_database()
-    player = get_current_player()
+    player = Player()
+    player.id = Player.current_id
+    player_data = player.get_current()
 
     # This is a temporary thing You can add more money here to test it out by uncommenting this folllowing block
-    """ new_money = player["money"] + 1000
-    update_player("money", new_money, player["id"])
-    player["money"] = new_money  # update local player's money to reflect the change """
+    """ new_money = player_data["money"] + 1000
+    player.update({"money": new_money})
+    player_data["money"] = new_money  # update local player's money to reflect the change """
 
-    print(f"Account balance: {Fore.MAGENTA}${str(player.get('money'))}  \n{Style.RESET_ALL}")
+    print(f"Account balance: {Fore.MAGENTA}${str(player_data.get('money'))}  \n{Style.RESET_ALL}")
     print("Available items:")
     display_index = 1
     filtered_items = []
@@ -61,20 +63,20 @@ def shop():
             price = selected_item['price'] if selected_item['price'] is not None else 0
 
             # Retrieve current player's money.
-            if not player:
+            if not player_data:
                 print("ERROR: No player found. Please create a player first.")
                 return
             
             # Check if the player has enough money
-            if player.get("money", 0) < price:
+            if player_data.get("money", 0) < price:
                 print(f"Insufficient funds to purchase {selected_item['name']} mate. Check your balance again. You have ${player.get('money')}.")
             else:
-                new_money = player["money"] - price
-                update_player("money", new_money, player["id"])
+                new_money = player_data.get("money") - price
+                player.update({"money": new_money})
                 print(f"Dude, you've got it! You purchased {selected_item['name']} for ${price}. Your new balance is ${new_money}.")
                 
-                # Update player's inventory and money in the database.
-                query = (f"INSERT INTO inventory (player_id, item, amount) VALUES ({player['id']}, '{selected_item['name']}', 1) "
+                # Update player's inventory in the database.
+                query = (f"INSERT INTO inventory (player_id, item, amount) VALUES ({player.id}, '{selected_item['name']}', 1) "
                          f"ON DUPLICATE KEY UPDATE amount = amount + 1")
                 update_data_in_database(query)
         else:
@@ -83,5 +85,7 @@ def shop():
         print("Invalid input.")
 
 if __name__ == "__main__":
+    player = Player('Test dude')
+    player.add()
     while True:
-     shop()
+        shop()

@@ -1,7 +1,8 @@
 import random
 import config
 from database import *
-from player import update_player, get_current_player
+# from player import update_player, get_current_player
+from player import Player
 from colorama import Fore, Style
 from utilities import print_separator, input_press_enter, input_integer, waiting_action
 from notifications import get_messages
@@ -9,20 +10,28 @@ from inventory import list_inventory
 from creature import get_creature, creature_turn, how_is_the_creature_doing
 
 def battle():
+    player = Player()
+    player.id = Player.current_id
+    player_data = player.get_current()
+
     fight = True
     creature = get_creature()
+    if not creature or "name" not in creature:
+        print("ERROR: No creature found at current location.")
+        return False
+
     print(f'Suddenly you are ambushed by {Fore.CYAN}{creature['name']}{Style.RESET_ALL}')
     input_press_enter('')
 
     while fight:
 
         #determine what colour the player health is displayed in
-        if get_current_player()['hp']>=100:
+        if player_data['hp'] >= 100:
             colour = Fore.GREEN
         else:
             colour = Fore.RED
 
-        print(f'You have {colour}{get_current_player()['hp']} HP{Style.RESET_ALL} left')
+        print(f'You have {colour}{player_data['hp']} HP{Style.RESET_ALL} left')
         input_press_enter('')
 
         print('Choose your next action')
@@ -38,7 +47,7 @@ def battle():
             print(f'You attack {creature['name']}')
             waiting_action()
             #adding random element to the normal attack
-            attack = random.randint(get_current_player()['attack']-5, get_current_player()['attack']+5)
+            attack = random.randint(player_data['attack'] - 5, player_data['attack'] + 5)
             creature['hp']-=attack
             print(f'{creature['name']} takes {Fore.RED}{attack} damage{Style.RESET_ALL}\n')
 
@@ -46,6 +55,7 @@ def battle():
             input_press_enter('')
 
             turnChange = creature_turn(creature) #creature attack logic contained in creature.py
+            player_data = player.get_current()
 
             if turnChange == 'win':
                 return True
@@ -62,13 +72,14 @@ def battle():
                 if item['type'] == 'Healing':
                     #checking for overhealing
                     #let's add max health to the database in the future!
-                    if get_current_player()['hp']+item['power']>=200:
+                    if player_data['hp'] + item['power'] >= 200:
                         healing = 200
-                        healthGained = 200-get_current_player()['hp']
+                        healthGained = 200 - player_data['hp']
                     else:
-                        healing = get_current_player()['hp']+item['power']
+                        healing = player_data['hp'] + item['power']
                         healthGained = item['power']
-                    update_player('hp', healing, get_current_player()['id'])
+                        player.update({'hp': healing})
+                        player_data = player.get_current()
 
                     print(f'You regain {Fore.GREEN}{healthGained}{Style.RESET_ALL} health')
                     input_press_enter('')
@@ -107,4 +118,7 @@ def battle():
             print_separator()
 
 if __name__ == "__main__":
+    player = Player('Test dude')
+    player.add()
+    player.update({'location_ident': 'KSEA'})
     battle()

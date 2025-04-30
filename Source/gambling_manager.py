@@ -1,6 +1,4 @@
 # gambling.py
-# TODO In the shop the player selects “earn money” and is directed here. Here they see a list of games and the option to choose one. The game files or functions or whatever need to be imported
-
 import os
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -10,7 +8,8 @@ from colorama import Fore, Style
 from snake_game import play_snake
 #from poker import play_poker  # RIP
 from blackjack import play_blackjack
-from player import get_current_player, update_player
+# from player import get_current_player, update_player
+from player import Player
 
 available_games = {
     "Blackjack": play_blackjack,
@@ -19,7 +18,11 @@ available_games = {
 
 def gambling_menu():
     clear_screen()
-    player = get_current_player()
+
+    player = Player()
+    player.id = Player.current_id
+    player_data = player.get_current()
+
     while True:
         print_separator()
         print(f"Welcome to the gambling corner!\nHere you can turn your {Fore.MAGENTA}💵 money 💵{Style.RESET_ALL} into.. MORE MONEY!\n")
@@ -44,9 +47,9 @@ def gambling_menu():
         game_function = available_games[selected_game]
 
         # Give reward if player wins
-        new_money = game_function(player)
+        new_money = game_function(player_data)
         if new_money is not None:
-            update_player("money", new_money, player["id"])
+            player.update({"money": new_money})
         
 if __name__ == "__main__":
     gambling_menu()

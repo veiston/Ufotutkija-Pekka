@@ -2,24 +2,28 @@ import config
 from utilities import print_separator, input_press_enter, input_integer, yes_no
 from notifications import get_messages
 from database import *
-from player import get_current_player
+# from player import get_current_player
+from player import Player
 from colorama import Fore, Style
 
 
 def get_inventory():
+    player = Player()
+    player.id = Player.current_id
+
     if config.tossNokia:
         query = (f'SELECT inventory.item, inventory.amount, items.price, items.item_power, items.item_type, items.description '
                 f'FROM inventory '
                 f'INNER JOIN items '
                 f'ON inventory.item = items.name '
-                f'WHERE player_id = {get_current_player()["id"]} '
+                f'WHERE player_id = {player.id} '
                 f'AND inventory.item NOT IN ("Nokia");')
     else:
         query = (f'SELECT inventory.item, inventory.amount, items.price, items.item_power, items.item_type, items.description '
                 f'FROM inventory '
                 f'INNER JOIN items '
                 f'ON inventory.item = items.name '
-                f'WHERE player_id = {get_current_player()["id"]};')
+                f'WHERE player_id = {player.id};')
     result = get_data_from_database(query)
     if result:
         columns = ["name", "amount", "price", "power", "type", "description"]
@@ -35,6 +39,9 @@ def list_inventory(): #mainly for combat-purposes, but it might be useful elsewh
     inventory = get_inventory()
     inventoryLength = len(inventory)
     openInventory = True
+
+    player = Player()
+    player.id = Player.current_id
 
     while openInventory:
         print_separator()
@@ -65,7 +72,7 @@ def list_inventory(): #mainly for combat-purposes, but it might be useful elsewh
                 if item['name'] == 'Nokia':
                     config.tossNokia = True
                 else:
-                    update_inventory(-1, get_current_player()['id'], item['name'])
+                    update_inventory(-1, player.id, item['name'])
                 return item
 
         elif action==inventoryLength+1: #the last option from the list (Go back)

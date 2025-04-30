@@ -1,7 +1,7 @@
 # notifications.py
 
 from colorama import Fore, Style
-from player import *
+from player import Player
 
 SCARY_REMINDERS = [
     "*** Just a reminder:  Have you forgotten that paranormal hotspots always have high radiation?\nYou don’t have many choices left. Choose wisely ***",
@@ -10,7 +10,10 @@ SCARY_REMINDERS = [
 
 # TODO add other texts from prints here as variable (not investigations, only direct text from the print()). Skip it if you do not agree that variables are more beautiful
 def get_messages(message_key):
-    current_player = get_current_player()
+    player_instance = Player()
+    player_instance.id = Player.current_id
+    current_player = player_instance.get_current()
+
     messages = {
         "COMMON_PRESS_ENTER_CONTINUE": "Press ENTER to continue",
         "COMMON_PRINT_OPTION_NUMBER": "Print number of option: ",

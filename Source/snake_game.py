@@ -5,7 +5,8 @@ import random
 import curses
 from utilities import print_separator, input_integer, clear_screen
 from colorama import Fore, Style
-from player import get_current_player
+# from player import get_current_player
+from player import Player
 
 def play_snake(player):
     """
@@ -113,5 +114,9 @@ def get_bet(player):
         else:
             print(f"{Fore.RED}Invalid bet. Enter an amount between $10 and ${player['money']}.{Style.RESET_ALL}")
 
+
 if __name__ == "__main__":
-    play_snake(get_current_player())
+    player = Player()
+    player.id = Player.current_id
+    player_data = player.get_current()
+    play_snake(player_data)

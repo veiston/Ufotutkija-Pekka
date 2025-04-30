@@ -3,7 +3,8 @@ import time
 from database import get_data_from_database, update_data_in_database
 from colorama import Fore, Style
 from utilities import type_writer, clear_screen
-from player import get_current_player, update_player, add_player
+# from player import get_current_player, update_player, add_player
+from player import Player
 from investigations import investigate, investigations
 
 PRICE_PER_KM = 0.01
@@ -27,18 +28,6 @@ def get_available_airports(player_level):
     Here it returns a list of airport symbols unlocked based on the player's level.
     Level 5 or higher: All configured airports become available.
     """
-    # if player_level == 1:
-    #     return ["KBNA"]
-    # elif player_level == 2:
-    #     return ["KDEN", "KSEA"]
-    # elif player_level == 3:
-    #     return ["KDEN", "KSEA", "KBNA"]
-    # elif player_level == 4:
-    #     return ["KDEN", "KSEA", "KBNA", "KHTS"]
-    # else:
-    #     return ["KDEN", "KSEA", "KBNA", "KHTS", "KLFK", "KROW"]
-
-    # Reduction of the airport list for the first release
     if player_level == 1:
         return ["KBNA"]
     elif player_level == 2:
@@ -49,21 +38,24 @@ def get_available_airports(player_level):
         return ["KDEN", "KSEA", "KBNA", "KHTS"]
 
 def travel():
-    current_player = get_current_player()
-    if not current_player:
+    # current_player = get_current_player()
+    player = Player()
+    player.id = Player.current_id
+    if not player.id:
         print("ERROR: No player found. Please create a player first.")
         return
+    player_data = player.get_current()
     # Change lever for testing purposes here:
     # Retrieve available airports based on player's level
-    #current_player['player_level'] = 1
-    available_airports = get_available_airports(current_player['player_level'])
+
+    available_airports = get_available_airports(player_data['player_level'])
     
     print("\nAvailable Airports:")
     airport_options = []
     index = 1
     for symbol in available_airports:
         airport_data = get_airport_data(symbol)
-        if (airport_data):
+        if airport_data:
             # Expected structure: (ident, name, municipality, player_location)
             airport_name = airport_data[1]
             option_text = f"{airport_name} ({symbol})"
@@ -87,14 +79,14 @@ def travel():
             flight_text()
             
             # Check if the player has enough money for the flight
-            if current_player["money"] < FLIGHT_COST:
-                print(f"Insufficient funds for the flight. You have ${current_player['money']}, but the flight costs ${FLIGHT_COST}. Have you tried to earn more money by gambling?")
+            if player_data["money"] < FLIGHT_COST:
+                print(f"Insufficient funds for the flight. You have ${player_data['money']}, but the flight costs ${FLIGHT_COST}. Have you tried to earn more money by gambling?")
                 return
             
             # Update player's airport and deduct flight cost.
-            update_player('location_ident', selected_symbol, current_player['id'])
-            new_money = current_player['money'] - FLIGHT_COST
-            update_player('money', new_money, current_player['id'])
+            player.update({'location_ident': selected_symbol})
+            new_money = player_data['money'] - FLIGHT_COST
+            player.update({'money': new_money})
             print(f"Flight cost ${FLIGHT_COST} deducted. New balance: ${new_money}")
 
             current_investigation = None
@@ -115,6 +107,6 @@ def travel():
 
 # Test block to check if the functions work. (This is only run if running this file directly)
 if __name__ == '__main__':
-    add_player('Test dude')
-    current_player = get_current_player()
+    player = Player('Test dude')
+    player.add()
     travel()
