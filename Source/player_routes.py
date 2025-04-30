@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from player import add_player, get_current_player, update_player
+from player import Player
 player_routes = Blueprint('player_routes', __name__)
 
 # Example of usage in JS
@@ -32,31 +32,34 @@ player_routes = Blueprint('player_routes', __name__)
 #     }
 # };
 
-# GET request to fetch player data
-@player_routes.route('/player/detail')
-def player_detail():
-    player = get_current_player()
-    return jsonify(player)
-
 # POST request to create new player
 @player_routes.route('/player/create', methods=['POST'])
 def player_create():
     data = request.get_json()
     player_name = data.get('name', '')
-    add_player(player_name)
-    player = get_current_player()
-    return jsonify(player)
+    player = Player(player_name)
+    player.add()
+    current = player.get_current()
+    return jsonify(current)
 
 # POST request to update current player
 @player_routes.route('/player/update', methods=['POST'])
 def player_update():
+    if not Player.current_id:
+        return jsonify({"error": "The field current_id is required"}), 404
     data = request.get_json()
+    player = Player()
+    player.id = Player.current_id
+    player.update(data)
+    updated = player.get_current()
+    return jsonify(updated)
 
-    from player import current_player_id
-
-    if current_player_id is None:
-        return jsonify({"error": "The field current_player_id is required"}), 404
-
-    update_player(data, current_player_id)
-    player = get_current_player()
-    return jsonify(player)
+# GET request to fetch player data
+@player_routes.route('/player/detail')
+def player_detail():
+    if not Player.current_id:
+        return jsonify({"error": "The field current_id is required"}), 404
+    player = Player()
+    player.id = Player.current_id
+    current = player.get_current()
+    return jsonify(current)
