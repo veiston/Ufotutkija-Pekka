@@ -1,3 +1,38 @@
+from flask import Flask, request, jsonify
+
+# Add Flask endpoint for /investigations/examine
+app = None
+try:
+    import flask
+    app = flask.current_app
+except Exception:
+    pass
+if app is None:
+    try:
+        app = Flask(__name__)
+    except Exception:
+        pass
+
+# Add /investigations/examine endpoint
+if app:
+    @app.route("/investigations/examine", methods=["POST"])
+    def investigations_examine():
+        data = request.get_json(force=True)
+        investigation_ident = data.get("investigation_ident")
+        step = data.get("step")
+        if investigation_ident is None or step is None:
+            return jsonify({"error": "Missing parameters"}), 400
+        # step may come as string from JS, ensure int
+        try:
+            step = int(step)
+        except Exception:
+            return jsonify({"error": "Invalid step"}), 400
+        # Mark as examined
+        examine(investigation_ident)
+        # Set is_examined = True for the step
+        if investigation_ident in investigations and step in investigations[investigation_ident]["steps"]:
+            investigations[investigation_ident]["steps"][step]["is_examined"] = True
+        return jsonify({"ok": True})
 # investigations.py
 
 import time
@@ -15,6 +50,7 @@ investigations = {
     "tutorial": { # story ident, important
         "description": "{player_name}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up\nat the airport by the appointed time. The clock is nearing midnight. Worried, you make\nyour way to Melvin's home, using the last known address he mentioned.\nThe streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
         "airport": "KBNA",  # airport code related to this story
+        "city": "Evergreen",
         "reward": 300,  # mission completion reward (money)
         "turns_limit": 100,  # number of attempts allowed for the location
         "level": 1,  # location level, must match the player's level to access
@@ -24,7 +60,7 @@ investigations = {
         "is_completed": False,
         "steps": {
             1: {
-                "text": "\nUpon arriving you find Melvin’s car still parked in his yard and the door to his house is ajar.\nIn the air, you can smell the smoke. Suddenly, you get a headache.\nYou call out for Melvin, but there’s no answer.“Something about this reminds me...\nI’m sure someone unusual has visited Melvin. It’s best to investigate the house and find out who,”\nyou decide and head inside.\n",
+                "text": "Upon arriving you find Melvin’s car still parked in his yard and the door to his house is ajar.\nIn the air, you can smell the smoke. Suddenly, you get a headache.\nYou call out for Melvin, but there’s no answer.“Something about this reminds me...\nI’m sure someone unusual has visited Melvin. It’s best to investigate the house and find out who,”\nyou decide and head inside.\n",
                 "can_examine": False,
                 "is_examined": False,
                 "choices": {
@@ -135,6 +171,7 @@ investigations = {
     "metal_goblin": {
         "description": "{player_name}, the coordinates from the infamous notebook have led you to Kentucky, to the village of Kelly\n— a place where strange occurrences have long been the norm. For half a century, Hopkinsville County\nhas intrigued people: at night, household appliances disappear, and witnesses speak of tiny creatures\nwith shimmering skin hiding in the woods. If stolen toasters and radio transmitters hold the key\nto Melvin’s disappearance, it's worth figuring out who is behind this.\n",
         "airport": "KDEN",
+        "city": "Hopkinsville",
         "reward": 250,
         "turns_limit": 15,
         "level": 2,
@@ -253,6 +290,7 @@ investigations = {
     "nakki": {
         "description": "{player_name}, the coordinates in Melvin's notebook lead you to Aberdeen, Washington. Here, by the banks\nof the Chihalis River, something strange is happening - late at night, fishermen saw a dark\nfigure in the water, then began to find drowned people. People say that at night someone splashes\nin the water, and in the morning they find ashy gray slime on the pier. Who is it and what does it\nhave to do with Melvin?\n",
         "airport": "KSEA",
+        "city": "Aberdeen",
         "reward": 300,
         "turns_limit": 20,
         "level": 2,
@@ -415,6 +453,7 @@ investigations = {
     "flatwoods_monster": {
         "description": "{player_name}, the coordinates from Melvin's notebook have led you to Flatwoods, Braxton County, West Virginia.\nThis place is a living legend. Half a century ago, something was seen here: a red sphere descending from\nthe sky, a metallic stench in the air, scorched patches of earth where nothing grows to this day.\nThe locals whisper: it has returned. Do you feel it?\n",
         "airport": "KHTS",
+        "city": "Flatwoods",
         "reward": 300,
         "turns_limit": 15,
         "level": 2,
@@ -569,6 +608,7 @@ investigations = {
     "endgame": {
         "description": "{player_name}, strange creatures, floppy disks, notebook pages—every investigation\nsite had traces linked to Melvin. It's time to uncover the truth.\n",
         "airport": "KBNA",
+        "city": "Evergreen",
         "reward": 500,
         "turns_limit": 4,
         "level": 3,
@@ -808,6 +848,21 @@ def examine(investigation_ident):
 
         if use_equipment(selected_item, item_type, current_creature, creature_types):
             break
+
+def investigation_start():
+    player_instance = Player()
+    player_instance.id = Player.current_id
+    player = player_instance.get_current()
+    player_location = player.get("location_ident")
+
+    for ident, story in investigations.items():
+        if story["airport"] == player_location and not story["is_completed"]:
+            story["description"] = story["description"].replace("{player_name}", player.get("name", "Player"))
+            story["investigation_ident"] = ident
+            story["step"] = 1
+            return story
+
+    return {"error": "No available investigation at this location."}
 
 if __name__ == "__main__":
     while True:

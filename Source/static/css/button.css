@@ -21,6 +21,7 @@ Add the markup like this:
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 
 .button.button--gray-light {
@@ -30,11 +31,12 @@ Add the markup like this:
 
 .button.button--blue-dark {
     background-color: #101D25;
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .button:hover {
     transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .button:focus {

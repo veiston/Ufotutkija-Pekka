@@ -15,11 +15,11 @@ document.addEventListener('mousemove', (e) => {
 
     const gradient = `
 		radial-gradient(
-			circle 160px at ${x}px ${y}px,
+			circle 200px at ${x}px ${y}px,
 			transparent 0%,
-			rgba(0, 0, 0, 0.4) 40%,
-			rgba(0, 0, 0, 0.6) 50%,
-			rgba(0, 0, 0, 0.8) 70%,
+			rgba(0, 0, 0, 0) 40%,
+			rgba(0, 0, 0, 0.2) 50%,
+			rgba(0, 0, 0, 0.4) 70%,
 			black 100%
 		)
 	`;

@@ -1,0 +1,14 @@
+.flashlight {
+    width: 80px;
+    height: 80px;
+    position: fixed;
+    top: -8px;
+    right: 20px;
+    z-index: 100000;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.flashlight:hover {
+    opacity: 0.6;
+}

@@ -14,7 +14,10 @@ Link it as <link rel="stylesheet" href="/static/css/main.css">
 /* Font for titles */
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap');
 /* Font for text */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 /* Font for buttons */
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Hairline&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Yeseva+One&display=swap');
 
@@ -25,10 +28,10 @@ body {
 	height: 100%;
 	min-height: 100vh;
 	font-size: 18px;
-    font-family: "Bungee Hairline", Helvetica, sans-serif;
-    font-weight: 600;
+    font-family: "Roboto Mono", Helvetica, sans-serif;
+    font-weight: 200;
 	color: #FFFFFF;
-	line-height: 1.42;
+	line-height: 1.6;
 	background-color: #5C6D89;
 }
 
@@ -110,6 +113,11 @@ input {
     box-sizing: border-box;
     transition: background-color 0.3s, transform 0.2s;
 }
+
+label {
+    font-family: 'Bungee Hairline', sans-serif;
+}
+
 
 input:focus {
     outline: none;
