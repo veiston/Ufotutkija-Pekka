@@ -37,11 +37,26 @@
         }
       };
 
+      const handleAirportClick = async (code) => {
+        try {
+          const response = await fetch("/player/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ location_ident: code })
+          });
+          if (!response.ok) throw new Error("Failed to update location");
+          window.location.href = "/investigations";
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       const loadAirports = async () => {
         const player = await fetchPlayer();
         if (!player) return;
 
         const playerLevel = player.player_level;
+        const playerMoney = player.money;
         const allowedAirports = airportMap[playerLevel] || airportMap.default;
         const container = document.getElementById("airportButtonsContainer");
 
@@ -50,8 +65,12 @@
           button.className = "button";
           button.id = code;
           button.textContent = code;
-          button.addEventListener("click", () => {
-            console.log(code);
+          button.addEventListener("click", async () => {
+            if (playerMoney < 100) {
+              alert(`Insufficient funds for the flight. You have $${playerMoney}, but the flight costs $100. Have you tried to earn more money by gambling?`);
+              return;
+            }
+            await handleAirportClick(code);
           });
           container.appendChild(button);
         });
