@@ -57,9 +57,26 @@
       </div>
     </div>
     <script>
+      const updateStep = async (step) => {
+        try {
+          const response = await fetch("/investigations/update-step", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ step })
+          });
+          const data = await response.json();
+          console.log(data)
+          return data
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       const fetchInvestigation = async () => {
         let currentStep = null;
         let story = null;
+        let turnsLeft = 0;
+
         const textContainer = document.getElementById("investigationText");
         const actionsContainer = document.getElementById(
           "investigationActions"
@@ -69,7 +86,13 @@
         );
         const cityContainer = document.getElementById("investigationCity");
 
-        const renderStep = (stepNumber) => {
+        const renderStep = async (stepNumber) => {
+
+          if (!turnsLeft) {
+            window.location.href = "/combat";
+            return;
+          }
+
           const stepData = story.steps[stepNumber];
           textContainer.innerHTML = stepData.text;
 
@@ -93,21 +116,37 @@
                   </div>
                 </div>
               `;
-                article.addEventListener("click", () => {
+                article.addEventListener("click", async () => {
                   currentStep = value.next_step;
-                  renderStep(currentStep);
+                  const updateData = await updateStep(currentStep);
+                  turnsLeft = updateData?.turns_limit;
+
+                  if (currentStep) {
+                    await renderStep(currentStep);
+                  }
                 });
                 actionsContainer.appendChild(article);
               } else {
-                console.log(value);
                 const button = document.createElement("button");
                 button.className =
                   key === "examine" ? "button" : "button button--blue-dark";
                 button.classList.add("button");
                 button.textContent = value.text;
-                button.addEventListener("click", () => {
+                button.addEventListener("click", async () => {
                   currentStep = value.next_step;
-                  renderStep(currentStep);
+                  const updateData = await updateStep(currentStep);
+                  turnsLeft = updateData?.turns_limit;
+                  const isWin = updateData.is_win
+                  if (isWin) {
+                    // TODO when the modal is ready
+                    alert('TODO modal ' + story.win_text)
+                    window.location.href = "/menu";
+                    return;
+                  }
+
+                  if (currentStep) {
+                    await renderStep(currentStep);
+                  }
                 });
                 actionsContainer.appendChild(button);
               }
@@ -119,16 +158,20 @@
           story = await response.json();
           cityContainer.innerText = story.city;
 
-          // if (story && story.description) {
-          //   const descriptionEl = document.createElement("p");
-          //   descriptionEl.textContent = story.description;
-          //   textContainer.appendChild(descriptionEl);
-          // }
+          // TODO when the modal is ready
+          if (story && story.description) {
+            // const descriptionEl = document.createElement("p");
+            // descriptionEl.textContent = story.description;
+            // textContainer.appendChild(descriptionEl);
+             alert('TODO modal ' + story.description)
+          }
 
           currentStep = story.step;
+          turnsLeft = story.turns_limit;
+
           renderStep(currentStep);
         } catch (error) {
-          console.error("Failed to load investigation:", error);
+          console.error(error);
           textContainer.textContent = "Error loading investigation.";
         }
       };

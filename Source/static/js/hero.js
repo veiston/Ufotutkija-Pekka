@@ -40,11 +40,22 @@ document.addEventListener("DOMContentLoaded", () => {
     messages = [
       `Hello, ${playerName}, our best UFO hunter!\nYou've become a legend in paranormal investigations, but now... Well... You're stuck in your office, bored and waiting for something exciting...`,
       `Oh wait! ${playerName}, you hear a notification from your email inbox...\nOpen it?`,
-      `Date: 03 Sept 1999\n\nSender: Mel_UFO-Investigator_77\n\nYo, ${playerName}, it's your buddy MELVIN from Evergreen!1! Hope you still REMEMBER me, space cowboy\n anyways, i just cant believe what im seeing... its NOT normal! noooo way. This is... PARA-NORMAL, and its HUUUGE. Like, REALLY f*cked up.\nI NEED your help here, at Evergreen! We need 2 meet @ Denver International Airport tomorrow evening. plz dont be late. dont tell anyone about this.\n\nCya, Melvin\n\nP.S. I've added $500 to your bank account for your plane ticket!1!\nHURRY UP!!`,
+      `     <span class="text-bold text-blue-dark">Date:</span> 03 Sept 1999
+            <span class="text-bold text-blue-dark">Sender:</span> Mel_UFO-Investigator_77
+
+            Yo, ${playerName}, it's your buddy MELVIN from Evergreen!1! Hope you still REMEMBER me, space cowboy
+            anyways, i just cant believe what im seeing... its NOT normal! noooo way. This is... PARA-NORMAL, and its HUUUGE.
+            Like, REALLY f*cked up. I NEED your help here, at Evergreen!
+            We need 2 meet @ <span class="text-yellow text-bold">Denver International Airport</span> tomorrow evening. plz dont be late. dont tell anyone about this.
+
+            Cya,
+            Melvin
+            P.S. I''ve added <span class="text-yellow text-bold">$500</span> to your bank account for your plane ticket!1! HURRY UP!!
+       `,
       `Hooray! A business trip!\nBefore leaving the office, don’t forget to take your Nokia from the desk. You’ll definitely need it.`
     ];
     currentMessageIndex = 0;
-    welcomeText.textContent = messages[0];
+    welcomeText.innerHTML = messages[0];
     updateContinueButtonText();
   };
 
@@ -65,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   continueWelcomeButton.addEventListener("click", () => {
     currentMessageIndex++;
     if (currentMessageIndex < messages.length) {
-      welcomeText.textContent = messages[currentMessageIndex];
+      welcomeText.innerHTML = messages[currentMessageIndex];
       updateContinueButtonText();
     } else {
       window.location.href = "/menu";
