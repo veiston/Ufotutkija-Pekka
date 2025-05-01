@@ -1,4 +1,4 @@
-.flashlight {
+.light {
     width: 80px;
     height: 80px;
     position: fixed;
@@ -8,6 +8,14 @@
     cursor: pointer;
 }
 
-.flashlight:hover {
+.light:hover {
     opacity: 0.6;
+}
+
+.light--on {
+    transform: scale(1, -1);
+}
+
+.light--opacity-2 {
+     opacity: 0.2;
 }
