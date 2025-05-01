@@ -20,7 +20,7 @@
     color: #101D25;
 }
 
-.hero__title + .hero__button {
+.hero__title+.hero__button {
     margin-top: 40px;
 }
 
@@ -30,7 +30,7 @@
     font-size: 24px;
 }
 
-.hero__button + .hero__button {
+.hero__button+.hero__button {
     margin-top: 16px;
 }
 
@@ -50,7 +50,7 @@
     width: 100%;
 }
 
-.hero__form-container + .hero__button  {
+.hero__form-container+.hero__button {
     margin-top: 20px;
 }
 
@@ -92,22 +92,25 @@
 .hero__text-wrap {
     width: 100%;
     height: 100%;
-   overflow: hidden;
-   padding-bottom: 20px;
+    overflow: hidden;
+    padding-bottom: 20px;
 }
 
-.hero__box-header + .hero__text-wrap {
+.hero__box-header+.hero__text-wrap {
     margin-top: 32px;
 }
 
 .hero__text {
-    display: flex;
     overflow: auto;
     height: 100%;
+
+}
+
+.hero__text p {
     white-space: pre-line;
 }
 
-.hero__text-wrap + .hero__button {
+.hero__text-wrap+.hero__button {
     margin-top: auto;
 }
 
@@ -120,6 +123,17 @@
 
 .hero__actions .button:hover {
     transform: scale(1.02);
+}
+
+.hero__actions-inner {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    padding: 20px 16px;
+}
+
+.hero__actions-inner .card {
+    flex: 1;
 }
 
 /*@keyframes screen-shake {*/

@@ -80,7 +80,7 @@ investigations = {
                 "is_examined": False,
                 "choices": {
 "                   search_desk": {
-                        "text": "Search the desk drawers" ,
+                        "text": "Search the desk" ,
                         "next_step": 5,
                     },
                     "go_kitchen": {
@@ -88,7 +88,7 @@ investigations = {
                         "next_step": 3,
                     },
                     "examine": {
-                        "text": "Examine the room with equipment",
+                        "text": "Examine the room",
                         "next_step": 6,
                     }
                 }
@@ -99,7 +99,7 @@ investigations = {
                 "is_examined": False,
                 "choices": {
                     "investigate_shelf": {
-                        "text": "Investigate the shelf with with groceries" ,
+                        "text": "Investigate the shelf" ,
                         "next_step": 4,
                     },
                     "go_office": {
@@ -107,7 +107,7 @@ investigations = {
                         "next_step": 2,
                     },
                     "examine": {
-                        "text": "Examine the room with equipment",
+                        "text": "Examine the room",
                         "next_step": 6,
                     }
                 }
@@ -142,15 +142,21 @@ investigations = {
                 "is_examined": False,
                 "choices": {
                     "choose_nakki": {
-                        "text": "Näkki. A ghostly water entity that lures its victims to the depths.",
+                        "title": "Näkki",
+                        "text": "A ghostly water entity that lures its victims to the depths.",
+                        "is_creature": True,
                         "next_step": 6,
                     },
                     "choose_mg": {
-                        "text": "Metal Goblin. Small, metallic alien creature that steals electronics and hides in the dark.",
+                        "title": "Metal Goblin",
+                        "text": "Small, metallic alien creature that steals electronics and hides in the dark.",
+                        "is_creature": True,
                         "next_step": 6,
                     },
                     "choose_alien": {
-                        "text": "Unknown Alien. A little gray troublemaker who can’t be knocked out even with a Nokia throw.",
+                        "title": "Unknown Alien",
+                        "text": "A little gray troublemaker who can’t be knocked out even with a Nokia throw.",
+                        "is_creature": True,
                         "next_step": 7,
                     },
                 },
@@ -205,7 +211,7 @@ investigations = {
                         "next_step": 3,
                     },
                     "examine": {
-                        "text": "Examine the tracks using equipment",
+                        "text": "Examine the tracks",
                         "next_step": 6,
                     },
                 }
@@ -335,7 +341,7 @@ investigations = {
                         "next_step": 4,
                     },
                     "examine": {
-                        "text": "Examine the substance using equipment",
+                        "text": "Examine the substance",
                         "next_step": 5,
                     },
                 }
@@ -350,7 +356,7 @@ investigations = {
                         "next_step": 3,
                     },
                     "examine": {
-                        "text": "Examine the water using equipment",
+                        "text": "Examine the water",
                         "next_step": 5,
                     },
                 }
@@ -531,7 +537,7 @@ investigations = {
                         "next_step": 5,
                     },
                     "inspect_trees": {
-                        "text": "Examine the trees around",
+                        "text": "Examine the trees",
                         "next_step": 10,
                     },
                 }
@@ -542,7 +548,7 @@ investigations = {
                 "is_examined": False,
                 "choices": {
                     "inspect_ground": {
-                        "text": "Examine the patches on the ground",
+                        "text": "Examine the patches",
                         "next_step": 5,
                     },
                 }
