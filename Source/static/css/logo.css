@@ -7,7 +7,7 @@ Add the markup like this:
 */
 
 .logo {
-    position: fixed;
+    position: absolute;
     top: 10px;
     left: 20px;
     font-family: 'Bungee Shade', sans-serif;

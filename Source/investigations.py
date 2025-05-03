@@ -17,6 +17,7 @@ investigations = {
         "city": "Evergreen",
         "reward": 300,  # mission completion reward (money)
         "turns_limit": 100,  # number of attempts allowed for the location
+        "max_turns": 100,
         "level": 1,  # location level, must match the player's level to access
         "win_text":  "{player_name}, it looks like you now have to find out what happened to Melvin and where the mysterious coordinates from his notebook will lead you. You receive $300 for new flights and equipment.",
         "lose_text": "{player_name}, your resources have run out, and now you lose.",
@@ -146,6 +147,7 @@ investigations = {
         "city": "Hopkinsville",
         "reward": 250,
         "turns_limit": 15,
+        "max_turns": 15,
         "level": 2,
         "win_text": f"You leave Kelly, but before that, you pick up a floppy disk from the sticky floor of the barn. On it — Melvin's name. What could it mean...",
         "lose_text": "{player_name}, you have exhausted all your resources and failed to uncover the mystery.",
@@ -273,6 +275,7 @@ investigations = {
         "city": "Aberdeen",
         "reward": 300,
         "turns_limit": 20,
+        "max_turns": 20,
         "level": 2,
         "win_text": "{player_name}, lost in thought, you slowly wander along the pier toward your next destination when you notice a little floppy disk underfoot. Strange symbols cover it, and… Melvin’s name. What could this mean?",
         "lose_text": "{player_name}, you have exhausted all resources and never discovered what lurks in the water.",
@@ -444,6 +447,7 @@ investigations = {
         "city": "Flatwoods",
         "reward": 300,
         "turns_limit": 15,
+        "max_turns": 15,
         "level": 2,
         "win_text": "You run out of the forest at full speed and stop only near the bar. On the ground, you see a floppy disk with Melvin's name on it. What the f...",
         "lose_text": "{player_name}, your resources have run out, and the mystery remains unsolved.",
@@ -607,6 +611,7 @@ investigations = {
         "city": "Evergreen",
         "reward": 500,
         "turns_limit": 4,
+        "max_turns": 4,
         "level": 3,
         "win_text": "{player_name}, it's time to accept congratulations! You managed to stop Melvin and escape this nightmare, but what will you do with this knowledge now?..",
         "lose_text": "{player_name}, you failed to resist Melvin. Now you are part of his insane plan.",
@@ -882,6 +887,8 @@ def investigation_update_step(step):
                 story["step"] = step
             else:
                 story["is_completed"] = True
+                story["turns_limit"] = story["max_turns"]
+                story["step"] = 1
 
                 player["money"] += story["reward"]
                 player_instance.update({"money": player["money"]})
@@ -889,6 +896,7 @@ def investigation_update_step(step):
                 if not has_unfinished_investigations(player["player_level"]):
                     player["player_level"] += 1
                     player_instance.update({"player_level": player["player_level"]})
+
             return {
                 "turns_limit": story["turns_limit"],
                 "is_win": is_win,
