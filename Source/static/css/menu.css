@@ -60,7 +60,7 @@
 .menu__button-description-text {
     padding-top: 32px;
     font-family: 'Roboto Mono', sans-serif;
-    font-size: 18px;
+    font-size: 1vw;
 }
 
 .menu__button:hover {

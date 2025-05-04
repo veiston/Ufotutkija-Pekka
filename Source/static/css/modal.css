@@ -1,0 +1,62 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #181c24;
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+#modalBoxMessage {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #e0e6f0;
+}
+
+#modalBoxButtons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+#modalBoxButtons .button {
+  background: #2e3646;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#modalBoxButtons .button:hover {
+  background: #FDC00B;
+}
+
+@media (max-width: 500px) {
+  .modal-content {
+    min-width: 0;
+    width: 95vw;
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+  }
+  #modalBoxMessage {
+    font-size: 1rem;
+  }
+}

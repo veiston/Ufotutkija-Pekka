@@ -1,266 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Shop</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shop</title>
 
-  <!-- Importing external stylesheets -->
-  <link rel="stylesheet" href="/static/css/button.css" />
-  <link rel="stylesheet" href="/static/css/hero.css" />
-  <link rel="stylesheet" href="/static/css/main.css" />
-  <link rel="stylesheet" href="/static/css/shop.css" />
-</head>
-<body>
+    <!-- Importing external stylesheets -->
+    <link rel="stylesheet" href="/static/css/button.css" />
+    <link rel="stylesheet" href="/static/css/hero.css" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <link rel="stylesheet" href="/static/css/shop.css" />
+    <link rel="stylesheet" href="/static/css/modal.css" />
+  </head>
+  <body>
+    <audio src="/static/audio/Shop.wav" autoplay loop></audio>
+    <main class="main-content">
+      <!-- Shop title -->
+      <h1>Shop</h1>
 
-<main class="main-content">
+      <!-- Player balance and top navigation buttons -->
+      <section class="player-balance">
+        <p class="balance-text">
+          You have: <strong>$<span id="money">500</span></strong>
+        </p>
+        <div class="menu-wrapper">
+          <!-- Open inventory modal -->
+          <button
+            class="button button--gray-light hero__button"
+            onclick="openInventory()"
+          >
+            Inventory
+          </button>
+          <!-- Go back to main menu -->
+          <button
+            class="button button--gray-light hero__button"
+            onclick="goToMainMenu()"
+          >
+            Back to Main Menu
+          </button>
+        </div>
+      </section>
 
-  <!-- Shop title -->
-  <h1>Shop</h1>
+      <!-- Product catalog section -->
+      <section class="products-section">
+        <h2 class="visually-hidden">Available Items</h2>
+        <div class="products-section-wrapper">
+          <ul class="product-list">
+            <!-- One product card = title + image + price + buy button -->
+            <!-- ID is used to hide the button after purchase -->
 
-  <!-- Player balance and top navigation buttons -->
-  <section class="player-balance">
-    <p class="balance-text">You have: <strong>$<span id="money">500</span></strong></p>
-    <div class="menu-wrapper">
-      <!-- Open inventory modal -->
-      <button class="button button--gray-light hero__button" onclick="openInventory()">Inventory</button>
-      <!-- Go back to main menu -->
-      <button class="button button--gray-light hero__button" onclick="goToMainMenu()">Back to Main Menu</button>
-    </div>
-  </section>
+            <!-- Salt -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Salt</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-salt-shaker-100.png"
+                  alt="Salt icon"
+                />
+                <p class="product-subtitle">Price: $65</p>
+                <button
+                  id="buy-salt"
+                  class="button button--gray-light"
+                  onclick="buyItem('Salt', 0, 'buy-salt')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-  <!-- Product catalog section -->
-  <section class="products-section">
-    <h2 class="visually-hidden">Available Items</h2>
-    <div class="products-section-wrapper">
-      <ul class="product-list">
+            <!-- Old Nokia -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Old Nokia</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-nokia-3310-100.png"
+                  alt="Old Nokia icon"
+                />
+                <p class="product-subtitle">Price: $250</p>
+                <button
+                  id="buy-nokia"
+                  class="button button--gray-light"
+                  onclick="buyItem('Old Nokia', 0, 'buy-nokia')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-        <!-- One product card = title + image + price + buy button -->
-        <!-- ID is used to hide the button after purchase -->
+            <!-- Batteries -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Batteries</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-batteries-100.png"
+                  alt="Batteries icon"
+                />
+                <p class="product-subtitle">Price: $90</p>
+                <button
+                  id="buy-batteries"
+                  class="button button--gray-light"
+                  onclick="buyItem('Batteries', 0, 'buy-batteries')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-        <!-- Salt -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Salt</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-salt-shaker-100.png" alt="Salt icon">
-            <p class="product-subtitle">Price: $65</p>
-            <button id="buy-salt" class="button button--gray-light" onclick="buyItem('Salt', 0, 'buy-salt')">Buy</button>
-          </article>
-        </li>
+            <!-- Flashlight -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Flashlight</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-flashlight-100.png"
+                  alt="Flashlight icon"
+                />
+                <p class="product-subtitle">Price: $150</p>
+                <button
+                  id="buy-flashlight"
+                  class="button button--gray-light"
+                  onclick="buyItem('Flashlight', 0, 'buy-flashlight')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-        <!-- Old Nokia -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Old Nokia</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-nokia-3310-100.png" alt="Old Nokia icon">
-            <p class="product-subtitle">Price: $250</p>
-            <button id="buy-nokia" class="button button--gray-light" onclick="buyItem('Old Nokia', 0, 'buy-nokia')">Buy</button>
-          </article>
-        </li>
+            <!-- Rope -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Rope</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-rope-100.png"
+                  alt="Rope icon"
+                />
+                <p class="product-subtitle">Price: $85</p>
+                <button
+                  id="buy-rope"
+                  class="button button--gray-light"
+                  onclick="buyItem('Rope', 0, 'buy-rope')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-        <!-- Batteries -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Batteries</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-batteries-100.png" alt="Batteries icon">
-            <p class="product-subtitle">Price: $90</p>
-            <button id="buy-batteries" class="button button--gray-light" onclick="buyItem('Batteries', 0, 'buy-batteries')">Buy</button>
-          </article>
-        </li>
+            <!-- Shovel -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Shovel</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-shovel-100.png"
+                  alt="Shovel icon"
+                />
+                <p class="product-subtitle">Price: $135</p>
+                <button
+                  id="buy-shovel"
+                  class="button button--gray-light"
+                  onclick="buyItem('Shovel', 0, 'buy-shovel')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-        <!-- Flashlight -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Flashlight</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-flashlight-100.png" alt="Flashlight icon">
-            <p class="product-subtitle">Price: $150</p>
-            <button id="buy-flashlight" class="button button--gray-light" onclick="buyItem('Flashlight', 0, 'buy-flashlight')">Buy</button>
-          </article>
-        </li>
+            <!-- One Torn Sneaker -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">One Torn Sneaker</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-sneaker-64.png"
+                  alt="Sneaker icon"
+                />
+                <p class="product-subtitle">Price: $90</p>
+                <button
+                  id="buy-sneaker"
+                  class="button button--gray-light"
+                  onclick="buyItem('One Torn Sneaker', 0, 'buy-sneaker')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
 
-        <!-- Rope -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Rope</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-rope-100.png" alt="Rope icon">
-            <p class="product-subtitle">Price: $85</p>
-            <button id="buy-rope" class="button button--gray-light" onclick="buyItem('Rope', 0, 'buy-rope')">Buy</button>
-          </article>
-        </li>
+            <!-- Bug Spray -->
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Bug Spray</h3>
+                <img
+                  class="product-image"
+                  src="static/images/Catalog_icons/icons8-bug-spray-100.png"
+                  alt="Bug spray icon"
+                />
+                <p class="product-subtitle">Price: $110</p>
+                <button
+                  id="buy-spray"
+                  class="button button--gray-light"
+                  onclick="buyItem('Bug Spray', 0, 'buy-spray')"
+                >
+                  Buy
+                </button>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </section>
 
-        <!-- Shovel -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Shovel</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-shovel-100.png" alt="Shovel icon">
-            <p class="product-subtitle">Price: $135</p>
-            <button id="buy-shovel" class="button button--gray-light" onclick="buyItem('Shovel', 0, 'buy-shovel')">Buy</button>
-          </article>
-        </li>
+      <!-- Inventory Modal -->
+      <section id="inventoryModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <h2>Your Inventory</h2>
+          <ul id="inventoryList" class="product-list"></ul>
+          <button class="button" onclick="closeInventory()">Close</button>
+        </div>
+      </section>
 
-        <!-- One Torn Sneaker -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">One Torn Sneaker</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-sneaker-64.png" alt="Sneaker icon">
-            <p class="product-subtitle">Price: $90</p>
-            <button id="buy-sneaker" class="button button--gray-light" onclick="buyItem('One Torn Sneaker', 0, 'buy-sneaker')">Buy</button>
-          </article>
-        </li>
+      <!-- No Money Modal (shows if the player can't afford an item) -->
+      <section id="noMoneyModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <h2>Not Enough Money</h2>
+          <p>What would you like to do?</p>
+          <ul class="product-list">
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Snake</h3>
+                <p class="product-subtitle">Play to earn coins</p>
+                <a
+                  href="snake.html"
+                  target="_blank"
+                  class="button button--gray-light"
+                  >Play Snake</a
+                >
+              </article>
+            </li>
+            <li class="product-item">
+              <article>
+                <h3 class="product-title">Blackjack</h3>
+                <p class="product-subtitle">Beat the house</p>
+                <a
+                  href="blackjack.html"
+                  target="_blank"
+                  class="button button--gray-light"
+                  >Play Blackjack</a
+                >
+              </article>
+            </li>
+          </ul>
+          <button class="button button--gray-light" onclick="goToMainMenu()">
+            Back to Main Menu
+          </button>
+          <button
+            class="button button--gray-light"
+            onclick="closeNoMoneyModal()"
+          >
+            Back to Shop
+          </button>
+        </div>
+      </section>
+    </main>
 
-        <!-- Bug Spray -->
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Bug Spray</h3>
-            <img class="product-image" src="static/images/Catalog_icons/icons8-bug-spray-100.png" alt="Bug spray icon">
-            <p class="product-subtitle">Price: $110</p>
-            <button id="buy-spray" class="button button--gray-light" onclick="buyItem('Bug Spray', 0, 'buy-spray')">Buy</button>
-          </article>
-        </li>
-
-      </ul>
-    </div>
-  </section>
-
-  <!-- Inventory Modal -->
-  <section id="inventoryModal" class="modal" style="display: none;">
-    <div class="modal-content">
-      <h2>Your Inventory</h2>
-      <ul id="inventoryList" class="product-list"></ul>
-      <button class="button" onclick="closeInventory()">Close</button>
-    </div>
-  </section>
-
-  <!-- No Money Modal (shows if the player can't afford an item) -->
-  <section id="noMoneyModal" class="modal" style="display: none;">
-    <div class="modal-content">
-      <h2>Not Enough Money</h2>
-      <p>What would you like to do?</p>
-      <ul class="product-list">
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Snake</h3>
-            <p class="product-subtitle">Play to earn coins</p>
-            <a href="snake.html" target="_blank" class="button button--gray-light">Play Snake</a>
-          </article>
-        </li>
-        <li class="product-item">
-          <article>
-            <h3 class="product-title">Blackjack</h3>
-            <p class="product-subtitle">Beat the house</p>
-            <a href="blackjack.html" target="_blank" class="button button--gray-light">Play Blackjack</a>
-          </article>
-        </li>
-      </ul>
-      <button class="button button--gray-light" onclick="goToMainMenu()">Back to Main Menu</button>
-      <button class="button button--gray-light" onclick="closeNoMoneyModal()">Back to Shop</button>
-    </div>
-  </section>
-
-</main>
-
-  <script>
+    <script src="/static/js/modal.js"></script>
+    <script>
       // Array to store names of purchased items
       let inventory = [];
 
       // Function to handle item purchase
       function buyItem(name, _, buttonId) {
-          // Get the button element using its ID
-          const button = document.getElementById(buttonId);
-
-          // Find the closest parent element with class "product-item"
-          const card = button.closest(".product-item");
-
-          // Get the text inside the price label
-          const priceText = card.querySelector(".product-subtitle").textContent;
-
-          // Extract numbers from the text and convert to integer (price)
-          const cost = parseInt(priceText.replace(/[^\d]/g, ""));
-
-          // Get the element showing the user's current money
-          const moneyEl = document.getElementById("money");
-          let currentMoney = parseInt(moneyEl.textContent);
-
-          // If item already bought, show alert and stop function
-          if (inventory.includes(name)) {
-            alert("You already bought this item.");
-            return;
-          }
-
-          // If enough money, deduct cost and update display
-          if (currentMoney >= cost) {
-            currentMoney -= cost;
-            moneyEl.textContent = currentMoney;
-
-            // Add item to inventory
-            inventory.push(name);
-
-            // Hide the Buy button (item is purchased)
-            button.classList.add("visually-hidden");
-
-            // Close the "no money" modal just in case it's open
-            closeNoMoneyModal();
-          } else {
-            // If not enough money, show the "no money" modal
-            document.getElementById("noMoneyModal").style.display = "flex";
-          }
+        const button = document.getElementById(buttonId);
+        const card = button.closest(".product-item");
+        const priceText = card.querySelector(".product-subtitle").textContent;
+        const cost = parseInt(priceText.replace(/[^\d]/g, ""));
+        const moneyEl = document.getElementById("money");
+        let currentMoney = parseInt(moneyEl.textContent);
+        if (inventory.includes(name)) {
+          showInfoModal("You already bought this item.");
+          return;
         }
+        if (currentMoney >= cost) {
+          currentMoney -= cost;
+          moneyEl.textContent = currentMoney;
+          inventory.push(name);
+          button.classList.add("visually-hidden");
+          closeNoMoneyModal();
+        } else {
+          document.getElementById("noMoneyModal").style.display = "flex";
+        }
+      }
 
       // Function to display the inventory modal
       function openInventory() {
-          // Get the list container inside inventory modal
-          const list = document.getElementById("inventoryList");
+        // Get the list container inside inventory modal
+        const list = document.getElementById("inventoryList");
 
-          // Clear any previous list items
-          list.innerHTML = "";
+        // Clear any previous list items
+        list.innerHTML = "";
 
-          // Loop through each item in inventory and create a list item
-          inventory.forEach(name => {
-            const li = document.createElement("li");
-            li.classList.add("product-item");
+        // Loop through each item in inventory and create a list item
+        inventory.forEach((name) => {
+          const li = document.createElement("li");
+          li.classList.add("product-item");
 
-            const article = document.createElement("article");
+          const article = document.createElement("article");
 
-            const title = document.createElement("h3");
-            title.classList.add("product-title");
-            title.textContent = name;
+          const title = document.createElement("h3");
+          title.classList.add("product-title");
+          title.textContent = name;
 
-            const img = document.createElement("img");
-            img.classList.add("product-image");
-            img.src = getImageSrc(name); // Get image path based on item name
-            img.alt = name + " icon";
+          const img = document.createElement("img");
+          img.classList.add("product-image");
+          img.src = getImageSrc(name); // Get image path based on item name
+          img.alt = name + " icon";
 
-            const label = document.createElement("p");
-            label.classList.add("product-subtitle");
+          const label = document.createElement("p");
+          label.classList.add("product-subtitle");
 
-            // Assemble elements into the list item
-            article.appendChild(title);
-            article.appendChild(img);
-            article.appendChild(label);
-            li.appendChild(article);
-            list.appendChild(li);
-          });
+          // Assemble elements into the list item
+          article.appendChild(title);
+          article.appendChild(img);
+          article.appendChild(label);
+          li.appendChild(article);
+          list.appendChild(li);
+        });
 
-          // Show the inventory modal
-          document.getElementById("inventoryModal").style.display = "flex";
-        }
+        // Show the inventory modal
+        document.getElementById("inventoryModal").style.display = "flex";
+      }
 
       // Function to get the image path for a given item name
       function getImageSrc(name) {
-          // Map item names to image filenames
-          const map = {
-            "Salt": "icons8-salt-shaker-100.png",
-            "Old Nokia": "icons8-nokia-3310-100.png",
-            "Batteries": "icons8-batteries-100.png",
-            "Flashlight": "icons8-flashlight-100.png",
-            "Rope": "icons8-rope-100.png",
-            "Shovel": "icons8-shovel-100.png",
-            "One Torn Sneaker": "icons8-sneaker-64.png",
-            "Bug Spray": "icons8-bug-spray-100.png"
-          };
+        // Map item names to image filenames
+        const map = {
+          Salt: "icons8-salt-shaker-100.png",
+          "Old Nokia": "icons8-nokia-3310-100.png",
+          Batteries: "icons8-batteries-100.png",
+          Flashlight: "icons8-flashlight-100.png",
+          Rope: "icons8-rope-100.png",
+          Shovel: "icons8-shovel-100.png",
+          "One Torn Sneaker": "icons8-sneaker-64.png",
+          "Bug Spray": "icons8-bug-spray-100.png",
+        };
 
-          // Return full path to image
-          return "static/images/Catalog_icons/" + map[name];
-        }
+        // Return full path to image
+        return "static/images/Catalog_icons/" + map[name];
+      }
 
       // Function to hide the inventory modal
       function closeInventory() {
@@ -287,9 +374,21 @@
       function goToMainMenu() {
         window.location.href = "/menu";
       }
+
+      // Function to show an information modal
+      function showInfoModal(message) {
+        showModal({
+          message: message,
+          buttons: [{ label: "OK", value: true }],
+        });
+      }
     </script>
 
-
-
-</body>
+    <div id="modalBox" class="modal" style="display: none">
+      <div class="modal-content">
+        <div id="modalBoxMessage"></div>
+        <div id="modalBoxButtons"></div>
+      </div>
+    </div>
+  </body>
 </html>
