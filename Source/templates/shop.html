@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Shop</title>
 
-  <!-- Stylesheets for layout and theme -->
+  <!-- Importing external stylesheets -->
   <link rel="stylesheet" href="/static/css/button.css" />
   <link rel="stylesheet" href="/static/css/hero.css" />
   <link rel="stylesheet" href="/static/css/main.css" />
@@ -14,29 +14,30 @@
 
 <main class="main-content">
 
-  <!-- Shop Header & Player Balance -->
+  <!-- Shop title -->
   <h1>Shop</h1>
 
+  <!-- Player balance and top navigation buttons -->
   <section class="player-balance">
     <p class="balance-text">You have: <strong>$<span id="money">500</span></strong></p>
-
-    <!-- Navigation Buttons -->
     <div class="menu-wrapper">
+      <!-- Open inventory modal -->
       <button class="button button--gray-light hero__button" onclick="openInventory()">Inventory</button>
+      <!-- Go back to main menu -->
       <button class="button button--gray-light hero__button" onclick="goToMainMenu()">Back to Main Menu</button>
     </div>
   </section>
 
-  <!-- Shop Product List -->
+  <!-- Product catalog section -->
   <section class="products-section">
     <h2 class="visually-hidden">Available Items</h2>
     <div class="products-section-wrapper">
       <ul class="product-list">
 
-        <!-- Each product below is a purchasable item -->
-        <!-- ID is used to target button for hiding after purchase -->
+        <!-- One product card = title + image + price + buy button -->
+        <!-- ID is used to hide the button after purchase -->
 
-        <!-- Example product -->
+        <!-- Salt -->
         <li class="product-item">
           <article>
             <h3 class="product-title">Salt</h3>
@@ -46,14 +47,81 @@
           </article>
         </li>
 
-        <!-- Repeat for all products -->
-        <!-- ... (rest of items omitted here to keep short) -->
+        <!-- Old Nokia -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">Old Nokia</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-nokia-3310-100.png" alt="Old Nokia icon">
+            <p class="product-subtitle">Price: $250</p>
+            <button id="buy-nokia" class="button button--gray-light" onclick="buyItem('Old Nokia', 0, 'buy-nokia')">Buy</button>
+          </article>
+        </li>
+
+        <!-- Batteries -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">Batteries</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-batteries-100.png" alt="Batteries icon">
+            <p class="product-subtitle">Price: $90</p>
+            <button id="buy-batteries" class="button button--gray-light" onclick="buyItem('Batteries', 0, 'buy-batteries')">Buy</button>
+          </article>
+        </li>
+
+        <!-- Flashlight -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">Flashlight</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-flashlight-100.png" alt="Flashlight icon">
+            <p class="product-subtitle">Price: $150</p>
+            <button id="buy-flashlight" class="button button--gray-light" onclick="buyItem('Flashlight', 0, 'buy-flashlight')">Buy</button>
+          </article>
+        </li>
+
+        <!-- Rope -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">Rope</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-rope-100.png" alt="Rope icon">
+            <p class="product-subtitle">Price: $85</p>
+            <button id="buy-rope" class="button button--gray-light" onclick="buyItem('Rope', 0, 'buy-rope')">Buy</button>
+          </article>
+        </li>
+
+        <!-- Shovel -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">Shovel</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-shovel-100.png" alt="Shovel icon">
+            <p class="product-subtitle">Price: $135</p>
+            <button id="buy-shovel" class="button button--gray-light" onclick="buyItem('Shovel', 0, 'buy-shovel')">Buy</button>
+          </article>
+        </li>
+
+        <!-- One Torn Sneaker -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">One Torn Sneaker</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-sneaker-64.png" alt="Sneaker icon">
+            <p class="product-subtitle">Price: $90</p>
+            <button id="buy-sneaker" class="button button--gray-light" onclick="buyItem('One Torn Sneaker', 0, 'buy-sneaker')">Buy</button>
+          </article>
+        </li>
+
+        <!-- Bug Spray -->
+        <li class="product-item">
+          <article>
+            <h3 class="product-title">Bug Spray</h3>
+            <img class="product-image" src="static/images/Catalog_icons/icons8-bug-spray-100.png" alt="Bug spray icon">
+            <p class="product-subtitle">Price: $110</p>
+            <button id="buy-spray" class="button button--gray-light" onclick="buyItem('Bug Spray', 0, 'buy-spray')">Buy</button>
+          </article>
+        </li>
 
       </ul>
     </div>
   </section>
 
-  <!-- Inventory Modal (displays owned items) -->
+  <!-- Inventory Modal -->
   <section id="inventoryModal" class="modal" style="display: none;">
     <div class="modal-content">
       <h2>Your Inventory</h2>
@@ -62,13 +130,12 @@
     </div>
   </section>
 
-  <!-- No Money Modal (offers mini-games when funds are too low) -->
+  <!-- No Money Modal (shows if the player can't afford an item) -->
   <section id="noMoneyModal" class="modal" style="display: none;">
     <div class="modal-content">
       <h2>Not Enough Money</h2>
       <p>What would you like to do?</p>
       <ul class="product-list">
-        <!-- Mini-Game Option 1 -->
         <li class="product-item">
           <article>
             <h3 class="product-title">Snake</h3>
@@ -76,7 +143,6 @@
             <a href="snake.html" target="_blank" class="button button--gray-light">Play Snake</a>
           </article>
         </li>
-        <!-- Mini-Game Option 2 -->
         <li class="product-item">
           <article>
             <h3 class="product-title">Blackjack</h3>
@@ -85,7 +151,6 @@
           </article>
         </li>
       </ul>
-      <!-- Navigation Buttons -->
       <button class="button button--gray-light" onclick="goToMainMenu()">Back to Main Menu</button>
       <button class="button button--gray-light" onclick="closeNoMoneyModal()">Back to Shop</button>
     </div>
@@ -93,118 +158,138 @@
 
 </main>
 
-<!-- Shop Logic Script -->
-<script>
-  // Store purchased item names
-  let inventory = [];
+  <script>
+      // Array to store names of purchased items
+      let inventory = [];
 
-  // Main purchase function
-  function buyItem(name, _, buttonId) {
-    const button = document.getElementById(buttonId);
-    const card = button.closest(".product-item");
+      // Function to handle item purchase
+      function buyItem(name, _, buttonId) {
+          // Get the button element using its ID
+          const button = document.getElementById(buttonId);
 
-    // Get numeric price from "Price: $123" string
-    const priceText = card.querySelector(".product-subtitle").textContent;
-    const cost = parseInt(priceText.replace(/[^\d]/g, ""));
+          // Find the closest parent element with class "product-item"
+          const card = button.closest(".product-item");
 
-    // Get current money from DOM
-    const moneyEl = document.getElementById("money");
-    let currentMoney = parseInt(moneyEl.textContent);
+          // Get the text inside the price label
+          const priceText = card.querySelector(".product-subtitle").textContent;
 
-    // Prevent duplicate purchases
-    if (inventory.includes(name)) {
-      return;
-    }
+          // Extract numbers from the text and convert to integer (price)
+          const cost = parseInt(priceText.replace(/[^\d]/g, ""));
 
-    // Check funds and complete purchase
-    if (currentMoney >= cost) {
-      currentMoney -= cost;
-      moneyEl.textContent = currentMoney;
-      inventory.push(name);
+          // Get the element showing the user's current money
+          const moneyEl = document.getElementById("money");
+          let currentMoney = parseInt(moneyEl.textContent);
 
-      // Hide Buy button after purchase
-      button.classList.add("visually-hidden");
-      closeNoMoneyModal();
-    } else {
-      // Not enough money → open mini-game modal
-      document.getElementById("noMoneyModal").style.display = "flex";
-    }
-  }
+          // If item already bought, show alert and stop function
+          if (inventory.includes(name)) {
+            alert("You already bought this item.");
+            return;
+          }
 
-  // Show Inventory Modal and generate item cards
-  function openInventory() {
-    const list = document.getElementById("inventoryList");
-    list.innerHTML = "";
+          // If enough money, deduct cost and update display
+          if (currentMoney >= cost) {
+            currentMoney -= cost;
+            moneyEl.textContent = currentMoney;
 
-    inventory.forEach(name => {
-      const li = document.createElement("li");
-      li.classList.add("product-item");
+            // Add item to inventory
+            inventory.push(name);
 
-      const article = document.createElement("article");
+            // Hide the Buy button (item is purchased)
+            button.classList.add("visually-hidden");
 
-      const title = document.createElement("h3");
-      title.classList.add("product-title");
-      title.textContent = name;
+            // Close the "no money" modal just in case it's open
+            closeNoMoneyModal();
+          } else {
+            // If not enough money, show the "no money" modal
+            document.getElementById("noMoneyModal").style.display = "flex";
+          }
+        }
 
-      const img = document.createElement("img");
-      img.classList.add("product-image");
-      img.src = getImageSrc(name);
-      img.alt = name + " icon";
+      // Function to display the inventory modal
+      function openInventory() {
+          // Get the list container inside inventory modal
+          const list = document.getElementById("inventoryList");
 
-      const label = document.createElement("p");
-      label.classList.add("product-subtitle");
+          // Clear any previous list items
+          list.innerHTML = "";
 
-      article.appendChild(title);
-      article.appendChild(img);
-      article.appendChild(label);
-      li.appendChild(article);
-      list.appendChild(li);
-    });
+          // Loop through each item in inventory and create a list item
+          inventory.forEach(name => {
+            const li = document.createElement("li");
+            li.classList.add("product-item");
 
-    document.getElementById("inventoryModal").style.display = "flex";
-  }
+            const article = document.createElement("article");
 
-  // Map product names to their image paths
-  function getImageSrc(name) {
-    const map = {
-      "Salt": "icons8-salt-shaker-100.png",
-      "Old Nokia": "icons8-nokia-3310-100.png",
-      "Batteries": "icons8-batteries-100.png",
-      "Flashlight": "icons8-flashlight-100.png",
-      "Rope": "icons8-rope-100.png",
-      "Shovel": "icons8-shovel-100.png",
-      "One Torn Sneaker": "icons8-sneaker-64.png",
-      "Bug Spray": "icons8-bug-spray-100.png"
-    };
-    return "static/images/Catalog_icons/" + map[name];
-  }
+            const title = document.createElement("h3");
+            title.classList.add("product-title");
+            title.textContent = name;
 
-  // Close Inventory Modal
-  function closeInventory() {
-    document.getElementById("inventoryModal").style.display = "none";
-  }
+            const img = document.createElement("img");
+            img.classList.add("product-image");
+            img.src = getImageSrc(name); // Get image path based on item name
+            img.alt = name + " icon";
 
-  // Show Mini-Games Modal
-  function openMiniGames() {
-    document.getElementById("miniGamesModal").style.display = "flex";
-    closeNoMoneyModal();
-  }
+            const label = document.createElement("p");
+            label.classList.add("product-subtitle");
 
-  // Close Mini-Games Modal
-  function closeMiniGames() {
-    document.getElementById("miniGamesModal").style.display = "none";
-  }
+            // Assemble elements into the list item
+            article.appendChild(title);
+            article.appendChild(img);
+            article.appendChild(label);
+            li.appendChild(article);
+            list.appendChild(li);
+          });
 
-  // Close "No Money" Modal
-  function closeNoMoneyModal() {
-    document.getElementById("noMoneyModal").style.display = "none";
-  }
+          // Show the inventory modal
+          document.getElementById("inventoryModal").style.display = "flex";
+        }
 
-  // Go back to main menu
-  function goToMainMenu() {
-    window.location.href = "/menu";
-  }
-</script>
+      // Function to get the image path for a given item name
+      function getImageSrc(name) {
+          // Map item names to image filenames
+          const map = {
+            "Salt": "icons8-salt-shaker-100.png",
+            "Old Nokia": "icons8-nokia-3310-100.png",
+            "Batteries": "icons8-batteries-100.png",
+            "Flashlight": "icons8-flashlight-100.png",
+            "Rope": "icons8-rope-100.png",
+            "Shovel": "icons8-shovel-100.png",
+            "One Torn Sneaker": "icons8-sneaker-64.png",
+            "Bug Spray": "icons8-bug-spray-100.png"
+          };
+
+          // Return full path to image
+          return "static/images/Catalog_icons/" + map[name];
+        }
+
+      // Function to hide the inventory modal
+      function closeInventory() {
+        document.getElementById("inventoryModal").style.display = "none";
+      }
+
+      // Function to show the mini-games modal and hide the no-money modal
+      function openMiniGames() {
+        document.getElementById("miniGamesModal").style.display = "flex";
+        closeNoMoneyModal();
+      }
+
+      // Function to hide the mini-games modal
+      function closeMiniGames() {
+        document.getElementById("miniGamesModal").style.display = "none";
+      }
+
+      // Function to hide the "not enough money" modal
+      function closeNoMoneyModal() {
+        document.getElementById("noMoneyModal").style.display = "none";
+      }
+
+      // Function to return to the main menu page
+      function goToMainMenu() {
+        window.location.href = "/menu";
+      }
+    </script>
+
+
 
 </body>
 </html>
