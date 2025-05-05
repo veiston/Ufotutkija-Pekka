@@ -43,4 +43,51 @@
       </div>
     </div>
   </body>
+<!--<script>-->
+<!--async function testAddItem(name) {-->
+<!--    const response = await fetch('/inventory/add', {-->
+<!--        method: 'POST',-->
+<!--        headers: {-->
+<!--            'Content-Type': 'application/json',-->
+<!--        },-->
+<!--        body: JSON.stringify({ item: name }),-->
+<!--    });-->
+
+<!--    const updatedInventory = await response.json();-->
+<!--    console.log(updatedInventory)-->
+<!--}-->
+
+<!--async function testDeleteItem(name) {-->
+<!--    const response = await fetch('/inventory/delete', {-->
+<!--        method: 'POST',-->
+<!--        headers: {-->
+<!--            'Content-Type': 'application/json',-->
+<!--        },-->
+<!--        body: JSON.stringify({ item: name }),-->
+<!--    });-->
+<!--    const data = await response.json();-->
+<!--    console.log('After deleting Coffee:', data);-->
+<!--}-->
+
+<!--async function fetchInventory() {-->
+<!--    const response = await fetch('/inventory/items');-->
+<!--    const data = await response.json();-->
+
+<!--    console.log(data , 'inventory')-->
+
+
+<!--}-->
+
+<!--async function runInventoryTest() {-->
+<!--  await fetchInventory()-->
+<!--    await testAddItem('Coffee');-->
+<!--    await testAddItem('Coffee');-->
+<!--  await testAddItem('EMF Detector');-->
+<!--   await testAddItem('EMF Detector');-->
+<!--    await testDeleteItem('Coffee');-->
+<!--    await fetchInventory()-->
+<!--}-->
+
+<!--runInventoryTest();-->
+<!--</script>-->
 </html>
