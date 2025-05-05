@@ -29,7 +29,7 @@
           id="backToMenu"
           class="hero__button hero__button-back button button--gray-light"
         >
-          Back to the menu
+          Back
         </button>
       </div>
     </div>
@@ -79,13 +79,13 @@
         }
       };
 
-      const handleAirportClick = async (code) => {
+      const handleAirportClick = async (code, money) => {
         try {
           await new Promise((resolve) => setTimeout(resolve, 500));
           const response = await fetch("/player/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ location_ident: code }),
+            body: JSON.stringify({ location_ident: code, money }),
           });
           if (!response.ok) throw new Error("Failed to update location");
           window.location.href = "/investigations";
@@ -163,7 +163,8 @@
                 ],
                 onClose: function (confirmed) {
                   if (confirmed) {
-                    handleAirportClick(code);
+                    const newMoney = player.money - 100;
+                    handleAirportClick(code, newMoney);
                   } else {
                     map.removeLayer(flightLine);
                   }
