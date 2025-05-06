@@ -3,6 +3,8 @@ fadeAudio.volume = 0;
 fadeAudio.muted = false;
 
 const fadeInAudio = (audioElement, targetVolume = 1, duration = 8000) => {
+    if (!audioElement) return;
+
     audioElement.volume = 0;
     const step = 0.01;
     const intervalTime = duration * step / targetVolume;
