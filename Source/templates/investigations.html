@@ -13,12 +13,13 @@
     <link rel="stylesheet" href="/static/css/card.css" />
     <link rel="stylesheet" href="/static/css/modal.css" />
 
+    <script src="/static/js/fade-in-audio.js" defer></script>
     <script src="/static/js/spotlight.js" defer></script>
     <script src="/static/js/light.js" defer></script>
     <script src="/static/js/modal.js"></script>
   </head>
   <body>
-    <audio src="/static/audio/AlienCall.mp3" autoplay loop></audio>
+    <audio src="/static/audio/AlienCall.mp3" id="fadeAudio" muted autoplay loop></audio>
     <div id="spotlight" class="spotlight"></div>
     <img class="light light--on" id="light" />
     <audio
@@ -60,7 +61,7 @@
       </div>
     </div>
     <script>
-      const updateStep = async (step) => {
+        const updateStep = async (step) => {
         try {
           const response = await fetch("/investigations/update-step", {
             method: "POST",
