@@ -13,6 +13,6 @@ Add the markup like this:
     font-family: 'Bungee Shade', sans-serif;
     font-size: 32px;
     font-weight: bold;
-    color: #101D25;
+    color: rgba(255, 255, 255, 0.5);
     z-index: 1000;
 }

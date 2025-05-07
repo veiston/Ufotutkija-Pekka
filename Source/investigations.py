@@ -12,6 +12,7 @@ player: dict | None = None
 
 investigations = {
     "tutorial": { # story ident, important
+        "ident": "tutorial",
         "description": "{player_name}, you arrive in the Evergreen to meet Melvin, but your friend doesn't show up at the airport by the appointed time. The clock is nearing midnight. Worried, you make your way to Melvin's home, using the last known address he mentioned. The streets are unusually silent and a strange feeling of unease begins to grow.",  # story description
         "airport": "KBNA",  # airport code related to this story
         "city": "Evergreen",
@@ -142,6 +143,7 @@ investigations = {
         }
     },
     "metal_goblin": {
+        "ident": "metal_goblin",
         "description": "{player_name}, the coordinates from the infamous notebook have led you to Kentucky, to the village of Kelly — a place where strange occurrences have long been the norm. For half a century, Hopkinsville County has intrigued people: at night, household appliances disappear, and witnesses speak of tiny creatures with shimmering skin hiding in the woods. If stolen toasters and radio transmitters hold the key to Melvin’s disappearance, it's worth figuring out who is behind this.",
         "airport": "KDEN",
         "city": "Hopkinsville",
@@ -270,6 +272,7 @@ investigations = {
         }
     },
     "nakki": {
+        "ident": "nakki",
         "description": "{player_name}, the coordinates in Melvin's notebook lead you to Aberdeen, Washington. Here, by the banks of the Chihalis River, something strange is happening - late at night, fishermen saw a dark figure in the water, then began to find drowned people. People say that at night someone splashes in the water, and in the morning they find ashy gray slime on the pier. Who is it and what does it have to do with Melvin?",
         "airport": "KSEA",
         "city": "Aberdeen",
@@ -442,6 +445,7 @@ investigations = {
         }
     },
     "flatwoods_monster": {
+        "ident": "flatwoods_monster",
         "description": "{player_name}, the coordinates from Melvin's notebook have led you to Flatwoods, Braxton County, West Virginia. This place is a living legend. Half a century ago, something was seen here: a red sphere descending from the sky, a metallic stench in the air, scorched patches of earth where nothing grows to this day. The locals whisper: it has returned. Do you feel it?",
         "airport": "KHTS",
         "city": "Flatwoods",
@@ -606,6 +610,7 @@ investigations = {
         }
     },
     "endgame": {
+        "ident": "endgame",
         "description": "{player_name}, strange creatures, floppy disks, notebook pages — every investigation site had traces linked to Melvin. It's time to uncover the truth.",
         "airport": "KBNA",
         "city": "Evergreen",
@@ -904,6 +909,16 @@ def investigation_update_step(step):
 
     return {"error": "No available investigation."}
 
+def get_investigations(type):
+    investigations_list = []
+    for ident, story in investigations.items():
+        story_copy = {key: value for key, value in story.items() if key != "steps"}
+        if type == 'uncompleted':
+            if not story.get("is_completed", False):
+                investigations_list.append(story_copy)
+        else:
+            investigations_list.append(story_copy)
+    return investigations_list
 
 
 if __name__ == "__main__":

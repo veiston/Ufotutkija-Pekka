@@ -43,6 +43,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    const fetchUncompletedInvestigations = async () => {
+        try {
+            const response = await fetch("/investigations/list?type=uncompleted");
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+
     const handleAirportClick = async (code, money) => {
         try {
             await new Promise((resolve) => setTimeout(resolve, 500));
@@ -62,9 +72,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const player = await fetchPlayer();
         if (!player) return;
 
+        const uncompletedInvestigations = await fetchUncompletedInvestigations();
+
+
         const playerLevel = player.player_level;
         const playerMoney = player.money;
         const allowedAirports = airportMap[playerLevel] || airportMap.default;
+
+        const uncompletedInvestigationsAirports = new Set(
+            (uncompletedInvestigations || [])
+                .map((investigation) => investigation.airport)
+                .filter((airport) => airport)
+        );
 
         const map = L.map("map");
 
@@ -75,10 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let currentMarker;
         if (currentCoords) {
             const currentMarkerIcon = L.icon({
-                iconUrl:
-                    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-                shadowUrl:
-                    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+                iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+                shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -97,6 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }).addTo(map);
 
         allowedAirports.forEach((code) => {
+            if (!uncompletedInvestigationsAirports.has(code)) return;
+
             const coords = airportCoordinates[code];
             if (!coords) return;
 

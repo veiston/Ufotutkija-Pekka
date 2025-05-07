@@ -38,8 +38,8 @@
       preload="auto"
     ></audio>
 
-    <div class="logo">UF0tutkiJA</div>
-
+    <div class="logo">Ufotutkija</div>
+    <div class="hero--back" id="backImg"></div>
     <div class="hero">
       <div class="hero__container hero__background">
         <div class="hero__box">
@@ -113,6 +113,7 @@
           "investigationInnerActions"
         );
         const cityContainer = document.getElementById("investigationCity");
+        const backContainer = document.getElementById("backImg");
 
         const renderStep = async (stepNumber) => {
           if (!turnsLeft) {
@@ -155,11 +156,15 @@
                 actionsContainer.appendChild(article);
               } else {
                 const button = document.createElement("button");
-                button.className =
-                  key === "examine" ? "button" : "button button--blue-dark";
+                button.className = key === "examine" ? "button" : "button button--gray-light";
                 button.classList.add("button");
                 button.textContent = value.text;
                 button.addEventListener("click", async () => {
+                  if (key === "examine") {
+
+
+                  }
+
                   currentStep = value.next_step;
                   const updateData = await updateStep(currentStep);
                   turnsLeft = updateData?.turns_limit;
@@ -184,6 +189,7 @@
           const response = await fetch("/investigations/start");
           story = await response.json();
           cityContainer.innerText = story.city;
+          backContainer.style.backgroundImage = `url("/static/images/investigations/${story.ident}.png")`;
 
           if (story && story.description) {
             showStoryDescriptionModal(story.description, () => {
