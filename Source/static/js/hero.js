@@ -54,6 +54,21 @@ document.addEventListener("DOMContentLoaded", () => {
        `,
       `Hooray! A business trip!\nBefore leaving the office, don’t forget to take your Nokia from the desk. You’ll definitely need it.`
     ];
+
+    const addNokiaToTheInvetory = async () => {
+      try {
+        await fetch("/inventory/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ item: 'Nokia' })
+        });
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+    addNokiaToTheInvetory();
+
     currentMessageIndex = 0;
     welcomeText.innerHTML = messages[0];
     updateContinueButtonText();

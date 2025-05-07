@@ -33,28 +33,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     light.addEventListener("click", async () => {
         if (spotlight) {
-            if (!isBroken) {
-                spotlight.classList.toggle('spotlight');
-                light.classList.toggle('light--on');
-                playLightSound();
-
-                const shouldBreak = Math.random() > 0.6 && !spotlight.classList.contains('spotlight');
-
-                if (shouldBreak) {
-                    await playBreakingSound();
-
-                    setTimeout(async () => {
-                        await playBrokenSound();
-                        spotlight.classList.add('spotlight');
-                        light.classList.add('light--opacity-2');
-                    }, 2000);
-
-                    isBroken = true;
-                }
-            } else {
-                light.classList.toggle('light--on');
-                playLightSound();
-            }
+            spotlight.classList.toggle('spotlight');
+            light.classList.toggle('light--on');
+            playLightSound();
+            // if (!isBroken) {
+            //     spotlight.classList.toggle('spotlight');
+            //     light.classList.toggle('light--on');
+            //     playLightSound();
+            //
+            //     const shouldBreak = Math.random() > 0.6 && !spotlight.classList.contains('spotlight');
+            //
+            //     if (shouldBreak) {
+            //         await playBreakingSound();
+            //
+            //         setTimeout(async () => {
+            //             await playBrokenSound();
+            //             spotlight.classList.add('spotlight');
+            //             light.classList.add('light--opacity-2');
+            //         }, 2000);
+            //
+            //         isBroken = true;
+            //     }
+            // } else {
+            //     light.classList.toggle('light--on');
+            //     playLightSound();
+            // }
         }
     });
 });
