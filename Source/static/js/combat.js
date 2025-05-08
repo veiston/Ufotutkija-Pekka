@@ -94,16 +94,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let pwr = 30;
     if (name === enemy.weak) {
       pwr *= 2;
-      log("Sillä oli erinomainen vaikutus viholliseen!");
+      log("Critical damage dealt to the enemy!");
     }
     if (randCrit()) {
       pwr *= 2;
-      log("Kriittinen isku!");
+      log("Critical hit!");
     }
     animateHit(e.playerSprite);
     enemy.hp = Math.max(0, enemy.hp - pwr);
     sfx.hit.play();
-    log(`Esine aiheuttaa ${pwr} vahinkoa.`);
+    log(`Item deals ${pwr} damage.`);
     await consumeItem(name);
     updateBars();
     enemyTurn();
@@ -126,9 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
       animateHit(e.playerSprite);
       sfx.attack.play();
       let dmg = player.atk * (randCrit() ? 2 : 1);
-      if (dmg > player.atk) log("Kriittinen isku!");
+      if (dmg > player.atk) log("Critical hit!");
       enemy.hp = Math.max(0, enemy.hp - dmg);
-      log(`Isku tekee ${dmg} vahinkoa.`);
+      log(`Item deals ${dmg} damage.`);
       updateBars();
       enemyTurn();
     }
@@ -142,10 +142,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       animateHit(e.enemySprite);
       let dmg = enemy.atk * (randCrit() ? 2 : 1);
-      if (dmg > enemy.atk) log("UFO iskee kriittisesti!");
+      if (dmg > enemy.atk) log("UFO strikes critically!");
       player.hp = Math.max(0, player.hp - dmg);
       sfx.hit.play();
-      log(`UFO tekee ${dmg} vahinkoa.`);
+      log(`Item deals ${dmg} damage.`);
       updateBars();
       if (player.hp <= 0) endBattle(false);
     }, 800);
@@ -161,8 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
       won && victoryText
         ? victoryText
         : won
-        ? "Voitit taistelun! Olet sankari!"
-        : "Hävisit taistelun... Lepää ja yritä uudelleen.";
+        ? "You won the battle! You are a hero!"
+        : "You lost the battle... Rest and try again.";
     showModal({
       message,
       buttons: [{ label: "OK", value: true }],
