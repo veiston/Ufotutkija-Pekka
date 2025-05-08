@@ -163,6 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
                             currentStep = value.next_step;
                             const updateData = await updateStep(currentStep);
                             turnsLeft = updateData?.turns_limit;
+                            const logoElement = document.querySelector('.logo');
+                            if (logoElement) {
+                                logoElement.textContent = `Turns left: ${turnsLeft}`;
+                                logoElement.style.fontFamily = "Bungee, sans-serif";
+                            }
 
                             if (currentStep) {
                                 await renderStep(currentStep);
@@ -185,6 +190,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                 const updateData = await updateStep(currentStep);
                                 turnsLeft = updateData?.turns_limit;
+                                const logoElement = document.querySelector('.logo');
+                                if (logoElement) {
+                                    logoElement.textContent = `Turns left: ${turnsLeft}`;
+                                    logoElement.style.fontFamily = "Bungee, sans-serif";
+                                }
                                 const isWin = updateData.is_win;
                                 story = updateData.story;
                                 if (isWin) {
@@ -215,6 +225,11 @@ document.addEventListener("DOMContentLoaded", () => {
         backContainer.style.backgroundImage = `url("/static/images/investigations/${story.ident}.png")`;
         currentStep = story.step;
         turnsLeft = story.turns_limit;
+        const logoElement = document.querySelector('.logo');
+        if (logoElement) {
+            logoElement.textContent = `Turns left: ${turnsLeft}`;
+            logoElement.style.fontFamily = "Bungee, sans-serif";
+        }
 
         if (story?.description) {
             showStoryModal(story.description, renderStep(currentStep));

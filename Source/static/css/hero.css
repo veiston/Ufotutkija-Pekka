@@ -233,6 +233,27 @@
     color: #101D25;
 }
 
+.player-image {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 200px;
+    height: auto;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.melvin-image {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 300px;
+    height: auto;
+    z-index: 10;
+    pointer-events: none;
+}
+
 
 /*@keyframes screen-shake {*/
 /*  0% { transform: translate(1px, 1px); }*/
