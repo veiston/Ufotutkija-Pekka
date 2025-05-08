@@ -67,5 +67,31 @@
         </div>
       </div>
     </div>
+  <script>
+      const characters = [
+        { src: "/static/images/character_art/alien.png", top: "10%", left: "15%" },
+        { src: "/static/images/character_art/flatwoodsmonster.png", top: "10%", left: "70%" },
+        { src: "/static/images/character_art/melvin.png", top: "50%", left: "20%" },
+        { src: "/static/images/character_art/metalgoblin.png", top: "70%", left: "75%" },
+        { src: "/static/images/character_art/nakki.png", top: "70%", left: "5%" },
+        { src: "/static/images/character_art/player.png", top: "20%", left: "45%" },
+      ];
+
+      characters.forEach(({ src, top, left }) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.position = 'absolute';
+        img.style.width = 'auto';
+        img.style.height = 'auto';
+        img.style.maxWidth = '200px';
+        // img.style.maxHeight = '120px';
+        img.style.top = top;
+        img.style.left = left;
+        img.style.zIndex = "0";
+        img.style.pointerEvents = "none";
+
+        document.body.appendChild(img);
+      });
+    </script>
   </body>
 </html>
