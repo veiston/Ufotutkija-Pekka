@@ -110,18 +110,21 @@ investigations = {
                 "choices": {
                     "choose_nakki": {
                         "title": "Näkki",
+                        "image": "nakki.png",
                         "text": "A ghostly water entity that lures its victims to the depths.",
                         "is_creature": True,
                         "next_step": 6,
                     },
-                    "choose_mg": {
-                        "title": "Metal Goblin",
-                        "text": "Small, metallic alien creature that steals electronics and hides in the dark.",
+                    "choose_braxie": {
+                        "title": "Braxie",
+                        "image": "flatwoodsmonster.png",
                         "is_creature": True,
-                        "next_step": 6,
+                        "text": "A towering, faceless alien entity with glowing red eyes and a metallic hood. It reeks of burning metal and fear.",
+                        "next_step": 10,
                     },
                     "choose_alien": {
                         "title": "Unknown Alien",
+                        "image": "alien.png",
                         "text": "A little gray troublemaker who can’t be knocked out even with a Nokia throw.",
                         "is_creature": True,
                         "next_step": 7,
@@ -239,20 +242,23 @@ investigations = {
                 "choices": {
                     "choose_mg": {
                         "title": "Metal Goblin",
+                        "image": "metalgoblin.png",
                         "is_creature": True,
                         "text": "Small, metallic alien creature that steals electronics and hides in the dark.",
                         "next_step": 7,
                     },
                     "choose_nakki": {
                         "title": "Näkki",
+                        "image": "nakki.png",
                         "is_creature": True,
                         "text": "A damp, elusive ghost figure seen near water, watching silently.",
                         "next_step": 6,
                     },
-                    "choose_ghost": {
-                        "title": "Wounded Grey",
+                    "choose_braxie": {
+                        "title": "Braxie",
+                        "image": "flatwoodsmonster.png",
                         "is_creature": True,
-                        "text": "A disoriented, lanky being with hollow eyes. Very aggressive. Looks extraterrestrial.",
+                        "text": "A towering, faceless alien entity with glowing red eyes and a metallic hood. It reeks of burning metal and fear.",
                         "next_step": 6,
                     },
                 }
@@ -412,18 +418,21 @@ investigations = {
                 "choices": {
                     "choose_nakki": {
                         "title": "Näkki",
+                        "image": "nakki.png",
                         "is_creature": True,
                         "text": "A ghostly water entity that lures its victims to the depths.",
                         "next_step": 11,
                     },
                     "choose_mg": {
                         "title": "Metal Goblin",
+                        "image": "metalgoblin.png",
                         "is_creature": True,
                         "text": "Small, metallic alien creature that steals electronics and hides in the dark.",
                         "next_step": 10,
                     },
                     "choose_braxie": {
                         "title": "Braxie",
+                        "image": "flatwoodsmonster.png",
                         "is_creature": True,
                         "text": "A towering, faceless alien entity with glowing red eyes and a metallic hood. It reeks of burning metal and fear.",
                         "next_step": 10,
@@ -578,19 +587,22 @@ investigations = {
                     "choose_mg": {
                         "title": "Metal Goblin",
                         "is_creature": True,
+                        "image": "metalgoblin.png",
                         "text": "Metal Goblin. Small, metallic alien creature that steals electronics and hides in the dark.",
                         "next_step": 7,
                     },
                     "choose_braxie": {
                         "title": "Braxie",
                         "is_creature": True,
+                        "image": "flatwoodsmonster.png",
                         "text": "A towering, faceless entity with glowing red eyes and a metallic hood. It reeks of burning metal and fear.",
                         "next_step": 8,
                     },
-                    "choose_ghost": {
-                        "title": "Wounded Grey",
+                    "choose_nakki": {
+                        "title": "Näkki",
+                        "image": "nakki.png",
                         "is_creature": True,
-                        "text": "A disoriented, lanky being with hollow eyes. Very aggressive. Looks extraterrestrial.",
+                        "text": "A ghostly water entity that lures its victims to the depths.",
                         "next_step": 7,
                     },
                 }

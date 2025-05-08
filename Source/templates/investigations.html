@@ -133,17 +133,32 @@
               if (stepData.choices[key].is_creature) {
                 const article = document.createElement("article");
                 article.className = "card";
-                article.innerHTML = `
-                <div class="card__wrapper">
-                  <figure>
-                    <img src="/static/images/сreature-placeholder.png" alt="Creature" />
-                  </figure>
-                  <div class="card__content">
-                    <h2>${value.title || "No title"}</h2>
-                    <p>${value.text || "No description"}</p>
-                  </div>
-                </div>
-              `;
+                const wrapper = document.createElement("div");
+                wrapper.className = "card__wrapper";
+
+                const figure = document.createElement("figure");
+                const img = document.createElement("img");
+                img.src = `/static/images/character_art/${stepData.choices[key].image}`;
+                img.alt = "Creature";
+
+                figure.appendChild(img);
+
+                const content = document.createElement("div");
+                content.className = "card__content";
+
+                const h2 = document.createElement("h2");
+                h2.textContent = value.title || "No title";
+
+                const p = document.createElement("p");
+                p.textContent = value.text || "No description";
+
+                content.appendChild(h2);
+                content.appendChild(p);
+
+                wrapper.appendChild(figure);
+                wrapper.appendChild(content);
+
+                article.appendChild(wrapper);
                 article.addEventListener("click", async () => {
                   currentStep = value.next_step;
                   const updateData = await updateStep(currentStep);

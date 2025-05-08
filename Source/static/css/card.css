@@ -1,7 +1,7 @@
 .card {
   position: relative;
   border-radius: 8px;
-  background: #FFFFFF;
+  background: transparent;
   transform-origin: center;
   transition: all 0.3s ease-in-out;
   overflow: hidden;
@@ -12,21 +12,16 @@
 .card h2 {
   font-family: "Bungee", sans-serif;
   font-size: 20px;
-  color: #303031;
+  color: rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease-out;
   line-height: 1;
   text-align: center;
 }
 
 .card figure {
-  margin: 0;
-  padding: 0;
-  aspect-ratio: 16 / 16;
-  overflow: hidden;
-  max-height: 206px;
+  max-height: 200px;
   display: flex;
-  align-items: center;
-  max-width: 140px;
+  padding: 10px;
 }
 
 .card img {
@@ -34,10 +29,11 @@
   transform-origin: center;
   transform: scale(1.001);
   transition: all 0.3s ease-in-out;
+  object-fit: contain;
 }
 
 .card__content {
-  padding: 0px 16px 12px;
+  padding: 12px 16px 12px;
 }
 
 .card__wrapper {
@@ -49,7 +45,7 @@
 
 .card:hover {
   transform: scale(1.1);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  /*// box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;*/
   z-index: 10;
 }
 
@@ -67,7 +63,7 @@
   opacity: 0;
   font-size: 14px;
   font-weight: 400;
-  color: #303031;
+  color: white;
   position: absolute;
   top: 16px;
   bottom: 16px;
@@ -76,6 +72,7 @@
   transition: all 0.3s ease-out;
   overflow: auto;
   height: calc(100% - 32px);
+  padding-inline: 40px;
 }
 
 .card:hover p {
