@@ -4,14 +4,17 @@ from database import *
 class Player:
     current_id = None
 
-    def __init__(self, name='Pekka'):
+    def __init__(self, name=None):
         self.id = None
-        self.name = name
+        self.name = name or "Pekka"
         self.location_ident = "EFHK"
         self.hp = None
         self.attack = None
         self.money = 500
         self.player_level = 1
+
+        if name is None:
+            self.load_current_player()
 
     @staticmethod
     def reset():
@@ -19,6 +22,21 @@ class Player:
         update_data_in_database("ALTER TABLE inventory AUTO_INCREMENT = 1")
         update_data_in_database("DELETE FROM player")
         update_data_in_database("ALTER TABLE player AUTO_INCREMENT = 1")
+
+    def load_current_player(self):
+        result = get_data_from_database(
+            "SELECT id, name, location_ident, hp, attack, money, player_level FROM player LIMIT 1")
+
+        if result:
+            row = result[0]
+            self.id = row[0]
+            self.name = row[1]
+            self.location_ident = row[2]
+            self.hp = row[3]
+            self.attack = row[4]
+            self.money = row[5]
+            self.player_level = row[6]
+            Player.current_id = self.id
 
     def add(self):
         Player.reset()

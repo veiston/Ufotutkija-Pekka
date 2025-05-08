@@ -3,6 +3,7 @@ import random
 from player import Player
 from database import update_data_in_database, get_data_from_database
 from inventory import Inventory
+import copy
 
 player_instance: Player | None = None
 player: dict | None = None
@@ -680,6 +681,12 @@ investigations = {
         }
     },
 }
+
+default_investigations = copy.deepcopy(investigations)
+
+def reset_investigations():
+    global investigations
+    investigations = copy.deepcopy(default_investigations)
 
 def get_creature_types():
     query = "SELECT name, weakness FROM creature_types;"

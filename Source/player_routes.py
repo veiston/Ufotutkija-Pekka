@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from player import Player
+from investigations import reset_investigations
 player_routes = Blueprint('player_routes', __name__)
 
 # Example of usage in JS
@@ -39,6 +40,7 @@ def player_create():
     player_name = data.get('name', '')
     player = Player(player_name)
     player.add()
+    reset_investigations()
     current = player.get_current()
     return jsonify(current)
 
