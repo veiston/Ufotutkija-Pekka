@@ -24,6 +24,23 @@ Add the markup like this:
 
 }
 
+.button--red-white {
+    background-color: #C0392B !important;
+    color: #FFFFFF;
+    position: relative;
+}
+
+.button--red-white::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 2px dashed white;
+    pointer-events: none;
+}
+
 .button.button--gray-light {
     background-color: #48526A;
     color: #FFFFFF;

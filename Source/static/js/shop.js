@@ -77,6 +77,22 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await response.json();
             console.log(result);
 
+            if (result.error === "Insufficient funds") {
+                showModal({
+                    message: "Not enough money! Want to try your luck?",
+                    buttons: [
+                        { label: "Step into the Lucky Room", value: "gamble", className: "button button--red-white" },
+                        { label: "No, I’m not 18 yet", value: "cancel" }
+                    ],
+                    onClose: (value) => {
+                        if (value === "gamble") {
+                            window.location.href = "/blackjack";
+                        }
+                    }
+                });
+                return;
+            }
+
             showModal({
                 message: result.message || "Cha-ching! Another questionable purchase made",
                 buttons: [{ label: "OK", value: true }],

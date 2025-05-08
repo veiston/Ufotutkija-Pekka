@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             Cya,
             Melvin
-            P.S. I''ve added <span class="text-yellow text-bold">$500</span> to your bank account for your plane ticket!1! HURRY UP!!
+            P.S. I''ve added <span class="text-yellow text-bold">$300</span> to your bank account for your plane ticket!1! HURRY UP!!
        `,
       `Hooray! A business trip!\nBefore leaving the office, don’t forget to take your Nokia from the desk. You’ll definitely need it.`
     ];

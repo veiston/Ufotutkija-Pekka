@@ -23,7 +23,7 @@ def initialize_game():
         if user_name:
             update_player("name", user_name, current_player["id"])
         update_player("player_level", 1, current_player["id"])
-        update_player("money", 500, current_player["id"])
+        update_player("money", 00, current_player["id"])
     
     print_separator()
     print(get_messages("START_HELLO_USER_NAME"))

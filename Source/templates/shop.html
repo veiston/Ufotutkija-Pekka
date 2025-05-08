@@ -49,6 +49,13 @@
           >
             Back to Main Menu
           </button>
+
+          <button
+            id="damblingButton"
+            class="button button--red-white hero__button"
+          >
+            Step into the Lucky Room
+          </button>
         </div>
       </section>
 
@@ -69,5 +76,10 @@
         <div id="modalBoxButtons"></div>
       </div>
     </div>
+    <script>
+      document.getElementById('damblingButton').addEventListener('click', function() {
+        window.location.href = '/blackjack';
+      });
+    </script>
   </body>
 </html>

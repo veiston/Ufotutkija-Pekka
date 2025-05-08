@@ -10,7 +10,7 @@ class Player:
         self.location_ident = "EFHK"
         self.hp = None
         self.attack = None
-        self.money = 500
+        self.money = 300
         self.player_level = 1
 
         if name is None:
@@ -45,7 +45,7 @@ class Player:
         if self.name:
             query = f"INSERT INTO player (name) VALUES ('{self.name}')"
         else:
-            query = "INSERT INTO player (name, location_ident, money, player_level) VALUES ('Pekka', 'EFHK', 500, 1)"
+            query = "INSERT INTO player (name, location_ident, money, player_level) VALUES ('Pekka', 'EFHK', 300, 1)"
 
         cursor = connection.cursor()
         cursor.execute(query)
