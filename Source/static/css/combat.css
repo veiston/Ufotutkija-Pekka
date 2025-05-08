@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: url('/static/images/investigations/nakki.png') no-repeat center/cover;
+  color: #fff;
+}
+
+.battle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60vh;
+  padding: 0 5vw;
+}
+
+.combatant {
+  flex: 1;
+  text-align: center;
+}
+
+.hp-bar {
+  width: 80%;
+  height: 12px;
+  margin: 1rem auto;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.menu__controls {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.menu__button {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  background: #3f517e;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.menu__button:hover {
+  background-color: #f2c94c;
+  transform: scale(1.05);
+}
+
+.menu__button-text {
+  display: block;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.menu__button:hover .menu__button-text {
+  color: #162030;
+  transform: scale(1.05);
+}
+
+.menu__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#modalBoxButtons > button {
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #f2c94c;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#modalBoxButtons > button:focus {
+  outline: 3px solid #f2c94c;
+  outline-offset: 2px;
+}
+
+.sprite {
+  width: auto;
+  max-height: 300px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.sprite:hover {
+  transform: scale(1.05);
+}
+
+.combat-log {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  width: calc(30% - 2rem);
+  max-height: 150px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #e4fc0c;
+  border-radius: 4px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}

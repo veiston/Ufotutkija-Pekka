@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ufotutkija Pekka – Taistelu</title>
+    <link rel="icon" href="/static/favicon.png" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <link rel="stylesheet" href="/static/css/combat.css" />
+    <link rel="stylesheet" href="/static/css/spotlight.css" />
+    <script src="/static/js/fade-in-audio.js" defer></script>
+    <script src="/static/js/spotlight.js" defer></script>
+    <script src="/static/js/modal.js" defer></script>
+    <script src="/static/js/combat.js" defer></script>
+  </head>
+  <body>
+    <div id="spotlight" class="spotlight"></div>
+    <audio
+      id="battleMusic"
+      src="/static/audio/battle.mp3"
+      autoplay
+      loop
+    ></audio>
+    <div class="battle-container">
+      <div class="combatant player">
+        <div class="hp-bar"><div class="hp-fill" id="playerHp"></div></div>
+        <img
+          src="/static/images/character_art/player.png"
+          alt="Pekka"
+          id="playerSprite"
+          class="sprite"
+        />
+        <div class="name-tag">Pekka</div>
+      </div>
+      <div class="combatant enemy">
+        <div class="hp-bar"><div class="hp-fill" id="enemyHp"></div></div>
+        <img
+          src="/static/images/character_art/alien.png"
+          alt="UFO"
+          id="enemySprite"
+          class="sprite"
+        />
+        <div class="name-tag">UFO</div>
+      </div>
+    </div>
+    <div class="menu__controls">
+      <button class="menu__button" data-action="attack">
+        <span class="menu__button-text">Hyökkää</span>
+      </button>
+      <button class="menu__button" data-action="item">
+        <span class="menu__button-text">Käytä esinettä</span>
+      </button>
+      <button class="menu__button" data-action="inspect">
+        <span class="menu__button-text">Tarkastele</span>
+      </button>
+    </div>
+    <div id="itemMenu" class="modal">
+      <div class="modal-content">
+        <h2>Valitse esine</h2>
+        <ul id="itemList"></ul>
+      </div>
+    </div>
+    <div id="log" class="combat-log"></div>
+    <div
+      id="modalBox"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalBoxMessage"
+    >
+      <div class="modal-content">
+        <p id="modalBoxMessage"></p>
+        <div id="modalBoxButtons"></div>
+      </div>
+    </div>
+  </body>
+</html>
