@@ -33,6 +33,8 @@ body {
 	color: #FFFFFF;
 	line-height: 1.6;
 	background-color: #5C6D89;
+    position: relative;
+    z-index: 1;
 }
 
 html,
@@ -43,6 +45,19 @@ body,
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(153, 149, 168, 0.6); /* Darker overlay. Adjust this one for brightness and hue tint*/
+    backdrop-filter: blur(2px) saturate(120%); /* Fog effect */
+    z-index: 1;
+    pointer-events: none;
 }
 
 h1,
