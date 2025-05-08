@@ -630,7 +630,7 @@ investigations = {
                 "is_examined": False,
                 "choices": {
                     "warn": {
-                        "text": "Insert the assembled floppies into Melvin's laptop.",
+                        "text": "Insert the assembled floppies into Melvin's laptop",
                         "next_step": 2,
                     },
                 }
