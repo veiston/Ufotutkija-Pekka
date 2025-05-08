@@ -1,0 +1,12 @@
+.card {
+    height: 200px;
+    padding: 10px;
+}
+
+.hand{
+    display: flex;
+    flex-direction: row;
+    /*background-color: aquamarine;*/
+    width: fit-content;
+}
+
