@@ -89,15 +89,7 @@
         }
       };
 
-      // function showInfoModal(message, onClose) {
-      //   showModal({
-      //     message: message,
-      //     buttons: [{ label: "OK", value: true }],
-      //     onClose: onClose,
-      //   });
-      // }
-
-      function showStoryWinModal(text, onClose) {
+      function showStoryModal(text, onClose) {
         showModal({
           message: text,
           buttons: [{ label: "OK", value: true }],
@@ -105,15 +97,7 @@
         });
       }
 
-      function showStoryDescriptionModal(text, onClose) {
-        showModal({
-          message: text,
-          buttons: [{ label: "OK", value: true }],
-          onClose: onClose,
-        });
-      }
-
-      const fetchInvestigation = async () => {
+      const startInvestigation = async () => {
         let currentStep = null;
         let story = null;
         let turnsLeft = 0;
@@ -205,7 +189,7 @@
                   const isWin = updateData.is_win;
                   story = updateData.story;
                   if (isWin) {
-                    showStoryWinModal(story.win_text, () => {
+                    showStoryModal(story.win_text, () => {
                       window.location.href = "/menu";
                     });
                     return;
@@ -220,32 +204,36 @@
             });
         };
 
-        try {
-          const response = await fetch("/investigations/start");
-          story = await response.json();
-          cityContainer.innerText = story.city;
-          backContainer.style.backgroundImage = `url("/static/images/investigations/${story.ident}.png")`;
+        story = await fetchInvestigation();
 
-          if (story && story.description) {
-            showStoryDescriptionModal(story.description, () => {
-              currentStep = story.step;
-              turnsLeft = story.turns_limit;
-
-              renderStep(currentStep);
-            });
-          } else {
-            currentStep = story.step;
-            turnsLeft = story.turns_limit;
-
-            renderStep(currentStep);
-          }
-        } catch (error) {
-          console.error(error);
+        if (!story) {
           textContainer.textContent = "Error loading investigation.";
+          return;
+        }
+
+        cityContainer.innerText = story.city;
+        backContainer.style.backgroundImage = `url("/static/images/investigations/${story.ident}.png")`;
+        currentStep = story.step;
+        turnsLeft = story.turns_limit;
+        
+        if (story?.description) {
+          showStoryModal(story.description, renderStep(currentStep));
+        } else {
+          renderStep(currentStep);
         }
       };
 
-      async function handleExamineClick() {
+      const fetchInvestigation = async () => {
+        try {
+          const response = await fetch("/investigations/start");
+          return await response.json();
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      };
+
+      const handleExamineClick = async () => {
         let inventory = await fetchInventory();
         console.log(inventory, "inventory");
 
@@ -325,7 +313,7 @@
         return result;
       }
 
-      fetchInvestigation();
+      startInvestigation();
     </script>
     <div id="modalBox" class="modal" style="display: none">
       <div class="modal-content">
