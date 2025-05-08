@@ -70,10 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setEnemyDisplay();
   };
   const fetchInv = async () => {
-    inv = await (await fetch("/player/inventory")).json();
+    inv = await (await fetch("/inventory/items")).json();
   };
   const consumeItem = async (item) => {
-    await fetch("/player/inventory/consume", {
+    await fetch("/inventory/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ item }),
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const useItem = async (name) => {
     e.itemMenu.classList.remove("show");
     sfx.item.play();
-    if (name === "Medikit") {
+    if (name === "Coffee") {
       player.hp = Math.min(player.max, player.hp + 50);
       log("Paranit 50 HP.");
       await consumeItem(name);
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   const openItems = () => {
     e.itemList.innerHTML = inv
-      .map((n) => `<li data-item="${n}">${n}</li>`)
+      .map((n) => `<li data-item="${n.name}" style="cursor: pointer">${n.name}</li>`)
       .join("");
     e.itemMenu.classList.add("show");
   };
@@ -167,8 +167,9 @@ document.addEventListener("DOMContentLoaded", () => {
       message,
       buttons: [{ label: "OK", value: true }],
       onClose: async (_) => {
-        await updateStory(won);
-        window.location.href = "/travel";
+         window.location.href = `/investigations?result=${won ? "win" : "lose"}`
+        // await updateStory(won);
+        // window.location.href = "/travel";
       },
       disableBackdropClose: true,
       disableEscClose: true,
@@ -178,17 +179,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (okBtn) okBtn.focus();
     }, 100);
   };
-  const updateStory = async (won) => {
-    await fetch("/investigations/update-step", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        step: storyStep,
-        combat_result: won ? "win" : "lose",
-        complete: won,
-      }),
-    });
-  };
+  // const updateStory = async (won) => {
+  //   await fetch("/investigations/update-step", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       step: storyStep,
+  //       combat_result: won ? "win" : "lose",
+  //       complete: won,
+  //     }),
+  //   });
+  // };
   (async () => {
     await fetchInv();
     await fetchCombatData();

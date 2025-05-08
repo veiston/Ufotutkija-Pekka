@@ -111,6 +111,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const cityContainer = document.getElementById("investigationCity");
         const backContainer = document.getElementById("backImg");
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const resultParam = urlParams.get('result');
+
+        if (resultParam) {
+            story = await fetchInvestigation();
+
+            if (!story) {
+                textContainer.textContent = "Error loading investigation.";
+                return;
+            }
+
+            cityContainer.innerText = story.city;
+            backContainer.style.backgroundImage = `url("/static/images/investigations/${story.ident}.png")`;
+
+            if (resultParam === 'win') {
+                showStoryModal(story.win_text, async () => {
+                    await updateStep(null);
+                    window.location.href = "/menu";
+                });
+            } else if (resultParam === 'lose') {
+                showStoryModal(story.lose_text, () => {
+                    window.location.href = "/menu";
+                });
+            }
+            return;
+        }
+
         const renderStep = async (stepNumber) => {
             if (!turnsLeft) {
                 window.location.href = "/combat";

@@ -4,7 +4,6 @@ from shop import get_shop_items, buy_item
 shop_routes = Blueprint('shop_routes', __name__)
 
 @shop_routes.route('/shop/items', methods=['GET'])
-
 def shop_items():
     items = get_shop_items()
     return jsonify(items)
