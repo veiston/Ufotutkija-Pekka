@@ -6,6 +6,7 @@ from player import Player
 from notifications import SCARY_REMINDERS
 from combat import battle
 from database import update_data_in_database, get_data_from_database
+from inventory import Inventory
 
 player_instance: Player | None = None
 player: dict | None = None
@@ -780,14 +781,14 @@ def investigate(ident):
 
 
 
-def get_inventory():
-    query = f"""
-        SELECT inventory.item, items.description, inventory.amount, items.item_type
-        FROM inventory
-        LEFT JOIN items ON inventory.item = items.name
-        WHERE inventory.player_id = {player["id"]};
-    """
-    return get_data_from_database(query)
+# def get_inventory():
+#     query = f"""
+#         SELECT inventory.item, items.description, inventory.amount, items.item_type
+#         FROM inventory
+#         LEFT JOIN items ON inventory.item = items.name
+#         WHERE inventory.player_id = {player["id"]};
+#     """
+#     return get_data_from_database(query)
 
 def get_creature_types():
     query = "SELECT name, weakness FROM creature_types;"
@@ -803,65 +804,86 @@ def update_inventory(selected_item):
 
 def use_equipment(selected_item, item_type, current_creature, creature_types):
     is_effective = selected_item == "Nokia" or item_type == creature_types.get(current_creature)
+    # Mark current step as examined before returning
+    # Find the current investigation and step
+    player_instance = Player()
+    player_instance.id = Player.current_id
+    player = player_instance.get_current()
+    player_location = player.get("location_ident")
+    for ident, story in investigations.items():
+        if story["airport"] == player_location and not story["is_completed"]:
+            investigation = story
+            break
+    else:
+        investigation = None
+    if investigation:
+        current_step = investigation.get("step")
+        if current_step in investigation["steps"]:
+            investigation["steps"][current_step]["is_examined"] = True
 
     if is_effective:
         confidence = random.randint(40, 95)
-        print(f"Your analysis suggests: with {confidence}% confidence, the creature is {current_creature}.")
-        return True
+        return {
+            "result": f"Your analysis suggests: with {confidence}% confidence, the creature is {current_creature}.",
+            # 'is_last' will be set by examine()
+        }
 
     if random.randint(1, 100) <= 5:
         wrong_creatures = list(creature_types.keys())
         guess = random.choice(wrong_creatures)
         confidence = random.randint(10, 30)
-        print(f"Your equipment gives an uncertain reading... With {confidence}% confidence, it says, that the creature might be {guess}. Too vague. You should try again.")
+        return {
+            "result" : f"Your equipment gives an uncertain reading... With {confidence}% confidence, it says, that the creature might be {guess}. Too vague.",
+            # 'is_last' will be set by examine()
+        }
     else:
-        print("You try using the item, but nothing happens.")
+        return {
+            "result" : "You try using the item, but nothing happens.",
+            # 'is_last' will be set by examine()
+        }
 
-    return False
+def examine(selected_item):
+    player_instance = Player()
+    player_instance.id = Player.current_id
+    player = player_instance.get_current()
+    player_location = player.get("location_ident")
 
-def examine(investigation_ident):
-    inventory_results = get_inventory()
-
-    if not inventory_results:
-        print("No items in inventory.")
-        return
-
-    creature_types = get_creature_types()
-    current_creature = investigations[investigation_ident]["creature"]
-
-    print_separator()
-
-    print("\nYou're going to use the equipment to determine what kind of creature you're dealing with.")
-    print("You think it might be: " + ", ".join(creature_types.keys()) + ".")
-
-    while True:
-        print("Choose equipment from your inventory to perform a more accurate analysis.")
-
-        inventory = {}
-        for index, (item, description, amount, item_type) in enumerate(inventory_results, 1):
-            print(f"{index}. {item} | {description} | {'Unlimited' if amount is None else f'{amount} pcs'}")
-            inventory[index] = (item, item_type, amount)
-
-        choice = input_integer("\nSelect an item by its number: ")
-
-        print_separator()
-
-        if choice not in inventory:
-            print("Dude, there are no such options here. Try again!")
-            continue
-
-        selected_item, item_type, amount = inventory[choice]
-
-        if selected_item != "Nokia" and item_type not in creature_types.values():
-            print("Sorry, but you should try again, this item cannot be used here.")
-            continue
-
-        if selected_item != "Nokia" and amount is not None:
-            update_inventory(selected_item)
-            inventory_results = get_inventory()
-
-        if use_equipment(selected_item, item_type, current_creature, creature_types):
+    for ident, story in investigations.items():
+        if story["airport"] == player_location and not story["is_completed"]:
+            investigation = story
             break
+    else:
+        return {
+            "result": "Investigation not found."
+        }
+
+    current_creature = investigation["creature"]
+    creature_types = get_creature_types()
+
+    inventory_instance = Inventory()
+    inventory_results = inventory_instance.get_inventory()
+
+    for item in inventory_results:
+        if item["name"] == selected_item:
+            selected_item_type = item["type"]
+            selected_amount = item["amount"]
+            break
+    else:
+        return "Item not found."
+
+    if selected_item != "Nokia" and selected_amount is not None:
+        inventory_instance.delete_item(selected_item)
+
+    # Determine if this is the last explorable step
+    explorable_steps = [
+        step for step in investigation["steps"].values()
+        if step.get("can_examine")
+    ]
+    is_last = all(step.get("is_examined") for step in explorable_steps) if explorable_steps else False
+
+    result_data = use_equipment(selected_item, selected_item_type, current_creature, creature_types)
+    result_data["is_last"] = is_last
+    return result_data
 
 def investigation_start():
     player_instance = Player()

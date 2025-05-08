@@ -50,10 +50,6 @@
             <div class="hero__text">
               <p id="investigationText"></p>
               <!-- messages container-->
-              <div
-                class="hero__actions-inner"
-                id="investigationInnerActions"
-              ></div>
             </div>
           </div>
           <div class="hero__actions" id="investigationActions"></div>
@@ -61,28 +57,40 @@
       </div>
     </div>
     <script>
-        const updateStep = async (step) => {
-        try {
-          const response = await fetch("/investigations/update-step", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ step }),
-          });
-          const data = await response.json();
-          console.log(data);
-          return data;
-        } catch (error) {
-          console.error(error);
-        }
-      };
 
-      function showInfoModal(message, onClose) {
-        showModal({
-          message: message,
-          buttons: [{ label: "OK", value: true }],
-          onClose: onClose,
-        });
-      }
+        const updateStep = async (step) => {
+          try {
+            const response = await fetch("/investigations/update-step", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ step }),
+            });
+            const data = await response.json();
+            console.log(data);
+            return data;
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        const fetchInventory = async () => {
+            try {
+              const response = await fetch("/inventory/items");
+              const data = await response.json() || [];
+              console.log(data);
+              return data;
+            } catch (error) {
+              console.error(error);
+            }
+        };
+
+      // function showInfoModal(message, onClose) {
+      //   showModal({
+      //     message: message,
+      //     buttons: [{ label: "OK", value: true }],
+      //     onClose: onClose,
+      //   });
+      // }
 
       function showStoryWinModal(text, onClose) {
         showModal({
@@ -109,9 +117,6 @@
         const actionsContainer = document.getElementById(
           "investigationActions"
         );
-        const innerActionsContainer = document.getElementById(
-          "investigationInnerActions"
-        );
         const cityContainer = document.getElementById("investigationCity");
         const backContainer = document.getElementById("backImg");
 
@@ -125,7 +130,6 @@
           textContainer.innerHTML = stepData.text;
 
           actionsContainer.innerHTML = "";
-          innerActionsContainer.innerHTML = "";
 
           Object.entries(stepData.choices)
             .reverse()
@@ -176,8 +180,7 @@
                 button.textContent = value.text;
                 button.addEventListener("click", async () => {
                   if (key === "examine") {
-
-
+                      await handleExamineClick();
                   }
 
                   currentStep = value.next_step;
@@ -224,6 +227,56 @@
           textContainer.textContent = "Error loading investigation.";
         }
       };
+
+      async function handleExamineClick() {
+        let inventory = await fetchInventory();
+        console.log(inventory, 'inventory');
+
+        const actionsContainer = document.getElementById("investigationActions");
+        actionsContainer.innerHTML = "";
+
+        const promises = [];
+
+        Object.entries(inventory)
+          .reverse()
+          .forEach(([key, value]) => {
+            const button = document.createElement("button");
+            button.className = "button";
+            button.textContent = value.name;
+
+            const promise = new Promise((resolve) => {
+              let text = ''
+              button.addEventListener("click", async () => {
+                try {
+                  const response = await fetch("/investigations/examine", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ item_name: value.name }),
+                  });
+
+                  const result = await response.json();
+                  console.log(result);
+                  text = result.result
+                } catch (error) {
+                  console.error("Error during examine:", error);
+                }
+
+                showModal({
+                  message: text,
+                  buttons: [{ label: "OK", value: true }],
+                  onClose: resolve,
+                });
+              });
+            });
+
+            actionsContainer.appendChild(button);
+            promises.push(promise);
+          });
+
+        await Promise.race(promises);
+      }
 
       fetchInvestigation();
     </script>
