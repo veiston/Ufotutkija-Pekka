@@ -47,7 +47,7 @@ investigations = {
                 "can_examine": True,
                 "is_examined": False,
                 "choices": {
-"                   search_desk": {
+                    "search_desk": {
                         "text": "Search the desk" ,
                         "next_step": 5,
                     },
@@ -685,101 +685,99 @@ investigations = {
     },
 }
 
-def investigate(ident):
-    global player_instance, player
-    player_instance = Player()
-    player_instance.id = Player.current_id
-    player = player_instance.get_current()
-
-    player_name = player.get("name", "Player")
-    story_template = investigations[ident]
-    investigation = eval(str(story_template).replace("{player_name}", player_name))
-    investigations[ident] = investigation
-
-    print_separator()
-
-    turns = investigation["turns_limit"]
-    step = 1
-
-    print(f"{investigation['description']}")
-
-    while True:
-        if step is None:
-            print(f"{investigation['win_text']}")
-            investigation["is_completed"] = True
-
-            current = player
-            current_money = current.get("money", 0)
-            current_level = current.get("player_level", 1)
-
-            new_money = current_money + investigation["reward"]
-            new_level = current_level
-
-            player_instance.update({"money": new_money})
-            player_instance.update({"player_level": new_level})
-
-            if not has_unfinished_investigations(current_level):
-                player["player_level"] += 1
-                player_instance.update({"player_level": player["player_level"]})
-                print(f"You've reached level {player['player_level']}!")
-
-            break
-
-        if turns <= 0:
-            battle_result = battle()
-            if battle_result:
-                print(f"{investigation['win_text']}")
-            else:
-                print(f"{investigation['lose_text']}")
-            break
-
-        if len(investigation["steps"]) > 4 and ((turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3)):
-            type_writer(f"{random.choice(SCARY_REMINDERS)}\nYou have {turns} turns left", 0.03)
-            time.sleep(2)
-            print_separator()
-
-        step_data = investigation["steps"][step]
-        step_choices_dict = step_data["choices"]
-        step_choices_list = list(step_choices_dict.values())
-        step_description = step_data["text"] if not step_data["is_examined"] else f"{step_data['text']}\nYou’ve already examined this area... What's next?"
-
-        print(step_description)
-
-        for number, choice in enumerate(step_choices_list, 1):
-            if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
-                continue
-            print(f"{number}. {choice['text']}")
-
-        while True:
-            selected_step_number = input_integer("\nSelect your next move by its number: ")
-            if 1 <= selected_step_number <= len(step_choices_list):
-                break
-            else:
-                print("Dude, there are no such options here, try again")
-
-        selected_choice = step_choices_list[selected_step_number - 1]
-        selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
-
-        if selected_key == "examine" and not step_data["is_examined"]:
-            examine(ident)
-            investigation["steps"][step]["is_examined"] = True
-
-            is_all_explored = all(
-                step_data["is_examined"] if step_data["can_examine"] else True
-                for step_data in investigation["steps"].values()
-            )
-
-            if is_all_explored:
-                step = selected_choice["next_step"]
-            else:
-                continue
-        else:
-            step = selected_choice["next_step"]
-
-        turns -= 1
-        print_separator()
-
-
+# def investigate(ident):
+#     global player_instance, player
+#     player_instance = Player()
+#     player_instance.id = Player.current_id
+#     player = player_instance.get_current()
+#
+#     player_name = player.get("name", "Player")
+#     story_template = investigations[ident]
+#     investigation = eval(str(story_template).replace("{player_name}", player_name))
+#     investigations[ident] = investigation
+#
+#     print_separator()
+#
+#     turns = investigation["turns_limit"]
+#     step = 1
+#
+#     print(f"{investigation['description']}")
+#
+#     while True:
+#         if step is None:
+#             print(f"{investigation['win_text']}")
+#             investigation["is_completed"] = True
+#
+#             current = player
+#             current_money = current.get("money", 0)
+#             current_level = current.get("player_level", 1)
+#
+#             new_money = current_money + investigation["reward"]
+#             new_level = current_level
+#
+#             player_instance.update({"money": new_money})
+#             player_instance.update({"player_level": new_level})
+#
+#             if not has_unfinished_investigations(current_level):
+#                 player["player_level"] += 1
+#                 player_instance.update({"player_level": player["player_level"]})
+#                 print(f"You've reached level {player['player_level']}!")
+#
+#             break
+#
+#         if turns <= 0:
+#             battle_result = battle()
+#             if battle_result:
+#                 print(f"{investigation['win_text']}")
+#             else:
+#                 print(f"{investigation['lose_text']}")
+#             break
+#
+#         if len(investigation["steps"]) > 4 and ((turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3)):
+#             type_writer(f"{random.choice(SCARY_REMINDERS)}\nYou have {turns} turns left", 0.03)
+#             time.sleep(2)
+#             print_separator()
+#
+#         step_data = investigation["steps"][step]
+#         step_choices_dict = step_data["choices"]
+#         step_choices_list = list(step_choices_dict.values())
+#         step_description = step_data["text"] if not step_data["is_examined"] else f"{step_data['text']}\nYou’ve already examined this area... What's next?"
+#
+#         print(step_description)
+#
+#         for number, choice in enumerate(step_choices_list, 1):
+#             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
+#                 continue
+#             print(f"{number}. {choice['text']}")
+#
+#         while True:
+#             selected_step_number = input_integer("\nSelect your next move by its number: ")
+#             if 1 <= selected_step_number <= len(step_choices_list):
+#                 break
+#             else:
+#                 print("Dude, there are no such options here, try again")
+#
+#         selected_choice = step_choices_list[selected_step_number - 1]
+#         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
+#
+#         if selected_key == "examine" and not step_data["is_examined"]:
+#             examine(ident)
+#             investigation["steps"][step]["is_examined"] = True
+#
+#             is_all_explored = all(
+#                 step_data["is_examined"] if step_data["can_examine"] else True
+#                 for step_data in investigation["steps"].values()
+#             )
+#
+#             if is_all_explored:
+#                 step = selected_choice["next_step"]
+#             else:
+#                 continue
+#         else:
+#             step = selected_choice["next_step"]
+#
+#         turns -= 1
+#         print_separator()
 
 # def get_inventory():
 #     query = f"""
@@ -874,18 +872,30 @@ def examine(selected_item):
     if selected_item != "Nokia" and selected_amount is not None:
         inventory_instance.delete_item(selected_item)
 
-    # Determine if this is the last explorable step
+    result_data = use_equipment(selected_item, selected_item_type, current_creature, creature_types)
+
+    if investigation.get("step") in investigation["steps"]:
+        investigation["steps"][investigation["step"]]["is_examined"] = True
+
     explorable_steps = [
         step for step in investigation["steps"].values()
-        if step.get("can_examine")
+        if step.get("can_examine") == True
     ]
     is_last = all(step.get("is_examined") for step in explorable_steps) if explorable_steps else False
 
-    result_data = use_equipment(selected_item, selected_item_type, current_creature, creature_types)
     result_data["is_last"] = is_last
     return result_data
 
 def investigation_start():
+    # For the test
+    # inventory_instance = Inventory()
+    # inventory_instance.add_item('Coffee')
+    # inventory_instance.add_item('Coffee')
+    # inventory_instance.add_item('Salt')
+    # inventory_instance.add_item('Salt')
+    # inventory_instance.add_item('Salt')
+    # inventory_instance.add_item('EMF Detector')
+
     player_instance = Player()
     player_instance.id = Player.current_id
     player = player_instance.get_current()
@@ -920,7 +930,7 @@ def investigation_update_step(step):
             if story["turns_limit"] > 0:
                 story["turns_limit"] -= 1
 
-            is_win = step not in story["steps"] and story["turns_limit"] > 0 and story["steps"][story["step"]].get("is_last", False)
+            is_win = story["turns_limit"] > 0 and story["steps"].get(story["step"], {}).get("is_last", False)
 
             if not is_win:
                 story["step"] = step
@@ -939,6 +949,7 @@ def investigation_update_step(step):
             return {
                 "turns_limit": story["turns_limit"],
                 "is_win": is_win,
+                "story": story,
             }
 
     return {"error": "No available investigation."}
@@ -953,7 +964,6 @@ def get_investigations(type):
         else:
             investigations_list.append(story_copy)
     return investigations_list
-
 
 if __name__ == "__main__":
     while True:

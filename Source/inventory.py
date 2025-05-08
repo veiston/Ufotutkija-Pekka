@@ -39,12 +39,19 @@ class Inventory:
                 )
                 return self.get_inventory()
 
-        update_data_in_database(
-            f'INSERT INTO inventory(player_id, item, amount) VALUES ({self.player.id}, "{item_name}", 1);'
-        )
+        if item_name == "Nokia":
+            update_data_in_database(
+                f'INSERT INTO inventory(player_id, item, amount) VALUES ({self.player.id}, "{item_name}", NULL);'
+            )
+        else:
+            update_data_in_database(
+                f'INSERT INTO inventory(player_id, item, amount) VALUES ({self.player.id}, "{item_name}", 1);'
+            )
         return self.get_inventory()
 
     def delete_item(self, item_name):
+        if item_name == "Nokia":
+            return self.get_inventory()
         inventory = self.get_inventory()
         for entry in inventory:
             if entry['name'] == item_name:
@@ -157,5 +164,3 @@ def list_inventory(): #mainly for combat-purposes, but it might be useful elsewh
 #         update_data_in_database(f'UPDATE inventory SET amount = {amount+value} WHERE player_id = {player_id} AND item = "{item}"')
 #
 #
-
-

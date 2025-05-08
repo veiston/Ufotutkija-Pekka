@@ -19,7 +19,13 @@
     <script src="/static/js/modal.js"></script>
   </head>
   <body>
-    <audio src="/static/audio/AlienCall.mp3" id="fadeAudio" muted autoplay loop></audio>
+    <audio
+      src="/static/audio/AlienCall.mp3"
+      id="fadeAudio"
+      muted
+      autoplay
+      loop
+    ></audio>
     <div id="spotlight" class="spotlight"></div>
     <img class="light light--on" id="light" />
     <audio
@@ -57,32 +63,31 @@
       </div>
     </div>
     <script>
+      const updateStep = async (step) => {
+        try {
+          const response = await fetch("/investigations/update-step", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ step }),
+          });
+          const data = await response.json();
+          console.log(data);
+          return data;
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
-        const updateStep = async (step) => {
-          try {
-            const response = await fetch("/investigations/update-step", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ step }),
-            });
-            const data = await response.json();
-            console.log(data);
-            return data;
-          } catch (error) {
-            console.error(error);
-          }
-        };
-
-        const fetchInventory = async () => {
-            try {
-              const response = await fetch("/inventory/items");
-              const data = await response.json() || [];
-              console.log(data);
-              return data;
-            } catch (error) {
-              console.error(error);
-            }
-        };
+      const fetchInventory = async () => {
+        try {
+          const response = await fetch("/inventory/items");
+          const data = (await response.json()) || [];
+          console.log(data);
+          return data;
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
       // function showInfoModal(message, onClose) {
       //   showModal({
@@ -127,15 +132,21 @@
           }
 
           const stepData = story.steps[stepNumber];
-          textContainer.innerHTML = stepData.text;
+
+          textContainer.innerHTML = stepData.is_examined
+            ? "“There’s nothing more interesting here. Better check other places.”"
+            : stepData.text;
 
           actionsContainer.innerHTML = "";
 
           Object.entries(stepData.choices)
             .reverse()
             .forEach(([key, value]) => {
+              if (key === "examine" && stepData.is_examined) {
+                return;
+              }
               if (stepData.choices[key].is_creature) {
-                const article = document.createElement("article");
+                const article = document.createElement("card");
                 article.className = "card";
                 const wrapper = document.createElement("div");
                 wrapper.className = "card__wrapper";
@@ -175,18 +186,24 @@
                 actionsContainer.appendChild(article);
               } else {
                 const button = document.createElement("button");
-                button.className = key === "examine" ? "button" : "button button--gray-light";
+                button.className =
+                  key === "examine" ? "button" : "button button--gray-light";
                 button.classList.add("button");
                 button.textContent = value.text;
                 button.addEventListener("click", async () => {
+                  let isLast = false;
                   if (key === "examine") {
-                      await handleExamineClick();
+                    const resultData = await handleExamineClick();
+                    isLast = resultData.is_last;
+                    currentStep = isLast ? value.next_step : story.step;
+                  } else {
+                    currentStep = value.next_step;
                   }
 
-                  currentStep = value.next_step;
                   const updateData = await updateStep(currentStep);
                   turnsLeft = updateData?.turns_limit;
                   const isWin = updateData.is_win;
+                  story = updateData.story;
                   if (isWin) {
                     showStoryWinModal(story.win_text, () => {
                       window.location.href = "/menu";
@@ -230,23 +247,51 @@
 
       async function handleExamineClick() {
         let inventory = await fetchInventory();
-        console.log(inventory, 'inventory');
+        console.log(inventory, "inventory");
 
-        const actionsContainer = document.getElementById("investigationActions");
+        const actionsContainer = document.getElementById(
+          "investigationActions"
+        );
         actionsContainer.innerHTML = "";
 
+        const textContainer = document.getElementById("investigationText");
+        textContainer.innerHTML = `<p>Let's take a look at what they're trying to hide.</p>
+        <p style="color: white; opacity: 0.7; font-style: italic;">(Use equipment from your inventory to investigate the location and identify the type of creature.)</p>`;
+
         const promises = [];
+        let result = null;
 
         Object.entries(inventory)
           .reverse()
           .forEach(([key, value]) => {
-            const button = document.createElement("button");
-            button.className = "button";
-            button.textContent = value.name;
+            if (value.name === "Coffee") {
+              return;
+            }
+            const item = document.createElement("div");
+            item.className = "product-item";
+
+            const article = document.createElement("article");
+
+            const title = document.createElement("h3");
+            title.className = "product-title";
+            title.innerHTML = value.amount
+              ? `${value.name}<br>(${value.amount})`
+              : value.name;
+
+            const img = document.createElement("img");
+            img.className = "product-image";
+            img.src = `/static/images/investigations/${value.name}.png`;
+            img.alt = value.name;
+
+            article.appendChild(img);
+            article.appendChild(title);
+            item.appendChild(article);
 
             const promise = new Promise((resolve) => {
-              let text = ''
-              button.addEventListener("click", async () => {
+              let text = "";
+              let isLast = "";
+
+              item.addEventListener("click", async () => {
                 try {
                   const response = await fetch("/investigations/examine", {
                     method: "POST",
@@ -256,9 +301,10 @@
                     body: JSON.stringify({ item_name: value.name }),
                   });
 
-                  const result = await response.json();
+                  result = await response.json();
                   console.log(result);
-                  text = result.result
+                  text = result.result;
+                  isLast = result.is_last;
                 } catch (error) {
                   console.error("Error during examine:", error);
                 }
@@ -271,11 +317,12 @@
               });
             });
 
-            actionsContainer.appendChild(button);
+            actionsContainer.appendChild(item);
             promises.push(promise);
           });
 
         await Promise.race(promises);
+        return result;
       }
 
       fetchInvestigation();
