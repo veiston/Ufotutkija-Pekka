@@ -1,10 +1,6 @@
 # investigations.py
-import time
 import random
-from utilities import type_writer, print_separator,input_integer
 from player import Player
-from notifications import SCARY_REMINDERS
-from combat import battle
 from database import update_data_in_database, get_data_from_database
 from inventory import Inventory
 
@@ -685,109 +681,6 @@ investigations = {
     },
 }
 
-# def investigate(ident):
-#     global player_instance, player
-#     player_instance = Player()
-#     player_instance.id = Player.current_id
-#     player = player_instance.get_current()
-#
-#     player_name = player.get("name", "Player")
-#     story_template = investigations[ident]
-#     investigation = eval(str(story_template).replace("{player_name}", player_name))
-#     investigations[ident] = investigation
-#
-#     print_separator()
-#
-#     turns = investigation["turns_limit"]
-#     step = 1
-#
-#     print(f"{investigation['description']}")
-#
-#     while True:
-#         if step is None:
-#             print(f"{investigation['win_text']}")
-#             investigation["is_completed"] = True
-#
-#             current = player
-#             current_money = current.get("money", 0)
-#             current_level = current.get("player_level", 1)
-#
-#             new_money = current_money + investigation["reward"]
-#             new_level = current_level
-#
-#             player_instance.update({"money": new_money})
-#             player_instance.update({"player_level": new_level})
-#
-#             if not has_unfinished_investigations(current_level):
-#                 player["player_level"] += 1
-#                 player_instance.update({"player_level": player["player_level"]})
-#                 print(f"You've reached level {player['player_level']}!")
-#
-#             break
-#
-#         if turns <= 0:
-#             battle_result = battle()
-#             if battle_result:
-#                 print(f"{investigation['win_text']}")
-#             else:
-#                 print(f"{investigation['lose_text']}")
-#             break
-#
-#         if len(investigation["steps"]) > 4 and ((turns == 3 and investigation["turns_limit"] > 3) or (turns == 1 and investigation["turns_limit"] <= 3)):
-#             type_writer(f"{random.choice(SCARY_REMINDERS)}\nYou have {turns} turns left", 0.03)
-#             time.sleep(2)
-#             print_separator()
-#
-#         step_data = investigation["steps"][step]
-#         step_choices_dict = step_data["choices"]
-#         step_choices_list = list(step_choices_dict.values())
-#         step_description = step_data["text"] if not step_data["is_examined"] else f"{step_data['text']}\nYou’ve already examined this area... What's next?"
-#
-#         print(step_description)
-#
-#         for number, choice in enumerate(step_choices_list, 1):
-#             if step_data["is_examined"] and list(step_choices_dict.keys())[number - 1] == "examine":
-#                 continue
-#             print(f"{number}. {choice['text']}")
-#
-#         while True:
-#             selected_step_number = input_integer("\nSelect your next move by its number: ")
-#             if 1 <= selected_step_number <= len(step_choices_list):
-#                 break
-#             else:
-#                 print("Dude, there are no such options here, try again")
-#
-#         selected_choice = step_choices_list[selected_step_number - 1]
-#         selected_key = list(step_choices_dict.keys())[selected_step_number - 1]
-#
-#         if selected_key == "examine" and not step_data["is_examined"]:
-#             examine(ident)
-#             investigation["steps"][step]["is_examined"] = True
-#
-#             is_all_explored = all(
-#                 step_data["is_examined"] if step_data["can_examine"] else True
-#                 for step_data in investigation["steps"].values()
-#             )
-#
-#             if is_all_explored:
-#                 step = selected_choice["next_step"]
-#             else:
-#                 continue
-#         else:
-#             step = selected_choice["next_step"]
-#
-#         turns -= 1
-#         print_separator()
-
-# def get_inventory():
-#     query = f"""
-#         SELECT inventory.item, items.description, inventory.amount, items.item_type
-#         FROM inventory
-#         LEFT JOIN items ON inventory.item = items.name
-#         WHERE inventory.player_id = {player["id"]};
-#     """
-#     return get_data_from_database(query)
-
 def get_creature_types():
     query = "SELECT name, weakness FROM creature_types;"
     creature_results = get_data_from_database(query)
@@ -802,8 +695,7 @@ def update_inventory(selected_item):
 
 def use_equipment(selected_item, item_type, current_creature, creature_types):
     is_effective = selected_item == "Nokia" or item_type == creature_types.get(current_creature)
-    # Mark current step as examined before returning
-    # Find the current investigation and step
+
     player_instance = Player()
     player_instance.id = Player.current_id
     player = player_instance.get_current()
@@ -823,7 +715,6 @@ def use_equipment(selected_item, item_type, current_creature, creature_types):
         confidence = random.randint(40, 95)
         return {
             "result": f"Your analysis suggests: with {confidence}% confidence, the creature is {current_creature}.",
-            # 'is_last' will be set by examine()
         }
 
     if random.randint(1, 100) <= 5:
@@ -832,12 +723,10 @@ def use_equipment(selected_item, item_type, current_creature, creature_types):
         confidence = random.randint(10, 30)
         return {
             "result" : f"Your equipment gives an uncertain reading... With {confidence}% confidence, it says, that the creature might be {guess}. Too vague.",
-            # 'is_last' will be set by examine()
         }
     else:
         return {
             "result" : "You try using the item, but nothing happens.",
-            # 'is_last' will be set by examine()
         }
 
 def examine(selected_item):
@@ -964,32 +853,3 @@ def get_investigations(type):
         else:
             investigations_list.append(story_copy)
     return investigations_list
-
-if __name__ == "__main__":
-    while True:
-        print_separator()
-        print("Investigations Menu:")
-        keys = list(investigations.keys())
-        for i, inv in enumerate(keys, 1):
-            print(f"{i}. {inv}")
-        print(f"{len(keys) + 1}. Exit")
-        print_separator()
-        choice = input_integer("Select an investigation by its number: ")
-        if choice == len(keys) + 1:
-            print("Exiting investigation menu...")
-            break
-        elif 1 <= choice <= len(keys):
-            selected_ident = keys[choice - 1]
-
-            # Set location to investigation's airport
-            player_instance = Player('Pekka')
-            player_instance.add()
-            player_instance.id = Player.current_id
-            airport_code = investigations[selected_ident]["airport"]
-            player_instance.update({"location_ident": airport_code})
-            investigate(selected_ident)
-
-            # Reset location back to EFHK after investigation
-            player_instance.update({"location_ident": "EFHK"})
-        else:
-            print("No such option. Please try again.")
