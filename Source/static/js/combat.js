@@ -1,3 +1,4 @@
+/* DOM NOM NOM */
 document.addEventListener("DOMContentLoaded", () => {
   const sel = (s) => document.querySelector(s);
   const selAll = (s) => Array.from(document.querySelectorAll(s));
@@ -21,9 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* Set player stats */
   let player = {
-    hp: 150,
-    max: 150,
-    atk: 20,
+    hp: 110,
+    max: 110,
+    atk: 25,
   };
 
   /* Set enemy stats */
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hp: 150,
     max: 150,
     atk: 20,
+
     /* set defaults for alien sprite, weakness, name in case load fails */
     weak: "Salt",
     name: "Alien",
@@ -40,26 +42,32 @@ document.addEventListener("DOMContentLoaded", () => {
   let storyStep = null,
     victoryText = null;
 
+  /* Roll a chance to deal critical damage on attack  */
   const randCrit = () => Math.random() < 0.1;
   const updateBars = () => {
     e.playerHp.style.width = `${(player.hp / player.max) * 100}%`;
     e.enemyHp.style.width = `${(enemy.hp / enemy.max) * 100}%`;
   };
+
   const log = (m) => {
     const p = document.createElement("p");
     p.textContent = m;
     e.log.prepend(p);
   };
+
+  /* Shake sprite when taking damage */
   const animateHit = (el) => {
     el.classList.add("hit");
     setTimeout(() => el.classList.remove("hit"), 300);
   };
+
   const setEnemyDisplay = () => {
     const s = document.getElementById("enemySprite");
     const n = document.querySelector(".enemy .name-tag");
     if (s) s.src = `/static/images/character_art/${enemy.sprite}`;
     if (n) n.textContent = enemy.name;
   };
+
   // Fetches all combat data for the current fight
   const fetchCombatData = async () => {
     const d = await (await fetch("/combat/current-step")).json();
@@ -67,11 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let invData = d.investigation;
     let c =
       invData && invData.creature_data ? invData.creature_data : invData || d;
+
     /* set defaults in case load fails */
-    enemy.name = c.name || c.creature || d.creature_name || d.name || "Alien";
-    enemy.weak =
-      c.weakness || c.weak || d.creature_weakness || d.weakness || "Salt";
-    enemy.sprite = c.sprite || d.creature_sprite || d.sprite || "alien.png";
+    enemy.name = c.name || c.creature || d.creature_name || d.name;
+    enemy.weak = c.weakness || c.weak || d.creature_weakness || d.weakness;
+    enemy.sprite = c.sprite || d.creature_sprite || d.sprite;
     enemy.hp = c.hp || d.creature_hp || d.hp || 150;
     enemy.max = c.hp || d.creature_hp || d.hp || 150;
     victoryText =
@@ -89,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     await fetchInv();
   };
+
   const useItem = async (name) => {
     e.itemMenu.classList.remove("show");
     sfx.item.play();
@@ -109,6 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pwr *= 2;
       log("Critical hit!");
     }
+
+    /* ITEMS: Hit sounds, updates, log */
     animateHit(e.playerSprite);
     enemy.hp = Math.max(0, enemy.hp - pwr);
     sfx.hit.play();
@@ -117,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateBars();
     enemyTurn();
   };
+
   const openItems = () => {
     e.itemList.innerHTML = inv
       .map(
@@ -130,6 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e1.target.tagName === "LI") useItem(e1.target.dataset.item);
     if (e1.target === e.itemMenu) e.itemMenu.classList.remove("show");
   });
+
+  /* Player turn and actions */
   e.controls.addEventListener("click", (e1) => {
     const b = e1.target.closest(".menu__button");
     if (!b) return;
@@ -140,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let dmg = player.atk * (randCrit() ? 2 : 1);
       if (dmg > player.atk) log("Critical hit!");
       enemy.hp = Math.max(0, enemy.hp - dmg);
-      log(`Item deals ${dmg} damage.`);
+      log(`Pekka deals ${dmg} damage.`);
       updateBars();
       enemyTurn();
     }
@@ -148,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (a === "inspect")
       log(`${enemy.name} ${enemy.hp}/${enemy.max} HP, heikko: ${enemy.weak}.`);
   });
+
   // Handles enemy's turn and checks for win/lose
   const enemyTurn = () => {
     if (enemy.hp <= 0) return endBattle(true);
@@ -157,11 +172,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (dmg > enemy.atk) log("UFO strikes critically!");
       player.hp = Math.max(0, player.hp - dmg);
       sfx.hit.play();
-      log(`Item deals ${dmg} damage.`);
+      log(`Alien deals ${dmg} damage.`);
       updateBars();
       if (player.hp <= 0) endBattle(false);
     }, 800);
   };
+
   // Shows modal and updates story after battle
   const endBattle = (won) => {
     selAll(".menu__button").forEach((b) => (b.disabled = true));
@@ -191,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (okBtn) okBtn.focus();
     }, 100);
   };
+
   // const updateStory = async (won) => {
   //   await fetch("/investigations/update-step", {
   //     method: "POST",
@@ -202,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //     }),
   //   });
   // };
+
   (async () => {
     await fetchInv();
     await fetchCombatData();

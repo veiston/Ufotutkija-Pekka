@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const startButton = document.getElementById("startButton");
   const nameForm = document.getElementById("nameForm");
-  const continueWelcomeButton = document.getElementById("continueWelcomeButton");
+  const continueWelcomeButton = document.getElementById(
+    "continueWelcomeButton"
+  );
   const indexScreen = document.getElementById("indexScreen");
   const nameEntryScreen = document.getElementById("nameEntryScreen");
   const welcomeScreen = document.getElementById("welcomeScreen");
@@ -15,11 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const buttonLabels = {
     1: "Open",
     2: "Hurry up",
-    3: "Go ahead"
+    3: "Go ahead",
   };
 
   const updateContinueButtonText = () => {
-    continueWelcomeButton.textContent = buttonLabels[currentMessageIndex] || "Continue";
+    continueWelcomeButton.textContent =
+      buttonLabels[currentMessageIndex] || "Continue";
   };
 
   const createPlayer = async (name) => {
@@ -27,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/player/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name })
+        body: JSON.stringify({ name }),
       });
       return await response.json();
     } catch (error) {
@@ -52,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             Melvin
             P.S. I''ve added <span class="text-yellow text-bold">$500</span> to your bank account for your plane ticket!1! HURRY UP!!
        `,
-      `Hooray! A business trip!\nBefore leaving the office, don’t forget to take your Nokia from the desk. You’ll definitely need it.`
+      `Hooray! A business trip!\nBefore leaving the office, don’t forget to take your Nokia from the desk. You’ll definitely need it.`,
     ];
 
     const addNokiaToTheInvetory = async () => {
@@ -60,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await fetch("/inventory/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ item: 'Nokia' })
+          body: JSON.stringify({ item: "Nokia" }),
         });
       } catch (error) {
         console.error(error);

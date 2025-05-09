@@ -5,6 +5,7 @@ function showModal(options) {
   msg.innerHTML = options.message;
   btns.innerHTML = "";
   let result = null;
+
   options.buttons.forEach(function (btnOpt) {
     let btn = document.createElement("button");
     btn.textContent = btnOpt.label;
