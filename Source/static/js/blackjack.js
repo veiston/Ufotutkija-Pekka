@@ -15,6 +15,9 @@ const startButton = document.querySelector('#startJack');
 const backButton = document.querySelector('#backButton');
 const playArea = document.querySelector("#playArea");
 const betValue = 5;
+const messageArea = document.querySelector('#jackMessages');
+const theMessage = document.querySelector('#theMessage');
+const playButtons = document.querySelector('#playButtons');
 
 const player = {score:0,hand:[]};
 const dealer = {score:0,hand:[]};
@@ -243,6 +246,10 @@ async function endCondition(){
     if((playerBust && dealerBust) || player.score === dealer.score){
       console.log('draw: you get your money back');
       hiddenCardReveal();
+      showElemets();
+      buttonHide();
+      theMessage.innerText = 'Draw';
+      playerMoneyText.innerHTML = 'Money: '+playerInfo.money;
       clear();
       return;
     } else if(dealerBust || (player.score>dealer.score && !playerBust)){
@@ -251,12 +258,20 @@ async function endCondition(){
       handleMoney(newMoney);
       hiddenCardReveal();
       clear();
+      buttonHide();
+      showElemets();
+      theMessage.innerText = `You win 10$!`;
+      playerMoneyText.innerHTML = 'Money: '+newMoney;
       return;
     } else {
       console.log('you lose.');
       const newMoney = playerInfo.money-betValue;
       handleMoney(newMoney);
       hiddenCardReveal();
+      buttonHide();
+      showElemets();
+      theMessage.innerText = 'You lose!';
+      playerMoneyText.innerHTML = 'Money: '+newMoney;
       clear();
       return;
     }
@@ -309,10 +324,13 @@ function deal(){
 
 function startGame(){
   playArea.style = 'display: block';
+  playButtons.style = 'display: block';
+  freeMoneyTxt.innerText = '';
   playerHand.innerHTML = '';
   playerScore.innerHTML = '';
   dealerHand.innerHTML = '';
   dealerScore.innerHTML = '';
+  hideElements();
   //const betValue = 5;
   deck = createDeck();
   shuffle(deck);
@@ -333,12 +351,14 @@ function buttonPress(choice) {
       //currently this doesn't do anything sensible
       //might remove later
       console.log('double');
+      buttonHide();
       playerStand = true;
       hiddenCardReveal();
       deal();
       break;
     case 'stand':
       playerStand = true;
+      buttonHide();
       console.log('stand');
       hiddenCardReveal();
       deal();
@@ -366,5 +386,18 @@ function goBack(){
   console.log('clicked');
 }
 
+function hideElements(){
+  messageArea.style = 'display: none';
+}
+
+function showElemets(){
+  messageArea.style = 'display: block';
+}
+function buttonHide(){
+  p
+}
 startButton.addEventListener('click',startGame);
 backButton.addEventListener('click',goBack);
+function buttonHide(){
+  playButtons.style = 'display: none';
+}
