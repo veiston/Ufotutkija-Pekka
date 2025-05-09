@@ -14,6 +14,7 @@ const freeMoneyTxt = document.querySelector('#freeMoney');
 const startButton = document.querySelector('#startJack');
 const backButton = document.querySelector('#backButton');
 const playArea = document.querySelector("#playArea");
+const betValue = 5;
 
 const player = {score:0,hand:[]};
 const dealer = {score:0,hand:[]};
@@ -158,7 +159,7 @@ async function testaus(){
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({money}),
             });
-            if (!response.ok) throw new Error("Failed to update location");
+            if (!response.ok) throw new Error("Failed to update money");
         } catch (error) {
             console.error(error);
         }
@@ -236,8 +237,9 @@ function clear(){
   console.log(player);
 }
 
-function endCondition(){
+async function endCondition(){
   if((playerBust) || (playerStand && dealerStand)){
+    const playerInfo = await fetchPlayer();
     if((playerBust && dealerBust) || player.score === dealer.score){
       console.log('draw: you get your money back');
       hiddenCardReveal();
@@ -245,11 +247,15 @@ function endCondition(){
       return;
     } else if(dealerBust || (player.score>dealer.score && !playerBust)){
       console.log('you win! you get 2x your bet');
+      const newMoney = playerInfo.money+(betValue*2);
+      handleMoney(newMoney);
       hiddenCardReveal();
       clear();
       return;
     } else {
       console.log('you lose.');
+      const newMoney = playerInfo.money-betValue;
+      handleMoney(newMoney);
       hiddenCardReveal();
       clear();
       return;
@@ -303,6 +309,11 @@ function deal(){
 
 function startGame(){
   playArea.style = 'display: block';
+  playerHand.innerHTML = '';
+  playerScore.innerHTML = '';
+  dealerHand.innerHTML = '';
+  dealerScore.innerHTML = '';
+  //const betValue = 5;
   deck = createDeck();
   shuffle(deck);
   console.log(deck[1]);
@@ -348,4 +359,12 @@ async function freebie(){
 freebie();
 //startGame();
 //console.log(await loadPlayerData());
+
+
+function goBack(){
+  window.location.href = '/shop';
+  console.log('clicked');
+}
+
 startButton.addEventListener('click',startGame);
+backButton.addEventListener('click',goBack);
