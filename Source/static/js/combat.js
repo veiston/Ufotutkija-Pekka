@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       won && victoryText
         ? victoryText
         : won
-        ? "You won the battle! WUUUUU! You are a hero!"
+        ? "You won the battle! WUUUUU! I am a hero!"
         : "You lost the battle... Ouch!! Rest and try again.";
     showModal({
       message,
