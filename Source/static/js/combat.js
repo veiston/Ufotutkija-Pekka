@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sfx.item.play();
     if (name === "Coffee") {
       player.hp = Math.min(player.max, player.hp + 50);
-      log("Paranit 50 HP.");
+      log("You healed 50 HP.");
       await consumeItem(name);
       updateBars();
       enemyTurn();
@@ -110,7 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   const openItems = () => {
     e.itemList.innerHTML = inv
-      .map((n) => `<li data-item="${n.name}" style="cursor: pointer">${n.name}</li>`)
+      .map(
+        (n) =>
+          `<li data-item="${n.name}" style="cursor: pointer">${n.name}</li>`
+      )
       .join("");
     e.itemMenu.classList.add("show");
   };
@@ -161,13 +164,13 @@ document.addEventListener("DOMContentLoaded", () => {
       won && victoryText
         ? victoryText
         : won
-        ? "You won the battle! You are a hero!"
-        : "You lost the battle... Rest and try again.";
+        ? "You won the battle! WUUUUU! You are a hero!"
+        : "You lost the battle... Ouch!! Rest and try again.";
     showModal({
       message,
       buttons: [{ label: "OK", value: true }],
       onClose: async (_) => {
-         window.location.href = `/investigations?result=${won ? "win" : "lose"}`
+        window.location.href = `/investigations?result=${won ? "win" : "lose"}`;
         // await updateStory(won);
         // window.location.href = "/travel";
       },
