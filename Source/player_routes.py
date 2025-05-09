@@ -3,6 +3,36 @@ from player import Player
 from investigations import reset_investigations
 player_routes = Blueprint('player_routes', __name__)
 
+# Example of usage in JS
+#
+# const newPlayerData = {
+#     name: 'Lucky bastard',
+#     money: 1000000
+#     // You can add here and thereby update any field of a player entity from the database
+# };
+#
+# const updatePlayer = async (newData = {}) => {
+#     try {
+#         const response = await fetch('/player/update', {
+#             method: 'POST',
+#             headers: {
+#                 'Content-Type': 'application/json',
+#             },
+#             body: JSON.stringify(newData),
+#         });
+#
+#         if (!response.ok) {
+#             throw new Error(`HTTP error`); // Fetch does not throw an error on HTTP 400 or 500 responses, so you should manually check the response to force the interpreter into the catch block
+#         }
+#
+#         const updatedPlayer = await response.json(); // Returns the updated current user in full
+#         return updatedPlayer;
+#     } catch (error) {
+#         console.error(error);
+#         return null;
+#     }
+# };
+
 # POST request to create new player
 @player_routes.route('/player/create', methods=['POST'])
 def player_create():
@@ -35,36 +65,3 @@ def player_detail():
     player.id = Player.current_id
     current = player.get_current()
     return jsonify(current)
-
-
-
-
-# Example of usage in JS
-#
-# const newPlayerData = {
-#     name: 'Lucky bastard',
-#     money: 1000000
-#     // You can add here and thereby update any field of a player entity from the database
-# };
-#
-# const updatePlayer = async (newData = {}) => {
-#     try {
-#         const response = await fetch('/player/update', {
-#             method: 'POST',
-#             headers: {
-#                 'Content-Type': 'application/json',
-#             },
-#             body: JSON.stringify(newData),
-#         });
-#
-#         if (!response.ok) {
-#             throw new Error(`HTTP error`); // Fetch does not throw an error on HTTP 400 or 500 responses, so you should manually check the response to force the interpreter into the catch block
-#         }
-#
-#         const updatedPlayer = await response.json(); // Returns the updated current user in full
-#         return updatedPlayer;
-#     } catch (error) {
-#         console.error(error);
-#         return null;
-#     }
-# };

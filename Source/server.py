@@ -16,6 +16,16 @@ from travel_routes import travel_routes
 # Create an instance of the Flask class to initialize the web application
 app = Flask(__name__)
 
+# Function to register all the pages (HTML files) from the templates folder
+def register_template_routes():
+    for filename in os.listdir('templates'):
+        if filename.endswith('.html'):
+            route = '/' if filename == 'index.html' else f'/{filename.replace(".html", "")}'
+            app.add_url_rule(route, endpoint=filename, view_func=lambda file=filename: send_from_directory('templates', file))
+
+# Call the function that registers all the pages
+register_template_routes()
+
 # Register the game routes
 app.register_blueprint(blackjack_routes)
 app.register_blueprint(combat_routes)
@@ -27,18 +37,6 @@ app.register_blueprint(player_routes)
 app.register_blueprint(shop_routes)
 app.register_blueprint(snake_game_routes)
 app.register_blueprint(travel_routes)
-
-
-
-# Function to register all the pages (HTML files) from the templates folder
-def register_template_routes():
-    for filename in os.listdir('templates'):
-        if filename.endswith('.html'):
-            route = '/' if filename == 'index.html' else f'/{filename.replace(".html", "")}'
-            app.add_url_rule(route, endpoint=filename, view_func=lambda file=filename: send_from_directory('templates', file))
-
-# Call the function that registers all the pages
-register_template_routes()
 
 # Start the server so users can begin playing when they open the site
 if __name__ == '__main__':
