@@ -4,24 +4,47 @@
     <meta charset="UTF-8">
     <title>UFOtutkiJA</title>
     <link rel="stylesheet" href="/static/css/main.css" />
+    <link rel="stylesheet" href="/static/css/modal.css" />
     <link rel="stylesheet" href="/static/css/button.css" />
     <link rel="stylesheet" href="/static/css/blackjack.css" />
-    <script src='../static/js/blackjack.js' defer></script>
+    <script src='/static/js/blackjack.js' defer></script>
+    <script src="/static/js/modal.js" defer></script>
 </head>
 <body>
-    <p id="playerMoney"></p>
-    <p>dealer</p>
-    <div class="cardsTable">
-        <div id="dealerHand" class="hand"></div>
-        <p id="dealerScore"></p>
+<h1>Black Jack</h1>
+    <div id="playArea">
+        <p>dealer</p>
+        <div class="cardsTable">
+            <div id="dealerHand" class="hand"></div>
+            <p id="dealerScore"></p>
+        </div>
+        <p>player</p>
+        <div class="cardsTable">
+            <div id="playerHand" class="hand"></div>
+            <p id="playerScore"></p>
+        </div>
+        <div id="playButtons">
+            <button id="hit">Hit</button>
+            <button id="doubleDown">Double Down</button>
+            <button id="stand">Stand</button>
+        </div>
     </div>
-    <p>player</p>
-    <div class="cardsTable">
-        <div id="playerHand" class="hand"></div>
-        <p id="playerScore"></p>
+
+<div id="jackMessages">
+    <div id="theMessage">Want to play some Black Jack?</div>
+    <div id="freeMoney"></div>
+    <form name="bet">
+        <input type="number" id="betInput" min="5" value="5">
+        <input type="submit" id="betSubmit" value="Place Bet">
+    </form>
+</div>
+<p id="playerMoney">HOI</p>
+
+    <div id="modalBox" class="modal" style="display: none">
+      <div class="modal-content">
+        <div id="modalBoxMessage">jkadui</div>
+        <div id="modalBoxButtons"><button>play</button><button>back</button></div>
+      </div>
     </div>
-    <button id="hit">Hit</button>
-    <button id="doubleDown">Double Down</button>
-    <button id="stand">Stand</button>
 </body>
 </html>

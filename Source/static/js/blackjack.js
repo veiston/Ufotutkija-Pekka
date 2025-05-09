@@ -9,6 +9,8 @@ const cardBack = 'static/images/cards/Back.png';
 const hit = document.querySelector('#hit');
 const doubleDown = document.querySelector('#doubleDown');
 const stand = document.querySelector('#stand');
+const betInput = document.querySelector('#betInput');
+const freeMoneyTxt = document.querySelector('#freeMoney');
 
 const player = {score:0,hand:[]};
 const dealer = {score:0,hand:[]};
@@ -18,6 +20,12 @@ let playerBust = false;
 let dealerBust = false;
 let deck = [];
 
+
+//betInput.addEventListener('')
+
+
+
+/*
 const fetchPlayer = async () => {
   try {
     const response = await fetch("/player/detail");
@@ -27,7 +35,7 @@ const fetchPlayer = async () => {
     return null;
   }
 };
-
+console.log(fetchPlayer().money);
 const handleMoney = async (money) => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -40,7 +48,7 @@ const handleMoney = async (money) => {
   } catch (error) {
     console.error(error);
   }
-};
+};*/
 
 //playerMoneyText.innerText = fetchPlayer().money;
 //console.log(fetchPlayer());
@@ -109,6 +117,53 @@ hit.addEventListener('click', function(){buttonPress('hit');});
 doubleDown.addEventListener('click', function(){buttonPress('doubleDown');});
 stand.addEventListener('click', function(){buttonPress('stand');});
 
+/*
+    async function loadPlayerData() {
+        try {
+            const response = await fetch('/player/detail');
+            const playerData = await response.json();
+            //const moneyEl = document.getElementById('money');
+            playerMoneyText.textContent = playerData.money;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+loadPlayerData();
+*/
+    const fetchPlayer = async () => {
+        try {
+            const response = await fetch("/player/detail");
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+  //let playerInfo = await fetchPlayer();
+  //console.log(playerInfo.money);
+async function testaus(){
+  const playerInfo = await fetchPlayer();
+  console.log(playerInfo.money);
+  handleMoney(playerInfo.money-5);
+}
+//testaus();
+    const handleMoney = async (money) => {
+        try {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            const response = await fetch("/player/update", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({money}),
+            });
+            if (!response.ok) throw new Error("Failed to update location");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+
+
 //Fisher-Yates shuffle nicked from Courey Wong
 //https://coureywong.medium.com/how-to-shuffle-an-array-of-items-in-javascript-39b9efe4b567
 function shuffle(d) {
@@ -142,10 +197,12 @@ function checkStatus(value, who){
     switch (who){
       case 'player':
         playerBust = true;
-        hiddenCardReveal();
+        //hiddenCardReveal();
+        //console.log('REVEAL THE DAMN CARD');
         break;
       case 'dealer':
         dealerBust = true;
+        //hiddenCardReveal();
     }
   } else if(value>=17 && who==='dealer'){
     dealerStand = true;
@@ -155,6 +212,7 @@ function checkStatus(value, who){
 
 function hiddenCardReveal(){
   document.querySelector('#hiddenCard').src = dealer.hand[0].src;
+  console.log(dealer.score);
   dealerScore.innerText = dealer.score;
 }
 
@@ -179,14 +237,24 @@ function endCondition(){
   if((playerBust) || (playerStand && dealerStand)){
     if((playerBust && dealerBust) || player.score === dealer.score){
       console.log('draw: you get your money back');
+      hiddenCardReveal();
       clear();
-    } else if(dealerBust || player.score>dealer.score){
+      return;
+    } else if(dealerBust || (player.score>dealer.score && !playerBust)){
       console.log('you win! you get 2x your bet');
+      hiddenCardReveal();
       clear();
+      return;
     } else {
       console.log('you lose.');
+      hiddenCardReveal();
       clear();
+      return;
     }
+  }
+
+  if(playerStand && (!dealerStand || !dealerBust)) {
+    deal();
   }
 }
 
@@ -263,4 +331,16 @@ function buttonPress(choice) {
   }
 }
 
-startGame();
+async function freebie(){
+  let playerInfo = await fetchPlayer();
+  console.log(playerInfo.money);
+  let newMoney = playerInfo.money+5;
+  handleMoney(newMoney);
+  freeMoneyTxt.innerText = 'Here, have 5$ on the house!';
+  //playerInfo = await fetchPlayer();
+  //console.log(playerInfo.money);
+  playerMoneyText.innerText = `Money: ${newMoney}`;
+}
+freebie();
+//startGame();
+//console.log(await loadPlayerData());
