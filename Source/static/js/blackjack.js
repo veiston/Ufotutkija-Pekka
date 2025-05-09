@@ -11,6 +11,9 @@ const doubleDown = document.querySelector('#doubleDown');
 const stand = document.querySelector('#stand');
 const betInput = document.querySelector('#betInput');
 const freeMoneyTxt = document.querySelector('#freeMoney');
+const startButton = document.querySelector('#startJack');
+const backButton = document.querySelector('#backButton');
+const playArea = document.querySelector("#playArea");
 
 const player = {score:0,hand:[]};
 const dealer = {score:0,hand:[]};
@@ -299,6 +302,7 @@ function deal(){
 }
 
 function startGame(){
+  playArea.style = 'display: block';
   deck = createDeck();
   shuffle(deck);
   console.log(deck[1]);
@@ -344,3 +348,4 @@ async function freebie(){
 freebie();
 //startGame();
 //console.log(await loadPlayerData());
+startButton.addEventListener('click',startGame);

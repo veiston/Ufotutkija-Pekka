@@ -12,9 +12,9 @@
 </head>
 <body>
 <h1>Black Jack</h1>
-    <div id="playArea">
+    <div id="playArea" style="display: none">
         <p>dealer</p>
-        <div class="cardsTable">
+        <div class="cardsTable" >
             <div id="dealerHand" class="hand"></div>
             <p id="dealerScore"></p>
         </div>
@@ -37,13 +37,14 @@
         <input type="number" id="betInput" min="5" value="5">
         <input type="submit" id="betSubmit" value="Place Bet">
     </form>
+    <div id="messagesButtons"><button id="startJack">Start BlackJack</button><button id="goBack">Go Back</button></div>
 </div>
 <p id="playerMoney">HOI</p>
 
     <div id="modalBox" class="modal" style="display: none">
       <div class="modal-content">
         <div id="modalBoxMessage">jkadui</div>
-        <div id="modalBoxButtons"><button>play</button><button>back</button></div>
+        <div id="modalBoxButtons"><button>play</button><button id="backButton">back</button></div>
       </div>
     </div>
 </body>
