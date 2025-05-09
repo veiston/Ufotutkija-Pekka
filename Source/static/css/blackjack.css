@@ -10,3 +10,16 @@
     width: fit-content;
 }
 
+button{
+    border: solid 1px;
+    margin: 10px;
+    padding: 3px;
+    background-color: #F7D35D;
+    color: #101D25;
+}
+
+/* Color options */
+/*	1.	Dark Blue: #101D25 */
+/*	2.	Dark Grayish Blue: #48526A */
+/*	3.	Light Yellow: #F7D35D */
+/*   5. Black: #303031 */
