@@ -55,7 +55,7 @@ body,
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(153, 149, 168, 0.6); /* Darker overlay. Adjust this one for brightness and hue tint*/
+    background: rgba(153, 149, 168, 0.6); /* Color / Brightness -overlay. Adjust this one for brightness and hue tint*/
     backdrop-filter: blur(2px) saturate(120%); /* Fog effect */
     z-index: 1;
     pointer-events: none;

@@ -1,12 +1,12 @@
 function showModal(options) {
-  var modal = document.getElementById("modalBox");
-  var msg = document.getElementById("modalBoxMessage");
-  var btns = document.getElementById("modalBoxButtons");
+  let modal = document.getElementById("modalBox");
+  let msg = document.getElementById("modalBoxMessage");
+  let btns = document.getElementById("modalBoxButtons");
   msg.innerHTML = options.message;
   btns.innerHTML = "";
-  var result = null;
+  let result = null;
   options.buttons.forEach(function (btnOpt) {
-    var btn = document.createElement("button");
+    let btn = document.createElement("button");
     btn.textContent = btnOpt.label;
     btn.className = btnOpt.className || "button";
     btn.onclick = function () {
@@ -21,6 +21,7 @@ function showModal(options) {
   modal.style.display = "flex";
 }
 window.showModal = showModal;
+
 // setTimeout(function () {
 /*    showModal({
         message: "This flight costs $100. Do you want to proceed?",
