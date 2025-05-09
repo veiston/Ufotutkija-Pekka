@@ -11,27 +11,36 @@ document.addEventListener("DOMContentLoaded", () => {
     playerSprite: sel("#playerSprite"),
     enemySprite: sel("#enemySprite"),
   };
+
+  /* Load combat audio */
   const sfx = {
     attack: new Audio("/static/audio/attack.mp3"),
     hit: new Audio("/static/audio/hit.mp3"),
     item: new Audio("/static/audio/item.mp3"),
   };
 
-  let player = { hp: 200, max: 200, atk: 25 },
-    enemy = {
-      hp: 150,
-      max: 150,
-      atk: 20,
-      /* set defaults in case load fails */
-      weak: "Salt",
-      name: "Alien",
-      sprite: "alien.png",
-    },
-    inv = [];
+  /* Set player stats */
+  let player = {
+    hp: 150,
+    max: 150,
+    atk: 20,
+  };
+
+  /* Set enemy stats */
+  let enemy = {
+    hp: 150,
+    max: 150,
+    atk: 20,
+    /* set defaults for alien sprite, weakness, name in case load fails */
+    weak: "Salt",
+    name: "Alien",
+    sprite: "alien.png",
+  };
+  let inv = [];
   let storyStep = null,
     victoryText = null;
 
-  const randCrit = () => Math.random() < 0.05;
+  const randCrit = () => Math.random() < 0.1;
   const updateBars = () => {
     e.playerHp.style.width = `${(player.hp / player.max) * 100}%`;
     e.enemyHp.style.width = `${(enemy.hp / enemy.max) * 100}%`;
