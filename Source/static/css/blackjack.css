@@ -17,7 +17,17 @@ button{
     background-color: #F7D35D;
     color: #101D25;
 }
+#playerMoney{
+    font-weight: bold;
+}
+#freeMoney{
+    font-weight: bold;
+}
 
+.score {
+    font-weight: bold;
+    margin-left: 5px;
+}
 /* Color options */
 /*	1.	Dark Blue: #101D25 */
 /*	2.	Dark Grayish Blue: #48526A */
